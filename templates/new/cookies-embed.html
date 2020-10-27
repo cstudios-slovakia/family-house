@@ -1,0 +1,147 @@
+<script src="{{ sitebase }}assets/js/vendor/js-cookie.js"></script>
+
+<div class="global-cookie">
+    <div class="text">
+        Súhlasíte s používaním cookies?
+    </div>
+    <div class="wrap">
+        <button class="agree">
+            Súhlasím
+        </button>
+        <a href="{{siteUrl}}cookies" class="inf">
+            Viac info
+        </a>
+    </div>
+</div>
+
+<script>
+    //global-cookies agreement
+    if (Cookies.get('agreed') === undefined) {
+        
+        var agree = '';
+        
+        Cookies.set('agreed', agree);
+
+    } 
+
+    if (Cookies.get('agreed') == "yes") {
+        $('.global-cookie').addClass('agreed');
+        
+    }
+
+    $('.global-cookie button.agree').click(function(){
+        var agree = "yes";
+
+        Cookies.set('agreed', agree);
+
+        $('.global-cookie').addClass('agreed');
+    });
+
+    // //global-cookies last viewed
+    // if (Cookies.get('lastv') === undefined) {
+        
+    //     var last = [];
+        
+    //     Cookies.set('lastv', last);
+
+    // } else {
+    //     var last = JSON.parse(Cookies.get('lastv'));
+    // }
+
+
+    //get liked cookie and parse
+    if (Cookies.get('liked') === undefined) {
+
+        //create empty array if first visit
+        var likedid = [];
+        // update cookie
+        Cookies.set('liked', likedid);
+
+        //set top-nav heart to 0
+        $('.right .heart .num').html('0');
+        
+    } else {
+        var likedid = JSON.parse(Cookies.get('liked'));
+        
+        //set liked num
+        $('.right .heart .num').html(likedid.length);
+
+        likedid.forEach(function(val){
+           if(val == $('.card .heart').attr('id')) {
+
+           }
+        });
+
+        $('.card .heart').each(function(){
+
+            var ids = $(this).attr('id');
+
+            if (likedid.includes(ids)) {
+                $(this).find('img').attr('src','https://familyhouse.sk/assets/new/img/heart-filled.svg');
+            }
+        })
+
+    }
+
+    
+    // update/add to cookie
+    $('.card .heart').click(function(){
+
+        var id = $(this).attr('id');
+
+        // check status of card in cookie
+        if (likedid.includes(id)) {
+
+            var i = likedid.indexOf(id);
+
+            //remove card from stack
+            likedid.splice(i, 1);
+
+            // update cookie array
+            Cookies.set('liked', likedid);
+
+            $(this).find('img').attr('src','https://familyhouse.sk/assets/new/img/heart.svg');
+
+            //update liked num in top-menu heart
+            $('.right .heart .num').html(likedid.length);
+
+        } else {
+            // push to likedid
+            likedid.push(id);
+
+            //add temp item if not duplicate or in likedid
+            // likedtemp.forEach(function(value){
+            //     if (likedid.indexOf(value)==-1) {
+            //         likedid.push(value);
+            //     };
+            // });
+
+            // update cookie array
+            Cookies.set('liked', likedid);
+
+            //update heart color
+            $(this).find('img').attr('src','https://familyhouse.sk/assets/new/img/heart-filled.svg');
+            
+
+            //update liked num in top-menu heart
+            $('.right .heart .num').html(likedid.length);
+
+        }
+        
+    });
+
+    
+    $('.right .eye').click(function(){
+        // if ($('.right .eye').hasClass('eye-drop')) {
+        //     
+        //     console.log('added');
+        // } else {
+        //     $(this).find('.drop').addClass('eye-drop');
+        //     console.log('removed');
+        // }
+        $(this).find('.drop').toggleClass('eye-drop');
+
+    });
+
+    
+</script>

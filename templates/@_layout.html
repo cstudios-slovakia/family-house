@@ -1,0 +1,232 @@
+{#
+ # Layout template
+ # ---------------
+ #
+ # This template defines your site’s global layout. It can be
+ # “extended” by other templates to fill in the gaps.
+ #
+ # See Twig’s Template Inheritance documentation for more details:
+ # http://twig.sensiolabs.org/doc/templates.html#template-inheritance
+ #}
+
+{% minify %}
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="sk-SK">
+<head>
+	<meta charset="utf-8" />
+	<link rel="home" href="{{ settings.baseUrl }}" />
+
+	<meta charset="utf-8">
+	<meta http-equiv="x-ua-compatible" content="ie=edge">
+	<meta name="viewport" content="shrink-to-fit=no, minimum-scale=1.0, maximum-scale=1.0, initial-scale=1.0">
+
+	{% if custom_seo is defined %}
+		{% block customSeo %}{% endblock customSeo %}
+	{% else %}
+		{% hook 'seomaticRender' %}
+	{% endif %}
+
+	<link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,700&amp;subset=latin-ext" rel="stylesheet">
+
+    <link rel="apple-touch-icon" sizes="57x57" href="{{ settings.baseUrl }}assets/img/favicons/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="{{ settings.baseUrl }}assets/img/favicons/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="{{ settings.baseUrl }}assets/img/favicons/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="{{ settings.baseUrl }}assets/img/favicons/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="{{ settings.baseUrl }}assets/img/favicons/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="{{ settings.baseUrl }}assets/img/favicons/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="{{ settings.baseUrl }}assets/img/favicons/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="{{ settings.baseUrl }}assets/img/favicons/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ settings.baseUrl }}assets/img/favicons/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="{{ settings.baseUrl }}assets/img/favicons/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ settings.baseUrl }}assets/img/favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="{{ settings.baseUrl }}assets/img/favicons/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ settings.baseUrl }}assets/img/favicons/favicon-16x16.png">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+
+    <link rel="manifest" href="{{ settings.baseUrl }}manifest.json">
+	<link rel="apple-touch-icon" href="{{ settings.baseUrl }}icon.png">
+	<!-- Place favicon.ico in the root directory -->
+
+	<link rel="stylesheet" href="{{ settings.baseUrl }}assets/css/vendor/swiper.min.css">
+	<link rel="stylesheet" href="{{ settings.baseUrl }}assets/css/vendor/jquery.fancybox.min.css">
+	<link rel="stylesheet" href="{{ settings.baseUrl }}assets/css/style.css?v=1.0.103">
+</head>
+<body class="{% block bodyClass %}dom-list-view{% endblock bodyClass %}">
+
+	<!--[if lte IE 9]>
+        <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience and security.</p>
+	<![endif]-->
+
+	<!-- MOBILE OVERLAY -->
+		<div class="mobile-navigation--overlay"></div>
+	<!-- /MOBILE OVERLAY -->
+
+	<!-- MOBILE NAVIGATION -->
+		<div class="mobile-navigation">
+			<!-- CLOSE NAV -->
+				<div class="close-navigation">
+					<svg viewBox="0 0 24 24">
+						<path fill="#000000" d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z" />
+					</svg>
+				</div>
+			<!-- /CLOSE NAV -->
+
+			<!-- CONTENT -->
+				<div class="body">
+					<div>
+						<a href="{{ siteUrl }}o-nas">O nás</a>
+						<a href="{{ siteUrl }}sluzby">Služby</a>
+						<a href="{{ siteUrl }}cenova-ponuka">Cenová ponuka</a>
+						<a href="javascript:;">Financovanie</a>
+						<a href="javascript:;">Referencie</a>
+						<a href="javascript:;">Prečo vybrať nás</a>
+						<a href="{{ siteUrl }}faq">FAQ</a>
+						<a href="{{ siteUrl }}clanky">Blog</a>
+						<a href="{{ siteUrl }}kontakt">Kontakt</a>
+					</div>
+				</div>
+				<div class="footer-info">
+					<a href="tel:00421948141840">+421 948 141 840</a>
+					<a href="mailto:david@familyhouse.sk">david@familyhouse.sk</a>
+					<a rel="noreferrer" href="www.facebook.com/familyhouseds" target="_blank">www.facebook.com/familyhouseds</a>
+				</div>
+			<!-- /CONTENT -->
+		</div>
+	<!-- /MOBILE NAVIGATION -->
+
+    <!-- FLOATING CONTACT -->
+        <div class="floating-contact">
+            <a href="mailto:{{ contact.email }}">
+                <img src="{{ settings.baseUrl }}assets/img/svg/mail.svg" alt="Mail icon"/>
+            </a>
+            <a href="tel:{{ contact.phone }}">
+                <img src="{{ settings.baseUrl }}assets/img/svg/telephone.svg" alt="Telephone icon"/>
+            </a>
+            <a href="{{ contact.facebookUrl }}" target="_blank">
+                <img src="{{ settings.baseUrl }}assets/img/svg/facebook_small.svg" class="facebook" alt="Facebook icon"/>
+            </a>
+        </div>
+    <!-- /FLOATING CONTACT -->
+
+	<div id="content">
+
+		<!-- HEADER -->
+			<header>
+
+				<!-- LOGO -->
+					<a href="{{ siteUrl }}" class="logo">
+						<img src="{{ settings.baseUrl }}assets/img/svg/familyhouse-logo.svg" alt="Familyhouse" />
+						<div class="slogan">projektovanie a<br>realizácia</div>
+					</a>
+				<!-- /LOGO -->
+
+				<!-- NAVIGATION -->
+					<nav>
+                        {% set slugs = craft.app.request.segments %}
+						<a class="" href="{{ siteUrl }}projekty-domov">katalóg domov</a>
+						<div class="divider"></div>
+						<a href="{{ siteUrl }}projektovanie">projektovanie</a>
+						<div class="divider"></div>
+						<a href="{{ siteUrl }}realizacia">realizácia</a>
+
+						<div class="mobile-navigation--trigger">
+							<div class="trigger-overlay"></div> <!-- FIX HAMBURGER -->
+							<span>menu</span>
+							<div class="hamburger"></div>
+						</div>
+					</nav>
+				<!-- /NAVIGATION -->
+
+				<!-- MOBILE TRIGGER OUTTER -->
+					<div class="mobile-navigation-trigger--outter">
+						<div></div>
+					</div>
+				<!-- /MOBILE TRIGGER OUTTER -->
+
+			</header>
+		<!-- /HEADER -->
+
+		{% block content %} {% endblock %}
+
+		<!-- FOOTER -->
+			<footer>
+				<div class="links">
+					<div class="box">
+						<div class="title">www.familyhouse.sk</div>
+						<a href="{{ siteUrl }}o-nas">O nás</a>
+						<a href="{{ siteUrl }}sluzby">Služby</a>
+						<a href="{{ siteUrl }}cenova-ponuka">Cenová ponuka</a>
+						<a href="javascript:;">Financovanie</a>
+						<a href="javascript:;">Referencie</a>
+						<a href="javascript:;">Prečo vybrať nás</a>
+					</div>
+					<div class="box">
+						<div class="title"></div>
+
+						<a href="{{ siteUrl }}faq">FAQ</a>
+						<a href="{{ siteUrl }}clanky">Blog</a>
+						<a href="{{ siteUrl }}kontakt">Kontakt</a>
+					</div>
+					<div class="box">
+						<div class="title">Kontakt</div>
+
+						<div>Ing. Dávid Lovas</div>
+						<a href="tel:{{ contact.phone }}">{{ contact.phone }}</a>
+						<a href="mailto:{{ contact.email }}">{{ contact.email }}</a>
+
+						<br>
+
+						<address>
+							{{ contact.address }}
+						</address>
+					</div>
+
+					<div class="box socials">
+						<a href="{{ contact.facebookUrl }}" target="_blank">
+							<img src="{{ settings.baseUrl }}assets/img/svg/facebook.svg" alt="Facebook" />
+						</a>
+					</div>
+				</div>
+				<div class="bottom">
+					<div>copyright 2018 | FAMILY HOUSE s.r.o.</div>
+					<a href="http://cstudios.sk/?ref=familyhouse">web developed by Cstudios s.r.o.</a>
+				</div>
+			</footer>
+		<!-- /FOOTER -->
+
+	</div>
+
+	<script src="{{ settings.baseUrl }}assets/js/vendor/modernizr-3.5.0.min.js"></script>
+	<script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+	<script>window.jQuery || document.write('<script src="{{ settings.baseUrl }}assets/js/vendor/jquery-3.2.1.min.js"><\/script>')</script>
+	<script src="{{ settings.baseUrl }}assets/js/vendor/plugins.js"></script>
+	<script src="{{ settings.baseUrl }}assets/js/vendor/swiper.min.js"></script>
+	<script src="{{ settings.baseUrl }}assets/js/vendor/jquery.fancybox.min.js"></script>
+	<script src="{{ settings.baseUrl }}assets/js/vendor/imageMapResizer.min.js"></script>
+	{% block footerScripts %}{% endblock footerScripts %}
+
+	<script src="{{ settings.baseUrl }}assets/js/main.js?v=1.0.48"></script>
+	
+	<!-- Global site tag (gtag.js) - Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-5409872-41"></script>
+	<script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-5409872-41');
+	</script>
+
+
+	<script type="text/javascript" id="inspectletjs"> window.__insp = window.__insp || []; __insp.push(['wid', 1940042559]); (function() { function ldinsp(){if(typeof window.__inspld != "undefined") return; window.__inspld = 1; var insp = document.createElement('script'); insp.type = 'text/javascript'; insp.async = true; insp.id = "inspsync"; insp.src = ('https:' == document.location.protocol ? 'https' : 'http') + '://cdn.inspectlet.com/inspectlet.js'; var x = document.getElementsByTagName('script')[0]; x.parentNode.insertBefore(insp, x); }; setTimeout(ldinsp, 500); document.readyState != "complete" ? (window.attachEvent ? window.attachEvent('onload', ldinsp) : window.addEventListener('load', ldinsp, false)) : ldinsp(); })(); </script><div id="fb-root"></div>
+
+
+	
+
+</body>
+</html>
+
+{% endminify %}

@@ -1,0 +1,348 @@
+<!-- FILTER -->
+    <div class="filter" data-entry-id="{{ entry.id }}">
+        <a class="h2-container" href="{{ siteUrl }}projekty-domov">
+            <h2>{{"Rodinné <i>domy</i>"|t|raw}}</h2>
+        </a>
+
+        {% set _entry = entry %}
+
+        <!-- HOUSE NAVIGATION -->
+            <form name="houseSelector" action="" method="get" class="house-navigation">
+                <div>
+
+                    {# defaults #}
+                    {% set filterQueryString = craft.app.request.getQueryStringWithoutPath() %}
+                    {% set filterString = filterQueryString is empty ? 'Vyberte si dom:' : 'Domy podľa nasteveného filtra:' %}
+
+                    <h2>{{ "Navigácia"|t }}</h2>
+                    <div class="house-selector">{{ filterString }}</div>
+                    <div class="select-container" data-entry-id="{{ entry.id }}">
+                        <select data-entry-id="{{ entry.id }}">
+
+                            {% set queryParams = {
+                                section: 'dom'
+                            } %}
+
+                            {% set filterEntry = craft.entries.section('nastavenia').one() %}
+                            {% set filterIsEmpty = false %}
+
+                            <!----- FILTER volitelne ----->
+                            {# Filter volitelne #}
+                            {# volitelne #}
+                                {% set volitelneArray = [] %}
+                                {% for option in filterEntry.volitelne.options %}
+                                    {% set filterVolitelne = craft.app.request.getParam('volitelne_' ~ loop.index) %}
+                                    {% if filterVolitelne is not empty %}
+                                        {% set volitelneArray = volitelneArray|merge([filterVolitelne]) %}
+                                    {% endif %}
+                                {% endfor %}
+
+                                {% set finalFilteredHousesListAll = [] %}
+                                {% set finalFilteredHousesList = [] %}
+                                {% set finalFilteredHousesList2 = [] %}
+                                {% if volitelneArray is not empty %}
+                                    {% for house in craft.entries.section('dom') %}
+                                        {% set finalFilteredHousesListAll = finalFilteredHousesListAll|merge([house.id]) %}
+                                        {% set _added = false %}
+                                        {% for volitelneParam in volitelneArray %}
+                                            {% if house.volitelne.contains(volitelneParam) and _added == false %}
+                                                {% set finalFilteredHousesList2 = finalFilteredHousesList2|merge([house.id]) %}
+                                                {% set _added = true %}
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% endfor %}
+                                {% endif %}
+                            <!----- FILTER volitelne ----->
+
+                            {# typ #}
+                            {% set typArray = [] %}
+                            {% for option in filterEntry.typ.options %}
+                                {% set filterTyp = craft.app.request.getParam('typ_' ~ loop.index) %}
+                                {% if filterTyp is not empty %}
+                                    {% set typArray = typArray|merge([filterTyp]) %}
+                                {% endif %}
+                            {% endfor %}
+
+                            {% if typArray|length > 1 %}
+                                {% set queryParams = queryParams|merge({
+                                    typ: typArray,
+                                }) %}
+                            {% else %}
+                                {% set queryParams = queryParams|merge({
+                                    typ: typArray,
+                                }) %}
+                            {% endif %}
+
+                            {# podlaznost #}
+                            {% set podlaznostArray = [] %}
+                            {% for option in filterEntry.podlaznost.options %}
+                                {% set filterPodlaznost = craft.app.request.getParam('podlaznost_' ~ loop.index) %}
+                                {% if filterPodlaznost is not empty %}
+                                    {% set podlaznostArray = podlaznostArray|merge([filterPodlaznost]) %}
+                                {% endif %}
+                            {% endfor %}
+
+                            {% if podlaznostArray|length > 1 %}
+                                {% set queryParams = queryParams|merge({
+                                    podlaznost: podlaznostArray,
+                                }) %}
+                            {% else %}
+                                {% set queryParams = queryParams|merge({
+                                    podlaznost: podlaznostArray,
+                                }) %}
+                            {% endif %}
+
+                            {# strecha #}
+                            {% set strechaArray = [] %}
+                            {% for option in filterEntry.strecha.options %}
+                                {% set filterStrecha = craft.app.request.getParam('strecha_' ~ loop.index) %}
+                                {% if filterStrecha is not empty %}
+                                    {% set strechaArray = strechaArray|merge([filterStrecha]) %}
+                                {% endif %}
+                            {% endfor %}
+
+                            {% if strechaArray|length > 1 %}
+                                {% set queryParams = queryParams|merge({
+                                    strecha: strechaArray,
+                                }) %}
+                            {% else %}
+                                {% set queryParams = queryParams|merge({
+                                    strecha: strechaArray,
+                                }) %}
+                            {% endif %}
+
+                            {# metraz #}
+                            {% set metrazArray = [] %}
+                            {% for option in filterEntry.metraz.options %}
+                                {% set filterMetraz = craft.app.request.getParam('metraz_' ~ loop.index) %}
+                                {% if filterMetraz is not empty %}
+                                    {% set metrazArray = metrazArray|merge([filterMetraz]) %}
+                                {% endif %}
+                            {% endfor %}
+
+                            {% if metrazArray|length > 1 %}
+                                {% set queryParams = queryParams|merge({
+                                    metraz: metrazArray,
+                                }) %}
+                            {% else %}
+                                {% set queryParams = queryParams|merge({
+                                    metraz: metrazArray,
+                                }) %}
+                            {% endif %}
+
+                            {# izby #}
+                            {% set izbyArray = [] %}
+                            {% for option in filterEntry.izby.options %}
+                                {% set filterIzby = craft.app.request.getParam('izby_' ~ loop.index) %}
+                                {% if filterIzby is not empty %}
+                                    {% set izbyArray = izbyArray|merge([filterIzby]) %}
+                                {% endif %}
+                            {% endfor %}
+
+                            {% if izbyArray|length > 1 %}
+                                {% set queryParams = queryParams|merge({
+                                    izby: izbyArray,
+                                }) %}
+                            {% else %}
+                                {% set queryParams = queryParams|merge({
+                                    izby: izbyArray,
+                                }) %}
+                            {% endif %}
+
+                            {# garaz #}
+                            {% set garazArray = [] %}
+                            {% for option in filterEntry.garaz.options %}
+                                {% set filterGaraz = craft.app.request.getParam('garaz_' ~ loop.index) %}
+                                {% if filterGaraz is not empty %}
+                                    {% set garazArray = garazArray|merge([filterGaraz]) %}
+                                {% endif %}
+                            {% endfor %}
+
+                            {% if garazArray|length > 1 %}
+                                {% set queryParams = queryParams|merge({
+                                    garaz: garazArray,
+                                }) %}
+                            {% else %}
+                                {% set queryParams = queryParams|merge({
+                                    garaz: garazArray,
+                                }) %}
+                            {% endif %}
+
+                            {% set filteredHousesList = craft.entries(queryParams) %}
+
+                            <!-- FILTER volitelne part2 --->
+                                {% if typArray|length > 0 or podlaznostArray|length > 0 or strechaArray|length > 0 or metrazArray|length > 0 or izbyArray|length > 0 or garazArray|length > 0 %}
+                                    {% set filterIsEmpty = true %}
+                                {% endif %}
+
+                                {% if finalFilteredHousesList2 is not empty %}
+                                    {% if filteredHousesList is not empty %}
+                                        {% for mergeHouse in filteredHousesList %}
+                                            {% if mergeHouse.id in finalFilteredHousesList2 == false  and filterIsEmpty == true %}
+                                                {% set finalFilteredHousesList2 = finalFilteredHousesList2|merge([mergeHouse.id]) %}
+                                            {% endif %}
+                                        {% endfor %}
+
+                                        {% set queryParams = {
+                                                section: 'dom',
+                                                id: finalFilteredHousesList2
+                                            }
+                                        %}
+                                        {% set filteredHousesList = craft.entries(queryParams) %}
+
+                                    {% endif %}
+                                {% else %}
+                                    {% set queryParams = {
+                                            section: 'dom',
+                                            id: finalFilteredHousesList2
+                                        }
+                                    %}
+                                {% endif %}
+                            <!-- /FILTER volitelne part2 --->
+
+                            {% set emptyCache = true %}
+                            {% cache unless emptyCache %}
+                                {% for house in filteredHousesList %}
+                                    <option {% if _entry.id == house.id %} selected disabled {% endif %} data-house="{{ house.id }}" data-nazov="{{ _entry.nazov }}" data-id="{{ _entry.id }}" data-slug="{{ _entry.slug }}" value="{{ house.url }}{% if filterQueryString is not empty %}?{{ filterQueryString }}{% endif %}">{{ house.nazov }}</option>
+                                {% endfor %}
+                            {% endcache %}
+
+                        </select>
+                    </div>
+                    <!-- MANUAL NAVIGATION -->
+                    <div class="navigation-footer">
+                        {% set paramsFilter = craft.entries.section('dom') %}
+                        {% set prev = _entry.getPrev(queryParams) %}
+                        {% set prev = _entry.getPrev(paramsFilter) %}
+                        {% if prev %}
+                            <a href="{{ prev.url }}{% if filterQueryString is not empty %}?{{ filterQueryString }}{% endif %}">{{ "predchádzajúci<br>dom"|t|raw }}</a>
+                        {% else %}
+                            <a class="disabled">{{ "predchádzajúci<br>dom"|t|raw }}</a>
+                        {% endif %}
+
+                        <div class="divider"></div>
+
+                        {% set next = _entry.getNext(queryParams) %}
+                        {% set next = _entry.getNext(paramsFilter) %}
+                        {% if next %}
+                            <a href="{{ next.url }}{% if filterQueryString is not empty %}?{{ filterQueryString }}{% endif %}">{{ "ďalší<br>dom"|t|raw }}</a>
+                        {% else %}
+                            <a class="disabled">{{ "ďalší<br>dom"|t|raw }}</a>
+                        {% endif %}
+
+                    </div>
+                    <!-- /MANUAL NAVIGATION -->
+                </div>
+            </form>
+        <!-- /HOUSE NAVIGATION -->
+
+        <!-- FILTER TRIGGER -->
+            <div class="filter-trigger">
+                <span>{{ "Filtrovať"|t }}</span>
+            </div>
+        <!-- /FILTER TRIGGER -->
+
+        {% embed '_components/left/filter' %}{% endembed %}
+
+        <!-- PROFESSIONAL CONSULTATION -->
+            <div class="professional-consultation">
+
+                <!-- CONTACT LINE -->
+                    <div class="contact-line">
+                        <div>
+                            <div>
+                                {{ "Potrebujete odbornú konzultáciu?"|t }}
+                                <strong>{{ "Radi Vám pomôžeme."|t }}</strong>
+                            </div>
+                        </div>
+                        <div>
+                            <a href="tel:00421948141840">+421 948 141 840</a>
+                            <a href="mailto:david@familyhouse.sk">david@familyhouse.sk</a>
+                            <a href="https://familyhouse.sk/kontakt" class="contact-redirect">{{ "Napísať správu"|t }}</a>
+                            <a href="https://familyhouse.sk/kontakt" class="contact-redirect">{{ "Kde nás nájdete"|t }}</a>
+                        </div>
+                    </div>
+                <!-- /CONTACT LINE -->
+
+            </div>
+        <!-- /PROFESSIONAL CONSULTATION -->
+
+        <!-- TEXT BOX GRID -->
+            <div class="text-box-grid">
+                <div class="grid-list" id="text-grid-swiper">
+                    <div class="swiper-container">
+                        <div class="swiper-wrapper">
+
+                            {% for entry in craft.entries.section('bullets').limit(6) %}
+
+                                <div class="swiper-slide">
+
+                                    <!-- TEXT BOX ELEM -->
+                                        <a class="text-box" href="{% if entry.bulletsurl is not empty %} {{ entry.bulletsurl }} {% else %}javascript:;{% endif %}">
+                                            <div>
+                                                <div class="title">
+                                                    {{ entry.title }}
+                                                    <div style="box-shadow: inset 8px 8px #{{ entry.textColors }}, inset -8px -8px #{{ entry.textColors }}" class="after-border"></div>
+                                                </div>
+                                                <p>{{ entry.shortText }}</p>
+                                            </div>
+                                        </a>
+                                    <!-- /TEXT BOX ELEM -->
+
+                                </div>
+
+                            {% endfor %}
+
+                        </div>
+                    </div>
+
+                    <div class="swiper-pagination-container">
+                        <div class="swiper-pagination"></div>
+                    </div>
+                </div>
+            </div>
+        <!-- /TEXT BOX GRID -->
+
+        <!-- ARTICLES -->
+            <div class="articles-list">
+                <h2>{{ "Články"|t }}</h2>
+
+                <div class="grid-list" id="article-grid-swiper">
+                    <div class="swiper-container">
+                        <div class="swiper-wrapper">
+
+                            {% for entry in craft.entries.section('blog').limit(6) %}
+
+                                <div class="swiper-slide">
+
+                                    <!-- ARTICLE ELEM -->
+                                        <a href="{{ entry.url }}" class="article-elem">
+                                            {% set cover = entry.obrazok.one() %}
+                                            <img src="{{ cover.url('blogSideCover') }}" alt="{{ cover }} - {{ entry.blog_title }}" />
+
+                                            <div class="title">{{ entry.blog_title }}</div>
+                                            <div class="short-description">{{ entry.shortText }}</div>
+                                            <div class="continue-reading">{{ "Prečítať článok"|t }}</div>
+                                        </a>
+                                    <!-- /ARTICLE ELEM -->
+
+                                </div>
+
+                            {% endfor %}
+
+                        </div>
+                    </div>
+
+                    <div class="swiper-pagination-container">
+                        <div class="swiper-pagination"></div>
+                    </div>
+                </div>
+
+                <a href="{{ siteUrl }}clanky">
+                    <span>{{ "Zobraziť všetky články"|t }}</span>
+                </a>
+            </div>
+        <!-- /ARTICLES -->
+
+    </div>
+<!-- /FILTER -->

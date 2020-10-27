@@ -1,0 +1,3 @@
+{% macro isActive(url) %}
+{% if craft.app.request.absoluteUrl == url %}active{% endif %}
+{% endmacro %}

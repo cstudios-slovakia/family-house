@@ -1,0 +1,108 @@
+html:not([dir=rtl]){
+  .slider-container {
+    height: 20px;
+    padding: 0px 50px;
+  }
+
+  .slider-container .noUi-horizontal {
+    height: 2px;
+
+    .noUi-handle{
+      border: 1px solid #adc526;
+      border-radius: 8pc;
+      background: #adc526;
+      cursor: default;
+      box-shadow: inset 0 0 1px #FFF, inset 0 1px 7px #c4dc3b, 0 3px 6px -3px #adc526;
+      width: 16px;
+      height: 16px;
+      right: -8px;
+      top: -7px;
+
+
+      &:after, &:before {
+        content: "";
+        display: block;
+        position: absolute;
+        height: 8px;
+        width: 1px;
+        background: #c4dc3b;
+        left: 5px;
+        top: 3px;
+      }
+      &:after{
+        left: 8px;
+      }
+
+      .noUi-touch-area{
+        &:before {
+          content: '';
+          position: absolute;
+          height: 2px;
+          width: 22px;
+          background: #959595;
+          left: -4px;
+          top: 6px;
+          z-index: -1;
+        }
+      }
+    }
+
+    &.noUi-target{
+      background: #c1c1c1;
+      border-radius: 4px;
+      border: none;
+      box-shadow: none;
+    }
+  }
+
+  .noUi-pips-horizontal{
+    padding: 0px;
+    height: 25px;
+    top: 100%;
+    left: 0;
+    width: 100%;
+
+    .noUi-marker {
+      background: #c1c1c1;
+
+      &.noUi-marker-horizontal.noUi-marker-large {
+        height: 10px;
+        top: -6px;
+      }
+
+      &.noUi-marker-horizontal.noUi-marker-sub{
+        height: 3px;
+        width: 1px;
+      }
+
+
+    }
+
+    .noUi-value{
+      &.noUi-value-horizontal {
+        transform: translate(-60%, 50%);
+        &.noUi-value-sub {
+          font-size: 12px;
+          color: #000;
+        }
+
+        &.noUi-value-large {
+          top: -5px;
+          transform: translate(-50%,50%);
+          font-size: 16px;
+          color: #000;
+        }
+      }
+    }
+
+
+  }
+
+}
+
+
+
+
+
+
+

@@ -1,0 +1,55 @@
+
+<div class="dom-nav-sidebar-container">
+    <div class="page-nav-sidebar-wrapper" data-simplebar data-simplebar-auto-hide="false">
+        <div class="dom-nav-sidebar">
+            {% for level1 in craft.entries().section('navigation').level(1).all() %}
+                
+                    <!-- <div style="height: {{ level1.title }}"></div> -->
+                {% if level1.type == 'navigation' %}
+                <div class="menu-item">
+                    <a {% if not level1.children().level(2)|length %}{% if level1.target|length %}href="{{ level1.target.one().getUrl() }}"{% endif %}{% if level1.baseUrl|length %}href="{{ level1.baseUrl }}"{% endif %}{% endif %} class="title {% if craft.app.request.segments|last == 'level1.title' %} {{ 'selected' }} {% endif %}">
+                        <div class="label">
+                            <div class="mark open">
+                                {% if level1.children().level(2)|length %}-{% endif %}
+                            </div>
+                            <div>
+                                {{ level1.title }}
+                            </div>
+                        </div>
+                    </a>
+                    
+                    <div class="sub-items">
+                        {% for level2 in level1.children().level(2).all() %}
+                        <a {% if level2.target|length %}href="{{ level2.target.one().getUrl() }}"{% endif %}{% if level2.baseUrl|length %}href="{{ level2.baseUrl }}"{% endif %} class="sub-item">
+                            {{ level2.title }}
+                        </a>
+                        {% endfor %}
+                    </div>
+                    
+                
+                </div>
+                {% endif %}
+
+                {% if level1.type == 'emptyRow' %}
+                    <div class="emptyrow" style="height: {{ level1.title }}px;"></div>
+                {% endif %}
+            {% endfor %}
+                <div class="btn-nav">
+                    <div class="row">
+                        Potrebujete poradiť?
+                    </div>
+                    <div class="row">
+                        Sme tu pre Vás
+                    </div>
+                    
+                    <a href="https://familyhouse.sk/2020/spytajte" class="button">
+                        Spýtajte sa
+                    </a>
+                </div>
+
+        </div>
+    </div>
+    <div class="dom-nav-sidebar-mobile-button">
+        Navigácia
+    </div>
+</div>

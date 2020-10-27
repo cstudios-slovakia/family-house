@@ -1,0 +1,181 @@
+
+
+<div class="dom-nav-sidebar-container">
+    <div class="dom-nav-sidebar-wrapper" data-simplebar data-simplebar-auto-hide="false">
+        <div class="dom-nav-sidebar">
+            <div class="name-row">
+                <h1>{{ dom.nazov }}</h1>
+            </div>
+            <div class="options-row">
+                <!-- <div class="option">
+                    <img src="{{ sitebase }}assets/new/img/highquality-blue.svg" alt="">
+                    <div class="ch-border active">
+                        <input type="checkbox" name="montovany" id="montovany" class="ch">
+                    </div>
+                    <label for="montovany" class="active">montovaný</label>
+                </div> -->
+
+                {% if dom.type == 'dom' %}
+                <div class="option">
+                    <img src="{{craft.categories().group('houseClass').slug('murovany-dom').one().obrazok.one().url}}" alt="">
+                    <div class="active">murovaný</div>
+                </div>
+                {% endif %}
+
+                {% if dom.type == 'dom_v2' %}
+                {% for block in entry.priceNew.all() %}
+                    {% switch block.type %}
+
+                        {% case 'price' %}
+                        <div class="option">
+                            <img src="{{block.triedaKamPrisluchaCena.one().obrazok.one().url}}" alt="">
+                            <div class="ch-border">
+                                <input type="radio" name="{{block.triedaKamPrisluchaCena.one().slug}}" id="{{block.triedaKamPrisluchaCena.one().slug}}" class="ch">
+                            </div>
+                            <label for="{{block.triedaKamPrisluchaCena.one().slug}}" class="">{{block.triedaKamPrisluchaCena.one().title}}</label>
+                        </div>
+
+
+                    {% endswitch %}
+                {% endfor %}
+                
+                {% endif %}
+            </div>
+
+            {% if dom.type == 'dom' %}
+            <div class="table-cont">
+                <div class="table">
+                    <div class="item">cena projektu</div>
+                    <div class="item">{{ dom.projekt|number_format(0, ',', '.') }} &euro;</div>
+                    <div class="item">holodom</div>
+                    <div class="item">{{ dom.holodomSDph|number_format(0, ',', '.') }} &euro;</div>
+                    <div class="item">cena na kľúč</div>
+                    <div class="item small">Na vyžiadanie</div>
+                </div>
+            </div>
+            {% endif %}
+
+            {% if dom.type == 'dom_v2' %}
+                <div class="table-cont">
+                {% for block in entry.priceNew.all() %}
+                    {% switch block.type %}
+
+                        {% case 'price' %}
+                        <div class="table" id="{{block.triedaKamPrisluchaCena.one().slug}}">
+                            <div class="item">cena projektu</div>
+                            <div class="item">{{ block.cenaProjektu|number_format(0, ',', '.') }} &euro;</div>
+                            <div class="item">holodom</div>
+                            <div class="item">{{ block.cenaStavbyDomu|number_format(0, ',', '.') }} &euro;</div>
+                            <div class="item">cena na kľúč</div>
+                            <div class="item">{{ block.cenaNaKluc|number_format(0, ',', '.') }} &euro;</div>
+                        </div>
+
+                    {% endswitch %}
+
+                {% endfor %}
+            
+            </div>
+            {% endif %}
+
+            <div class="nav-title-row">
+                <div class="line"></div>
+                <div class="title">
+                    <h2>Navigácia</h2>
+                </div>
+            </div>
+
+            {% set structured = '' %}
+            {% if entry %}
+            {% endif %}
+            
+            <div class="nav-sidebar-items">
+                <a href="{{entry.url}}" class="nav-sidebar-item {% if craft.app.request.segments|last == entry.slug %} {{ 'selected' }} {% endif %}">
+                    <div class="count"></div>
+                    <div class="label">informácie</div>
+                    <img src="{{ sitebase }}assets/new/img/arrow-right-white3.svg" alt="">
+                </a>
+                
+                {% if entry.prehliadkaObrazok|length > 0 %}
+                <a href="{{siteUrl}}dom/{{entry.slug}}/prehliadka" class="nav-sidebar-item {% if craft.app.request.segments|last == 'prehliadka' %} {{ 'selected' }} {% endif %}">
+                    <div class="count"></div>
+                    <div class="label">prehliadka - 3d</div>
+                    <img src="{{ sitebase }}assets/new/img/arrow-right-white3.svg" alt="">
+                </a>
+                {% endif %}
+                
+                <a href="{{siteUrl}}dom/{{entry.slug}}/podorys" class="nav-sidebar-item {% if craft.app.request.segments|last == 'podorys' %} {{ 'selected' }} {% endif %}">
+                    <div class="count"></div>
+                    <div class="label">pôdorys</div>
+                    <img src="{{ sitebase }}assets/new/img/arrow-right-white3.svg" alt="">
+                </a>
+                <a href="{{siteUrl}}dom/{{entry.slug}}/osadenie" class="nav-sidebar-item {% if craft.app.request.segments|last == 'osadenie' %} {{ 'selected' }} {% endif %}">
+                    <div class="count"></div>
+                    <div class="label">osadenie domu</div>
+                    <img src="{{ sitebase }}assets/new/img/arrow-right-white3.svg" alt="">
+                </a>
+
+                {% if entry.type == 'dom_v2' %}
+                <a href="{{siteUrl}}dom/{{entry.slug}}/konfigurator" class="nav-sidebar-item {% if craft.app.request.segments|last == 'konfigurator' %} {{ 'selected' }} {% endif %}">
+                    <div class="count"></div>
+                    <div class="label">konfigurátor</div>
+                    <img src="{{ sitebase }}assets/new/img/arrow-right-white3.svg" alt="">
+                </a>
+                {% endif %}
+
+                <a href="{{siteUrl}}dom/{{entry.slug}}/dom-financovanie" class="nav-sidebar-item {% if craft.app.request.segments|last == 'dom-financovanie' %} {{ 'selected' }} {% endif %}">
+                    <div class="count"></div>
+                    <div class="label">financovanie</div>
+                    <img src="{{ sitebase }}assets/new/img/arrow-right-white3.svg" alt="">
+                </a>
+            </div>
+
+            
+            
+            <a href="{{siteUrl}}dom/{{entry.slug}}/poradenstvo" class="interest">
+                <div class="top">mám záujem</div>
+                <div class="bottom">projekt / stavba / vizualizácia</div>
+            </a>
+            <div class="other-container">
+                <!-- <div class="other-title-row">
+                    <div class="title">ostatné</div>
+                    <div class="line"></div>
+                </div> -->
+                <div class="other-items">
+                    <a href="{{siteUrl}}dom/{{entry.slug}}/dom-baliky" class="other-item">
+                        <div class="label">balíky domov</div>
+                        <img src="{{ sitebase }}assets/new/img/dropdown-right.svg" alt="">
+                    </a>
+                    <a href="{{siteUrl}}dom/{{entry.slug}}/dom-prevedenia" class="other-item">
+                        <div class="label">prevedenia domu</div>
+                        <img src="{{ sitebase }}assets/new/img/dropdown-right.svg" alt="">
+                    </a>
+                    <a href="{{siteUrl}}dom/{{entry.slug}}/dom-otazky" class="other-item">
+                        <div class="label">všeobecné otázky</div>
+                        <img src="{{ sitebase }}assets/new/img/dropdown-right.svg" alt="">
+                    </a>
+                    <a href="{{siteUrl}}dom/{{entry.slug}}/dom-zlavy" class="other-item">
+                        <div class="label">zľavy s family klubom</div>
+                        <img src="{{ sitebase }}assets/new/img/dropdown-right.svg" alt="">
+                        <!-- <div class="drop-list">
+                            <div class="drop-list-item">
+                                <a class="label">otázky k domu</a>
+                                <img src="{{ sitebase }}assets/new/img/downarrow-brightblue.svg" alt="">
+                            </div>
+                            <div class="drop-list-item">
+                                <a class="label">všeobecné otázky</a>
+                                <img src="{{ sitebase }}assets/new/img/downarrow-brightblue.svg" alt="">
+                            </div>
+                            <div class="drop-list-item">
+                                <a class="label">recenzie a fotky</a>
+                                <img src="{{ sitebase }}assets/new/img/downarrow-brightblue.svg" alt="">
+                            </div>
+                        </div> -->
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="dom-nav-sidebar-mobile-button">
+        Navigácia
+    </div>
+</div>

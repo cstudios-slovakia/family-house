@@ -1,0 +1,23 @@
+{#builds up a request friendly query string with '?'#}
+{% set enabledFilterQueryString = craft.housefilterModule.getEnabledFilterQueryString %}
+{# ??#}
+{% set comingSoon = false %}
+
+{# the filtered houses list#}
+{% set housesListData = craft.housefilterModule.getHousesList %}
+{% paginate housesListData as paginateInfo, housesList %}
+
+{# set filtered house amount throug a module#}
+{% set filterResult = paginateInfo.total %}
+
+{# builds up the filtered labels from module#}
+{% set activeFilterLabelsList = craft.housefilterModule.getActiveFilterLabelList %}
+<div>
+    <div class="listings--header">
+        {% include 'dom/partials/_filter_result_properties' %}
+    </div>
+
+    {% embed 'dom/partials/_toolbar' %}{% endembed %}
+
+    {% embed 'dom/partials/_houses_list' %}{% endembed %}
+</div>

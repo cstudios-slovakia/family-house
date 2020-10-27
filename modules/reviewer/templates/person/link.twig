@@ -1,0 +1,79 @@
+{% extends "_layouts/cp"  %}
+{% set title = "Generate review link"|t('reviewer') %}
+{% set fullPageForm = true %}
+
+{% set tabs = {
+    generator: {label: 'Generator'|t('reviewer'), url: '#generator'},
+    reviews: {label: 'Reviews'|t('reviewer'), url: '#reviews'},
+} %}
+
+
+{% block content %}
+
+    <div id="generator">
+        {{ csrfInput() }}
+        <small>Review card for: </small>
+        <h3>
+            {{ person.first_name }} {{ person.last_name }}
+        </h3>
+        <p>
+            Please, click on 'Save' to generate another review card.
+        </p>
+
+        {% if review is defined %}
+
+            <h3>
+                Review link
+            </h3>
+            <p>Copy: <strong>{{ review.getEmailLink() }}</strong></p>
+
+        {% endif %}
+    </div>
+    <div id="reviews" class="hidden">
+        <h3>
+            List of review cards
+        </h3>
+        <table class="data fullwidth collapsible">
+            <thead>
+            <tr>
+                <th>Dátum vytvorenia dotazu</th>
+                <th>Odpovedané</th>
+                <th>Link dotazu</th>
+
+            </tr>
+            </thead>
+            <tbody>
+            {% for review in reviews %}
+
+                <tr>
+                    <td>
+                        {{ review.dateCreated|date('d.m.Y H:i') }}
+                    </td>
+                    <td>
+                        {% if review.question %}
+
+
+
+                        <a href="{{ url('actions/reviewer/review/show',{id:review.id}) }}" class="go">Áno</a>
+                        {% else %}
+                            Nie
+                        {% endif %}
+                    </td>
+                    <td>{{ review.getEmailLink() }}</td>
+                </tr>
+            {% endfor %}
+
+            </tbody>
+        </table>
+    </div>
+
+
+
+
+{% endblock %}
+
+
+
+
+
+

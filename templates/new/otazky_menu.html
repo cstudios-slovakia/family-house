@@ -1,0 +1,20 @@
+<div class="otazky-menu">
+    <a href="{{ siteUrl }}dom/{{ entry.slug }}/dom-otazky" class="button {% if craft.app.request.segments|last == 'dom-otazky' %} {{ 'selected' }} {% endif %}">
+        všeobecné otázky
+    </a>
+    <a href="{{ siteUrl }}dom/{{ entry.slug }}/dom-baliky" class="button {% if craft.app.request.segments|last == 'dom-baliky' %} {{ 'selected' }} {% endif %}">
+        balíky domov
+    </a>
+    <a href="{{ siteUrl }}dom/{{ entry.slug }}/dom-partneri" class="button {% if craft.app.request.segments|last == 'dom-partneri' %} {{ 'selected' }} {% endif %}">
+        naši partneri
+    </a>
+    <a href="{{ siteUrl }}dom/{{ entry.slug }}/dom-recenzie" class="button {% if craft.app.request.segments|last == 'dom-recenzie' %} {{ 'selected' }} {% endif %}">
+        recenzie a fotky
+    </a>
+    <a href="{{ siteUrl }}dom/{{ entry.slug }}/dom-prevedenia" class="button {% if craft.app.request.segments|last == 'dom-prevedenia' %} {{ 'selected' }} {% endif %}">
+        prevedenia domu
+    </a>
+    <a href="{{ siteUrl }}dom/{{ entry.slug }}/dom-zlavy" class="button {% if craft.app.request.segments|last == 'dom-zlavy' %} {{ 'selected' }} {% endif %}">
+        zľavy s family klubom
+    </a>
+</div>

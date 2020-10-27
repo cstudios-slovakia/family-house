@@ -1,0 +1,207 @@
+{% block headerScripts %}
+
+    {% set _version = '1.0.3' %}
+    <script src="https://tools.cstudios.ninja/jquery.domline.min.js?v={{ _version }}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.10/lodash.min.js?v={{ _version }}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js?v={{ _version }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js?v={{ _version }}"></script>
+
+
+
+    {% set _s = entry.sirka|replace('m','') %}
+    {% set _v = entry.vyska|replace('m','') %}
+    {% if entry.sirka is empty or entry.sirka == '' %}
+        {% set _s = 40 %}
+    {% endif %}
+    {% if entry.vyska is empty or entry.vyska == '' %}
+        {% set _v = 40 %}
+    {% endif %}
+
+    <script>
+        var editorData = {
+            border: [
+                {x:100,   y:100},
+                {x:100,   y:400},
+                {x:400,   y:400},
+                {x:400,   y:100}
+            ],
+            background: '',
+            house: {
+                url: '{{ entry.houseImage is not empty ? entry.houseImage.first().url('editorHouseTransform') : '' }}',
+                x: 150, // 1
+                y: 150,
+                sizeX: {{ _s|replace(',','.') * 2 }},
+                sizeY: {{ _v|replace(',','.') * 2 }},
+                rotation: 0,
+                flip: 1,
+                selected: 0},
+                assets: []
+        };
+    </script>
+{% set _editorVersion = '1.302'  %}
+<!--{% set _editorVersion = date().timestamp  %}-->
+    <script src="{{ settings.baseUrl }}assets/js/vendor/editor.min.js?v={{ _editorVersion }}"></script>
+
+{% endblock headerScripts %}
+
+    <!-- CONTENT CONTAINER -->
+        <div class="main editor-main editor-embed" data-init="{{ craft.app.request.getParam('uid') }}">
+            <!-- EDITOR CONTENT -->
+                <div class="editor-content">
+                    <div id="canvas" class="full-size" data-house-url="{{ entry.houseImage is not empty ? entry.houseImage.first().url('editorHouseTransform') : ''  }}">
+
+                        {% set editor = craft.entries.section('editor') %}
+
+                        <!-- FIRST PATTERN IS THE DEFAULT BACKGROUND -->
+                        {% set objectsList = editor.type('Pattern') %}
+                        {% set defaultCanvasImage = '' %}
+                        {% if objectsList is not empty %}
+                            {% set defaultCanvasImage = objectsList.one().editorAssetImage is not empty ? objectsList.one().editorAssetImage.one().url('editorAssetTransform') : '' %}
+                        {% endif %}
+
+                        <div class="canvas-background" style="background: url({{ defaultCanvasImage }}) no-repeat; background-position:center; background-size: cover"></div>
+                        <div class="assets-list">
+                            <div class="content-relative">
+                                <!-- TEXTURE -->
+                                    <div class="list object">
+                                        {% set objectsList = editor.type('Object') %}
+                                        {% if objectsList is not empty %}
+                                            {% for objElem in objectsList %}
+                                                {% set assetImage = objElem.editorAssetImage is not empty ? objElem.editorAssetImage.one().url('editorAssetTransform') : '' %}
+                                                <div onClick="addAssetElem('{{ assetImage }}', {{ objElem.objectSize }})">
+                                                    <img src="{{ assetImage }}" alt="{{ objElem.title }} - Editor - Familyhouse"/>
+                                                </div>
+                                            {% endfor %}
+                                        {% endif %}
+                                    </div>
+                                <!-- /TEXTURE -->
+
+                                <!-- BACKGROUNDS -->
+                                    <div class="list texture">
+                                        {% set objectsList = editor.type('Pattern') %}
+                                        {% if objectsList is not empty %}
+                                            {% for objElem in objectsList %}
+                                                {% set assetImage = objElem.editorAssetImage is not empty ? objElem.editorAssetImage.first().url('editorAssetTransform') : '' %}
+                                                {% set assetImageBig = objElem.editorAssetImage is not empty ? objElem.editorAssetImage.first().url('editorBackgroundTexture') : '' %}
+                                                <div onClick="changeBackground('{{ assetImage }}')">
+                                                    <img class="texture" src="{{ assetImage }}" alt="{{ objElem.title }} - Editor - Familyhouse"/>
+                                                </div>
+                                            {% endfor %}
+                                        {% endif %}
+                                    </div>
+                                <!-- /BACKGROUNDS -->
+
+                                <!-- SEND EMAIL -->
+                                    <div class="send-mail-container mail">
+                                        <form id="send-editor-data-form" name="editorSendToMail" action="https://familyhouse.sk/share.php" method="post">
+                                            <input type="text" placeholder="Meno" id="editor-name" required>
+                                            <input type="email" placeholder="E-mail" id="editor-email" required>
+                                            <input type="hidden" name="data" id="editor-data"/>
+                                            {{craft.recaptcha.render()}}
+                                            <button class="btn-primary" type="submit" disabled>
+                                                <span>{{ "Odoslať"|t }}</span>
+                                                <svg viewBox="0 0 24 24">
+                                                    <path fill="#ed483e" d="M2,21L23,12L2,3V10L17,12L2,14V21Z" />
+                                                </svg>
+                                            </button>
+                                        </form>
+                                    </div>
+                                <!-- /SEND EMAIL -->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="editor-controllers">
+                        <div class="heading">
+                            <button class="btn-primary" id="ruler-label-btn">
+                                <svg style="width:24px;height:24px" viewBox="0 0 24 24">
+                                    <path fill="#000000" d="M1.39,18.36L3.16,16.6L4.58,18L5.64,16.95L4.22,15.54L5.64,14.12L8.11,16.6L9.17,15.54L6.7,13.06L8.11,11.65L9.53,13.06L10.59,12L9.17,10.59L10.59,9.17L13.06,11.65L14.12,10.59L11.65,8.11L13.06,6.7L14.47,8.11L15.54,7.05L14.12,5.64L15.54,4.22L18,6.7L19.07,5.64L16.6,3.16L18.36,1.39L22.61,5.64L5.64,22.61L1.39,18.36Z" />
+                                </svg>
+                                <span>{{ "Merať"|t }}</span>
+                            </button>
+                            <input class="btn-primary ruler" name="ruler" type="checkbox" id="ruler"/>
+                            <a class="btn-primary" onclick="undo()">
+                                <svg style="width:24px;height:24px" viewBox="0 0 24 24">
+                                    <path fill="#fff" d="M13.5,7A6.5,6.5 0 0,1 20,13.5A6.5,6.5 0 0,1 13.5,20H10V18H13.5C16,18 18,16 18,13.5C18,11 16,9 13.5,9H7.83L10.91,12.09L9.5,13.5L4,8L9.5,2.5L10.92,3.91L7.83,7H13.5M6,18H8V20H6V18Z" />
+                                </svg>
+                                <span>{{ "Späť"|t }}</span>
+                            </a>
+                        </div>
+
+                        <a onclick="addNode()" class="btn-primary fw add">
+                            <svg style="width:24px;height:24px" viewBox="0 0 24 24">
+                                <path fill="#000000" d="M12,20C7.59,20 4,16.41 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59 20,12C20,16.41 16.41,20 12,20M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M13,7H11V11H7V13H11V17H13V13H17V11H13V7Z" />
+                            </svg>
+                            <span>{{ "Nový lom pozemku"|t }}</span>
+                        </a>
+
+                        <!-- ADD ASSET -->
+                            <a class="btn-primary fw add-asset" data-type="object">
+                                <svg style="width:24px;height:24px" viewBox="0 0 24 24">
+                                    <path fill="#000000" d="M15.41,16.58L10.83,12L15.41,7.41L14,6L8,12L14,18L15.41,16.58Z" />
+                                </svg>
+                                <div class="span">
+                                    <span>{{ "Pridať object"|t }}</span>
+                                    <span class="tooltip">{{ "Napríklad krík, auto..."|t }}</span>
+                                </div>
+                            </a>
+                        <!-- /ADD ASSET -->
+
+                        <!-- ADD BACKGROUND -->
+                            <a onclick="addAsset()" class="btn-primary fw add-asset" data-type="texture">
+                                <svg style="width:24px;height:24px" viewBox="0 0 24 24">
+                                    <path fill="#000000" d="M8.5,13.5L11,16.5L14.5,12L19,18H5M21,19V5C21,3.89 20.1,3 19,3H5A2,2 0 0,0 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19Z" />
+                                </svg>
+                                <div class="span">
+                                    <span>{{ "Pridať pozadie"|t }}</span>
+                                    <span class="tooltip">{{ "Napríklad krík, auto..."|t }}</span>
+                                </div>
+                            </a>
+                        <!-- /ADD BACKGROUND -->
+
+                        <div class="label">{{ "Presnosť"|t }}</div>
+                        <div class="grid-slider" id="slider-container">
+                            <div id="custom-handle" class="ui-slider-handle"></div>
+                            <input type="number" value="1" min="1" max="100" width="3" name="snap-to-grid" id="snapToGrid"/>
+                        </div>
+
+                        <div class="rotation-container">
+                            <div class="label rotation-control">{{ "Rotácia"|t }}</div>
+                            <div class="grid-slider rotation-control" id="rotation-slider-container">
+                                <div id="custom-rotation-handle" class="ui-slider-handle"></div>
+                                <input type="number" value="1" min="1" max="100" width="3" name="snap-to-grid"/>
+                            </div>
+
+                            <div class="rotation-flip btn-primary">
+                                <span>{{ "Preklopiť"|t }}</span>
+                            </div>
+                        </div>
+
+                        <div class="footer">
+
+                            <a class="btn-primary send-mail fw small add-asset" data-type="mail">
+                                <svg style="width:24px;height:24px" viewBox="0 0 24 24">
+                                    <path fill="#000000" d="M20,8L12,13L4,8V6L12,11L20,6M20,4H4C2.89,4 2,4.89 2,6V18A2,2 0 0,0 4,20H20A2,2 0 0,0 22,18V6C22,4.89 21.1,4 20,4Z" />
+                                </svg>
+                                <span>{{ "Odoslať na email"|t }}</span>
+                            </a>
+
+                            <a onclick="save()" class="btn-primary">
+                                <svg style="width:24px;height:24px" viewBox="0 0 24 24">
+                                    <path fill="#000000" d="M17,13L12,18L7,13H10V9H14V13M19.35,10.03C18.67,6.59 15.64,4 12,4C9.11,4 6.6,5.64 5.35,8.03C2.34,8.36 0,10.9 0,14A6,6 0 0,0 6,20H19A5,5 0 0,0 24,15C24,12.36 21.95,10.22 19.35,10.03Z" />
+                                </svg>
+                                <span>{{ "Zapamätať"|t }}</span>
+                            </a>
+                            <a onclick="load()" class="btn-primary">
+                                <svg style="width:24px;height:24px" viewBox="0 0 24 24">
+                                    <path fill="#000000" d="M14,13V17H10V13H7L12,8L17,13M19.35,10.03C18.67,6.59 15.64,4 12,4C9.11,4 6.6,5.64 5.35,8.03C2.34,8.36 0,10.9 0,14A6,6 0 0,0 6,20H19A5,5 0 0,0 24,15C24,12.36 21.95,10.22 19.35,10.03Z" />
+                                </svg>
+                                <span>{{ "Načítať"|t }}</span>
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
+            <!-- EDITOR CONTENT -->
+
+        </div>
+    <!-- /CONTENT CONTAINER -->

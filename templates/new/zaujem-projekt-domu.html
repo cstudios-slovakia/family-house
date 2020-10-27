@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+    {% set sitebase = 'https://familyhouse.sk/' %}
+
+    {% set entry = craft.entries().section('dom').slug(craft.app.request.getSegment(2)).one() %}
+
+    {% set dom = entry %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projekty Domov - Family House 2020</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="{{ sitebase }}assets/css/vendor/swiper.min.css">
+
+    <link rel="stylesheet" href="{{ sitebase }}assets/new/css/simplebar.css">
+    <link rel="stylesheet" href="{{ sitebase }}assets/new/css/main.css?=ver{{ random(1, 100) }}">
+</head>
+<body>
+    <div class="page-container">
+        {% embed "new/header/header.html" %}
+        {% endembed %}
+
+
+        
+        <div class="page" id="poradenstvo">
+            
+            {% embed "new/checkout_sidebar.html" %}
+            {% endembed %}
+
+            <div class="poradenstvo-container">
+
+                {% embed "new/checkout-top-nav.html" %}
+                {% endembed %}
+
+                <form class="poradenstvo-form projekt-domu" method="post" action="{{sitebase}}services/projekt-domu.php" accept-charset="UTF-8">
+                    {{ getCsrfInput() }}
+
+                    <input type="hidden" name="action" value="contactForm/message/add">
+                    <input type="hidden" name="formId" value="1">
+                    <input type="hidden" name="redirect" value="dakujeme">
+                    <input type="hidden" name="dom" value="{{ entry.title }}">
+                    <input type="hidden" class="captcha-input" name="g-recaptcha-response" value="0">
+                    
+                    <div id="step1" class="step1">
+                        <h2>
+                            kontaktné údaje
+                        </h2>
+    
+                        <div class="poradenstvo">
+                            
+                            <div class="wrapper">
+                                <div class="col">
+                                    <div class="row">
+                                        <input type="text" name="Name" id="Name" placeholder="Vaše meno a priezvisko*">
+                                    </div>
+                                    <div class="row">
+                                        <input type="text" name="Street" id="Street" placeholder="Adresa*">
+                                    </div>
+                                    <div class="row">
+                                        <input type="text" name="City" id="City" placeholder="Mesto*">
+                                    </div>
+                                    <div class="row">
+                                        <input type="text" name="PSC" id="PSC" placeholder="PSC*">
+                                    </div>
+                                    <div class="row">
+                                        <input type="text" name="Telephone" id="Telephone" placeholder="Telefónne číslo">
+                                    </div>
+                                    <div class="row">
+                                        <input type="text" name="E-mail" id="E-mail" placeholder="E-mailová adresa*">
+                                    </div>
+                                    <textarea name="Message" id="Message" cols="30" rows="10" placeholder="Poznámky; napr. kedy Vám môžeme zavolať"></textarea>
+                                </div>
+                                <div class="col">
+                                    <div class="row chb firm">
+                                        <label class="chb" for="firma">
+                                            <input type="checkbox" name="firma" id="firma">
+                                            <div class="label">Nakupujem na firmu</div>
+                                        </label>
+                                    </div>
+                                </div>
+                                
+                            </div>
+
+                            <div class="row">
+                                <div class="agree">
+                                    <input type="checkbox" name="sales" id="sales">
+                                    <label for="sales">Súhlasím s <a href="">obchodnými podmienkami</a></label>
+                                </div>
+                            </div>
+
+                            <div class="send-btn" to="step2">
+                                ďalší krok
+                            </div>
+                            
+                        </div>
+                    </div>
+                    <div id="step2" class="step2">
+
+                    </div>
+                </form>
+
+
+            </div>
+
+            <div class="step-sidebar">
+                <div class="inner-wrapper">
+                    <div class="steps">
+                        <div class="label">
+                            len
+                        </div>
+                        <div class="nums">
+                            <div class="num step1 active">
+                                1
+                            </div>
+                            <div class="line">
+                            </div>
+                            <div class="num step2">
+                                2
+                            </div>
+                            <div class="line">
+                            </div>
+                            <div class="num step3">
+                                3
+                            </div>
+                        </div>
+                        <div class="label">
+                            krok
+                        </div>
+                    </div>
+                    {% set mem = craft.entries().section('member').slug('ing-david-lovas').one() %}
+                    {% set ss = mem.personalPhoto.first() %}
+                    <div class="member">
+                        <div class="img-wrap">
+                            <img src="{{ ss.getUrl('houseDetailGalleryThumbs320w') }}" width="{{ ss.getWidth('houseDetailGalleryThumbs320w') }}" height="{{ ss.getHeight('houseDetailGalleryThumbs320w') }}" alt="">
+                        </div>
+                        <div class="position">
+                            <div class="bold uppercase row">
+                                {{ mem.function }}
+                            </div>
+                            <div class="bold row">
+                                {{ mem.memberName }}
+                            </div>
+                            <div class="row">
+                                {{ mem.memberPhone }}
+                            </div>
+                            <div class="row">
+                                {{ mem.memberEmail }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        
+        
+        </div>
+
+
+
+
+
+
+
+        {% embed "new/footer-checkout.html" %}
+        {% endembed %}
+    
+    </div>
+    
+    
+        <script src="{{ sitebase }}assets/js/vendor/jquery-3.2.1.min.js"></script>
+        <script src="{{ sitebase }}assets/js/vendor/jquery-waypoints-and-sticky.js"></script>
+        <script src="{{ sitebase }}assets/js/vendor/simplebar.min.js"></script>
+        <script src="{{ sitebase }}assets/js/vendor/vue.js"></script>
+        <script src="{{ sitebase }}assets/js/vendor/swiper.min.js"></script>
+        <script src="{{ sitebase }}assets/new/js/main.js?=ver{{ random(1, 100) }}"></script>
+    
+        <script>
+
+            $('div.send-btn').click(function(){
+                var z = 2;
+                var cur = $(this).parent().parent().attr('class');
+                var step = $(this).attr('to');
+
+                console.log(step);
+
+                $('form div.' + cur).addClass('step-hidden');
+                $('form div.' + step).addClass('step-visible');
+                
+                
+                $('.step-sidebar .num.' + step).addClass('active');
+            });
+
+            
+
+            function bla() {
+                $('form #Street').attr('type', 'hidden');
+            }
+
+            function attach() {
+                $('form #Street').attr('type', 'hidden');
+                $(this).one("click", detach);
+            }
+
+            function detach() {
+                $('form #Street').attr('type', 'text');
+                $(this).one("click", attach);
+            }
+
+
+            $('.row.chb.firm').click(function(){
+
+                $('form #Street').toggleClass('addfirm');
+
+            });
+    
+    
+        </script>
+        {% embed '_components/security/reCaptcha' %}{% endembed %}
+        {% embed 'new/cookies-embed.html'%}{%endembed%}
+</body>
+</html>

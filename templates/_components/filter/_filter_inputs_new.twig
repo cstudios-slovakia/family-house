@@ -1,0 +1,248 @@
+<!-- FILTER GROUP WITH TITLE -->
+<div class="filter-group">
+    <div class="title">{{ 'Podlažnosť' | t }}</div>
+
+    {% for option in craft.housefilterModule.getFilterInputData('floor') %}
+
+        {% if option.value == 'bungalov' %}
+        <div>
+            <label for="option-{{ option.value }}">
+                <input id="option-{{ option.value }}" type="checkbox" value="{{ option.value }}" {{ option.selected | checked }} name="podlaznost[]" />
+                <span>Bungalov</span>
+            </label>
+        </div>
+        {% endif %}
+        {% if option.value == 'poschodove' %}
+        <div>
+            <label for="option-{{ option.value }}">
+                <input id="option-{{ option.value }}" type="checkbox" value="{{ option.value }}" {{ option.selected | checked }} name="podlaznost[]" />
+                <span>Poschodový dom</span>
+            </label>
+        </div>
+        {% endif %}
+
+    {% endfor %}
+</div>
+<!-- /FILTER GROUP WITH TITLE -->
+
+<!-- FILTER GROUP WITH TITLE -->
+<div class="filter-group">
+    <div class="title">Montované domy</div>
+
+    {% for option in craft.housefilterModule.getFilterInputData('construction') %}
+
+        {% if option.value == 'montovaneDomy' %}
+        <div>
+            <label for="option-{{ option.value }}">
+                <input id="option-{{ option.value }}" type="checkbox" value="{{ option.value }}" {{ option.selected | checked }} name="konstrukcia[]" />
+                <span>Montovaný dom</span>
+            </label>
+        </div>
+        {% endif %}
+        
+    {% endfor %}
+</div>
+<!-- /FILTER GROUP WITH TITLE -->
+
+<!-- FILTER GROUP WITHOUT TITLE -->
+<div class="filter-group">
+    {# <div class="title">{{ 'Murované domy' | t }}</div> #}
+    <div class="title">Murované domy</div>
+
+    {% for option in craft.housefilterModule.getFilterInputData('type') %}
+        <div>
+            <input id="option-{{ option.value }}" type="checkbox" value="{{ option.value }}" {{ option.selected | checked }} name="typ[]" />
+            <label for="option-{{ option.value }}">{{ option.label }}</label>
+        </div>
+    {% endfor %}
+</div>
+<!-- /FILTER GROUP WITHOUT TITLE -->
+
+<div class="filter-group">
+    <div class="title">Najviac Používané</div>
+
+    {% for option in craft.housefilterModule.getFilterInputData('eligible') %}
+        {% if option.value == 'uzkypozemok08' %}
+        <div>
+            <label for="option-{{ option.value }}">
+            <input id="option-{{ option.value }}" type="checkbox" value="{{ option.value }}" {{ option.selected | checked }} name="volitelne[]" />
+            Dom na úzky pozemok 0-8m
+            </label>
+        </div>
+        {% endif %}
+        {% if option.value == 'domnauzkypozemok89' %}
+        <div>
+            <label for="option-{{ option.value }}">
+            <input id="option-{{ option.value }}" type="checkbox" value="{{ option.value }}" {{ option.selected | checked }} name="volitelne[]" />
+            Dom na úzky pozemok 8-9m
+            </label>
+        </div>
+        {% endif %}
+        {% if option.value == 'domvtvarel' %}
+        <div>
+            <input id="option-{{ option.value }}" type="checkbox" value="{{ option.value }}" {{ option.selected | checked }} name="volitelne[]" />
+            <label for="option-{{ option.value }}">Dom v tvare L</label>
+        </div>
+        {% endif %}
+        {% if option.value == 'projektDo3Dni' %}
+        <div>
+            <input id="option-{{ option.value }}" type="checkbox" value="{{ option.value }}" {{ option.selected | checked }} name="volitelne[]" />
+            <label for="option-{{ option.value }}">Projekty do 3 dní</label>
+        </div>
+        {% endif %}
+        {% if option.value == 'projekt2020' %}
+        <div>
+            <input id="option-{{ option.value }}" type="checkbox" value="{{ option.value }}" {{ option.selected | checked }} name="volitelne[]" />
+            <label for="option-{{ option.value }}">Projekty domov 2020</label>
+        </div>
+        {% endif %}
+        
+    {% endfor %}
+</div>
+
+<div class="filter-group">
+    <div class="title">Podľa ceny</div>
+    <div class="">
+        <input type="checkbox" id="do60" value="60000" name="cena">
+        <label for="do60">Lacné domy do 60.000 &euro;</label>
+    </div>
+    <div class="">
+        <input type="checkbox" id="do80" value="80000" name="cena">
+        <label for="do80">Domy do 80.000 &euro;</label>
+    </div>
+    <div class="">
+        <input type="checkbox" id="do100" value="100000" name="cena">
+        <label for="do100">Domy do 100.000 &euro;</label>
+    </div>
+    <div class="">
+        <input type="checkbox" id="nad100" value="100001" name="cena">
+        <label for="nad100">Domy nad 100.000 &euro;</label>
+    </div>
+</div>
+
+
+<!-- FILTER GROUP WITH TITLE -->
+<div class="filter-group">
+    <div class="title">Úžitková Plocha</div>
+
+    {% for option in craft.housefilterModule.getFilterInputData('square') %}
+        <div>
+            <input id="option-{{ option.value }}" type="checkbox" value="{{ option.value }}" {{ option.selected | checked }} name="metraz[]" />
+            <label for="option-{{ option.value }}">{{ option.label }}</label>
+        </div>
+    {% endfor %}
+</div>
+<!-- /FILTER GROUP WITH TITLE -->
+
+<!-- FILTER GROUP WITH TITLE -->
+<div class="filter-group">
+    <div class="title">Miestnosti</div>
+
+    {% for option in craft.housefilterModule.getFilterInputData('room') %}
+        <div>
+            <input id="option-{{ option.value }}" type="checkbox" value="{{ option.value }}" {{ option.selected | checked }} name="izby[]" />
+            <label for="option-{{ option.value }}">{{ option.label }}</label>
+        </div>
+    {% endfor %}
+    {% for option in craft.housefilterModule.getFilterInputData('garage') %}
+        {% if option.value == 'g0' %}
+        <div>
+            <input id="option-{{ option.value }}" type="checkbox" value="{{ option.value }}" {{ option.selected | checked }} name="garaz[]" />
+            <label for="option-{{ option.value }}">Bez garáže</label>
+        </div>
+        {% endif %}
+        {% if option.value == 'g1' %}
+        <div>
+            <input id="option-{{ option.value }}" type="checkbox" value="{{ option.value }}" {{ option.selected | checked }} name="garaz[]" />
+            <label for="option-{{ option.value }}">Garáž</label>
+        </div>
+        {% endif %}
+        {% if option.value == 'g2' %}
+        <div>
+            <input id="option-{{ option.value }}" type="checkbox" value="{{ option.value }}" {{ option.selected | checked }} name="garaz[]" />
+            <label for="option-{{ option.value }}">Dvojgaráž</label>
+        </div>
+        {% endif %}
+    {% endfor %}
+    {% for option in craft.housefilterModule.getFilterInputData('eligible') %}
+        {% if option.value == 'kupelna' %}
+        <div>
+            <input id="option-{{ option.value }}" type="checkbox" value="{{ option.value }}" {{ option.selected | checked }} name="volitelne[]" />
+            <label for="option-{{ option.value }}">Kúpeľňa</label>
+        </div>
+        {% endif %}
+        {% if option.value == 'satnik' %}
+        <div>
+            <input id="option-{{ option.value }}" type="checkbox" value="{{ option.value }}" {{ option.selected | checked }} name="volitelne[]" />
+            <label for="option-{{ option.value }}">Šatník</label>
+        </div>
+        {% endif %}
+        {% if option.value == 'spajza' %}
+        <div>
+            <input id="option-{{ option.value }}" type="checkbox" value="{{ option.value }}" {{ option.selected | checked }} name="volitelne[]" />
+            <label for="option-{{ option.value }}">Špajza</label>
+        </div>
+        {% endif %}
+    {% endfor %}
+</div>
+<!-- /FILTER GROUP WITH TITLE -->
+
+<!-- FILTER GROUP WITH TITLE -->
+<div class="filter-group">
+    <div class="title">{{ 'Strecha'|t }}</div>
+
+    {% for option in craft.housefilterModule.getFilterInputData('roof') %}
+        <div>
+            <input id="option-{{ option.value }}" type="checkbox" value="{{ option.value }}" {{ option.selected | checked }} name="strecha[]" />
+            <label for="option-{{ option.value }}">{{ option.label }}</label>
+        </div>
+    {% endfor %}
+</div>
+<!-- /FILTER GROUP WITH TITLE -->
+
+<!-- FILTER GROUP WITHOUT TITLE -->
+<div class="filter-group">
+    <div class="title">Ďalšie typy domov</div>
+
+    {% for option in craft.housefilterModule.getFilterInputData('eligible') %}
+        {% if option.value == 'dvojdom' %}
+        <div>
+            <input id="option-{{ option.value }}" type="checkbox" value="{{ option.value }}" {{ option.selected | checked }} name="volitelne[]" />
+            <label for="option-{{ option.value }}">Dvojdom</label>
+        </div>
+        {% endif %}
+        {% if option.value == 'dvojgeneracnyDom' %}
+        <div>
+            <input id="option-{{ option.value }}" type="checkbox" value="{{ option.value }}" {{ option.selected | checked }} name="volitelne[]" />
+            <label for="option-{{ option.value }}">Dvojgeneračný dom</label>
+        </div>
+        {% endif %}
+        {% if option.value == 'podpivnicenyDom' %}
+        <div>
+            <input id="option-{{ option.value }}" type="checkbox" value="{{ option.value }}" {{ option.selected | checked }} name="volitelne[]" />
+            <label for="option-{{ option.value }}">Podpivničený dom</label>
+        </div>
+        {% endif %}
+        {% if option.value == 'domDoSvahu' %}
+        <div>
+            <input id="option-{{ option.value }}" type="checkbox" value="{{ option.value }}" {{ option.selected | checked }} name="volitelne[]" />
+            <label for="option-{{ option.value }}">Dom do svahu</label>
+        </div>
+        {% endif %}
+        
+    {% endfor %}
+
+    {% for option in craft.housefilterModule.getFilterInputData('floor') %}
+
+        {% if option.value == 'podkrovny' %}
+        <div>
+            <label for="option-{{ option.value }}">
+                <input id="option-{{ option.value }}" type="checkbox" value="{{ option.value }}" {{ option.selected | checked }} name="podlaznost[]" />
+                <span>Podkrovný dom</span>
+            </label>
+        </div>
+        {% endif %}
+
+    {% endfor %}
+</div>
+<!-- /FILTER GROUP WITHOUT TITLE -->

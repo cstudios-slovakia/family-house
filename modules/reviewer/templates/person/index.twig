@@ -1,0 +1,67 @@
+{% extends '_layouts/cp' %}
+
+{% set title = "Persons" |t %}
+
+{% if crumbs is not defined %}
+    {% set crumbs = [
+        { label: craft.reviewerModule.name, url: url('reviewer') }
+    ] %}
+{% endif %}
+
+
+{% block actionButton %}
+    <a href="{{ url('reviewer/person/create') }}"
+       class="btn submit add icon">{{ "Add new person"|t('reviewer') }}</a>
+{% endblock %}
+
+{% block content %}
+
+    {% if persons %}
+        <table id="fields" class="data fullwidth collapsible">
+            <thead>
+            <th scope="col">Č.klienta</th>
+            <th scope="col">{{ "Interné č.klienta"|t('reviewer') }}</th>
+            <th scope="col">{{ "Meno a priezvisko"|t('reviewer') }}</th>
+            <th scope="col">{{ "Email"|t('reviewer') }}</th>
+            <th class=""></th>
+            <th class=""></th>
+            <th class=""></th>
+            </thead>
+            <tbody>
+            {% for person in persons %}
+                <tr data-id="{{ person.id }}">
+                    <td>
+                        #{{ person.id }}
+                    </td>
+                    <td>
+                        {{ person.client_number }}
+                    </td>
+                    <td>
+                        {{ person.first_name }} {{ person.last_name }}
+                    </td>
+                    <td>
+                        {{ person.email }}
+                    </td>
+                    <td class="thin"><a class="edit icon"
+                                        title="{{ 'Edit'|t('app') }}"
+                                        role="button"
+                                        href="{{ url('reviewer/person/edit',{id:person.id}) }}"></a></td>
+                    <td class="thin"><a class="" title="{{ 'Link'|t('reviewer') }}" role="button"
+                                        href="{{ url('reviewer/person/link-builder',{id:person.id}) }}">{{ 'Link'|t('reviewer') }}</a>
+                    </td>
+                    <td class="thin">
+                        <form method="post" action="{{ url('reviewer/person/delete') }}" accept-charset="utf-8" >
+                            {{ getCsrfInput() }}
+{#                            <input type="hidden" name="action" value="reviewer/person/delete">#}
+                            <input type="hidden" name="id" value="{{ person.id }}">
+                            <button type="submit" class="delete icon btn btn-link"></button>
+                        </form>
+                    </td>
+
+
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+{% endblock %}

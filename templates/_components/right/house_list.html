@@ -1,0 +1,94 @@
+{# set housesList = craft.entries.section('dom').limit(settings.houseListCountListView) #}
+
+{% paginate craft.entries.section('dom').limit(settings.houseListCountListView) as pageInfo, housesList %}
+
+{% set filterQueryString = craft.app.request.getQueryStringWithoutPath() %}
+{% for entry in housesList %}
+
+    <!-- HOUSE ELEM -->
+        <a href="{{ entry.url }}{% if filterQueryString is not empty%}?{{ filterQueryString }}{% endif %}" class="house-elem">
+            {% set cover = entry.vizualy.first() %}
+            <img src="{{ cover.url('catalogViewListCover') }}" alt="{{ cover }} - {{ entry.nazov }}" />
+
+            <div class="details">
+                <div class="top">
+                    <div class="name">
+                        <div class="counter">#{% if entry.cisloDomu is not empty %}{{ entry.cisloDomu }}{% else %}{{ entry.id }}{% endif %}</div>
+                        <div>{{ entry.nazov }}</div>
+                    </div>
+                </div>
+                <div class="bottom">
+
+                    {% if entry.stitok != '' %}
+                        <div class="label" style="background: {{ entry.stitokFarba.value }} ">
+                            <div>{{ entry.stitok }}</div>
+                        </div>
+                    {% endif %}
+
+                    <div class="box"></div>
+                </div>
+            </div>
+
+            {% set finalContent = [] %}
+            {% if entry.seopKeys is not empty %}
+
+                {% for elem in entry.seopKeys %}
+                    {% set currentLoopIndex = loop.index %}
+                    {% set contentIndex = elem.contentKey - 1 %}
+
+                    {% if entry.seo|length %}
+                        {% for seoObject in entry.seo %}
+                            {% if currentLoopIndex == loop.index %}
+                                {# Entry content #}
+                                {% if seoObject.contents|length and contentIndex >= 0 %}
+                                    {% if seoObject.contents[contentIndex] is defined %}
+                                        {% set finalContent = finalContent|merge([seoObject.contents[contentIndex].content]) %}
+                                    {% endif %}
+                                {% endif %}
+
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+
+                {% endfor %}
+
+            {% endif %}
+
+            <!-- DETAILS BOTTOM -->
+                <div class="details-bottom">
+                    <div class="short-description">
+                        {% if finalContent|length %}
+                            <p>{{ finalContent|join(' ') }}</p>
+                        {% endif %}
+                    </div>
+                    <div class="info-grid">
+                        <div>
+                            <div class="row">
+                                <div class="label">{{ "Úžitková plocha"|t }}</div>
+                                <div>{{ entry.uzhitkovaPlocha }} m<sup>2</sup></div>
+                            </div>
+                            <div class="row">
+                                <div class="label">{{ "Cena projektu"|t }}</div>
+                                <div>{{ entry.projekt }} &euro;</div>
+                            </div>
+                            <div class="row">
+                                <div class="label">{{ "Cena holodomu"|t }}</div>
+                                <div>{{ entry.holodomSDph }} &euro;</div>
+                            </div>
+                            <div class="row">
+                                <div class="label">{{ "Cena komplet"|t }}</div>
+                                <div>
+                                    <strong class="red">{{ entry.kompletSDph }} &euro;</strong>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="interest">
+                            <div>{{ "Mám <br>záujem"|t|raw }}</div>
+                        </div>
+                    </div>
+                </div>
+            <!-- /DETAILS BOTTOM -->
+        </a>
+    <!-- /HOUSE ELEM -->
+
+{% endfor %}

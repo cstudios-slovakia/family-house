@@ -1,0 +1,100 @@
+//@import "_mixins/radio_input";
+.left--block{
+  padding: 25px 22px;
+  border: 1px solid $background-color;
+  border-top: none;
+  .left-block--title{
+    text-transform: uppercase;
+    color: $left--block-title--color;
+    font-family: Montserrat;
+    font-size: 14px;
+    font-weight: bold;
+    letter-spacing: 3px;
+    line-height: 18px;
+
+  }
+  .left-block--content{
+    display: flex;
+    flex-direction: column;
+    label{
+      margin: 12px 0;
+    }
+  }
+
+  &.pm--house-versions {
+    .left-block--title{
+      color: #000;
+      margin-bottom: 19px;
+    }
+    .left-block--content{
+      label{
+        text-transform: uppercase;
+      }
+      @include radio-input('pm-radio-group')
+    }
+  }
+
+  &.pm--version-price {
+    .left-block--title{
+
+      margin-bottom: 15px;
+    }
+    .left-block--content{
+      color: $site--color-red;
+      margin: 4px 0;
+    }
+  }
+
+  &.pm--energy-sum-block{
+    background-color: $background-color;
+    .left-block--title{
+      font-weight: bold;
+      padding-bottom: 16px;
+      border-bottom: 1px solid #9B9B9B;
+      margin-bottom: 12px;
+    }
+
+    .energy-row{
+      margin-bottom: 21px;
+      &--title{
+        color: #9B9B9B;
+        font-family: Montserrat;
+        font-size: 16px;
+        font-weight: 300;
+        line-height: 19px;
+        margin-bottom: 11px;
+      }
+
+      &--value{
+        font-size: 16px;
+        line-height: 19px;
+        margin-left: 39px;
+        color: #000;
+        span{
+          font-weight: bold;
+          font-size: 22px;
+          line-height: 27px;
+        }
+      }
+
+      &:last-child{
+        margin-bottom: 0;
+      }
+
+      &.energy-price-sum{
+        .energy-row--value{
+          color: $site--color-red;
+        }
+      }
+
+      &.energy-position{
+        .energy-row--value{
+          font-size: 66px;
+          line-height: 81px;
+          font-weight: bold;
+        }
+
+      }
+    }
+  }
+}

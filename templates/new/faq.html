@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+    {% set sitebase = 'https://familyhouse.sk/' %}
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projekty Domov - Family House 2020</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="{{ sitebase }}assets/css/vendor/swiper.min.css">
+
+    <link rel="stylesheet" href="{{ sitebase }}assets/new/css/simplebar.css">
+    <link rel="stylesheet" href="{{ sitebase }}assets/new/css/main.css?=ver{{ random(1, 100) }}">
+</head>
+<body>
+    <div class="page-container">
+        
+        {% embed "new/header/header.html" %}
+        {% endembed %}
+
+        <div class="page" id="multipage">
+            
+            {% embed "new/pages/page_sidebar.html" %}
+            {% endembed %}
+
+
+                <div class="multipage-container">
+                
+                    <div class="faq" id="faq">
+                        <div class="title-row">
+                            <h1>
+                                Ako Vám Pomôžeme - FAQ
+                            </h1>
+                            <!-- <div class="search">
+
+                            </div> -->
+                        </div>
+
+
+
+                        {% set swipers = craft.entries().section('akoVamPomozeme').level('2').all() %}
+                        <div class="swipers">
+
+                            {% for swiper_num in swipers %}
+
+                                <div class="swiper-container-{{loop.index}}">
+                                    <div class="title-row">
+                                        <h3>
+                                            {{ swiper_num.title }}
+                                        </h3>
+                                    </div>
+                                    <div class="swiper-wrapper">
+                                        {% for r in swiper_num.universalEntry.all()|batch(3, '') %}
+                                        
+                                            <div class="swiper-slide">
+                                                {% for block in r %}
+                                                    {% switch block.type %}
+
+                                                        {% case 'nadpisPopis' %}
+                                                            
+                                                            
+                                                            <div class="item">
+                                                                
+                                                                <div class="q">
+                                                                    {{ block.nadpis }}
+                                                                </div>
+                                                                
+                                                                <div class="a">
+                                                                    {{ block.popis }}
+                                                                </div>
+                                                                
+                                                            </div>
+                                                        
+                                                    {% endswitch %}
+                                                {% endfor %}
+                                            </div>
+
+                                        {% endfor %}  
+                                    </div>
+                                    <div class="pagination"></div>
+                                </div>
+
+                            {% endfor %}
+
+                        </div>
+
+                    </div>    
+                
+                    {% embed "new/embed_interest.html" %}
+                    {% endembed %}
+    
+    
+    
+                </div>
+            
+            
+            </div>
+    
+    
+    
+    
+    
+    
+    
+            {% embed "new/footer.twig" %}
+            {% endembed %}
+        
+        </div>
+        
+        
+            <script src="{{ sitebase }}assets/js/vendor/jquery-3.2.1.min.js"></script>
+            <script src="{{ sitebase }}assets/js/vendor/jquery-waypoints-and-sticky.js"></script>
+            <script src="{{ sitebase }}assets/js/vendor/simplebar.min.js"></script>
+            <script src="{{ sitebase }}assets/js/vendor/vue.js"></script>
+            <script src="{{ sitebase }}assets/js/vendor/vue-router.js"></script>
+            <script src="{{ sitebase }}assets/js/vendor/swiper.min.js"></script>
+            <script src="{{ sitebase }}assets/new/js/main.js?=ver{{ random(1, 100) }}"></script>
+        
+            <script>
+                
+                {% for swiper_num in swipers %}
+
+                var ref_swiper = new Swiper('.swiper-container-{{loop.index}}', {
+                    spaceBetween: 20,
+                    slidesPerView: 1,
+                    pagination: {
+                        el: '.swiper-container-{{loop.index}} .pagination',
+                    }
+                });                
+
+                {% endfor %}
+        
+            </script>
+            {% embed 'new/cookies-embed.html'%}
+            {% endembed %}
+</body>
+</html>

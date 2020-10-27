@@ -1,0 +1,8 @@
+<table border="1">
+    {% for key in calcFlow %}
+        <tr>
+            <td>{{ key }}</td>
+            <td>{{ calculationElements.get(key).getValue() }}</td>
+        </tr>
+    {% endfor %}
+</table>

@@ -1,0 +1,34 @@
+{
+    "name": "reviewer-module",
+    "description": "Module for reviews",
+    "version": "1.0.0",
+    "type": "craft-module",
+    "keywords": ["module"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "lostika86"
+        }
+    ],
+    "require": {
+        "illuminate/support": "^5.8",
+        "yii2tech/spreadsheet": "*",
+        "mossadal/math-parser": "^1.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "namespace\\prefix\\": "src/"
+        }
+    },
+    "extra": {
+        "handle": "plugin-handle",
+        "name": "Plugin Name",
+        "documentationUrl": "https://github.com/developer/repo/blob/master/README.md"
+    },
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://asset-packagist.org"
+        }
+    ]
+}

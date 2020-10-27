@@ -1,0 +1,69 @@
+{% extends "_layout" %}
+{% set review = craft.app.request.getParam('review',0) %}
+{% block bodyClass %}dom-list-view{% endblock bodyClass %}
+
+{% block content %}
+
+<h1 class="_hidden">{{ "Ďakujeme"|t }}</h1>
+
+<!-- CONTENT CONTAINER -->
+    <div class="main grid-2-layout no-filter">
+
+        <!-- FILTER + HOUSE LISTING -->
+            <div class="filter-house-listing">
+                {% embed '_components/left' %}{% endembed %}
+
+                <!-- HOUSE LISTING -->
+                    <div class="house-listing">
+                        <div>
+
+                            <!-- CONTACT CONTENT -->
+                                <div class="house-details contact-container">
+                                    {% if review == 1 %}
+
+
+
+                                        <!-- DETAILS -->
+                                        <div class="details">
+                                            <div class="thanks-message" style="margin: 100px 0;width: 100%;text-align: center;font-weight: 400;font-size: 20px;line-height: 1.5;">
+                                                <div>{{ "Ďakujeme, za Váš názor!"|t }}</div>
+                                            </div>
+                                        </div>
+                                        <!-- /DETAILS -->
+                                        {% else %}
+                                            <div class="house-header">
+                                                <div>
+                                                    <div class="name">
+                                                        <div class="counter"></div>
+                                                        <div class="no-padding">{{ "Kontakt"|t }}</div>
+                                                    </div>
+                                                </div>
+                                                <div class="beadcrumbs">
+                                                    <a href="{{ siteUrl }}" class="elem">{{ "Hlavná stránka"|t }}</a>
+                                                    <div>{{ "Kontakt"|t }}</div>
+                                                </div>
+                                            </div>
+                                        <!-- DETAILS -->
+                                        <div class="details">
+                                            <div class="thanks-message" style="margin: 100px 0;width: 100%;text-align: center;font-weight: 400;font-size: 20px;line-height: 1.5;">
+                                                <div>{{ "Ďakujeme, <br> budeme Vás kontaktovať!"|t|raw }}</div>
+                                            </div>
+                                        </div>
+                                        <!-- /DETAILS -->
+                                    {% endif %}
+
+
+                                </div>
+                            <!-- /CONTACT CONTENT-->
+
+                        </div>
+                    </div>
+                <!-- /HOUSE LISTING -->
+
+            </div>
+        <!-- /FILTER + HOUSE LISTING -->
+
+    </div>
+<!-- /CONTENT CONTAINER -->
+
+{% endblock %}

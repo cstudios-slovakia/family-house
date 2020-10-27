@@ -1,0 +1,30 @@
+<div class="question__block question-type__slider">
+    <p>
+        {{ sliderData.title }}  {{ requiredMark|raw }}
+    </p>
+
+    <fieldset>
+
+        <input type="hidden" name="questions[{{ sliderData.q_name }}]" data-question="{{ sliderData.q_name }}" class="slider">
+        <div class="slider-container">
+            <div id="{{ sliderData.q_name }}"></div>
+        </div>
+
+        <div class="question__slider-orientation">
+            {% for key, option in sliderData.q_options %}
+                <span>{{ option }}</span>
+            {% endfor %}
+        </div>
+
+        {% if sliderData.attr.commentable is defined and sliderData.attr.commentable  %}
+            <div class="comment">
+                {% if model.hasErrors(sliderData.q_name ~'_comment') %}
+                    <small class="field-error">
+                        {{ model.getFirstError(sliderData.q_name ~'_comment') }}
+                    </small>
+                {% endif %}
+                <textarea name="questions[comments][{{ sliderData.q_name }}]"  rows="5"></textarea>
+            </div>
+        {% endif %}
+    </fieldset>
+</div>

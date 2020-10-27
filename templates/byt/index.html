@@ -1,0 +1,207 @@
+<?php	
+/*
+ini_set('display_errors', 1);
+error_reporting(~0);
+*/
+
+$mysql=new MySQL();
+$mysql->connect();
+
+$possible_urls_step2 = array('_ab','cd','ef','gh','ij','kl','mn','op','rs');
+$possible_urls_step3 = array('a1','a2','b1','b2','c1','c2','d1','d2','e1','e2','f1','f2','g1','g2','h1','h2','i1','i2','j1','j2','k1','k2','l1','l2','m1','m2','n1','n2','o1','o2','p1','p2','r1','r2','s1','s2');
+
+$stepcontent = '';
+$maps = '';
+$tooltips = '';
+$back_url1 = '';
+$back_url2 = '';
+$mobiledropdown = '';
+
+if(isset($urlarr[3]) && in_array($urlarr[3],$possible_urls_step3)){
+	$curstep = 3;
+	$back_url1 = __BASE_URL__.'sk/'.$urlarr[1];
+	$back_url2 = __BASE_URL__.'sk/'.$urlarr[1].'/'.$urlarr[2];
+}elseif(isset($urlarr[2]) && in_array($urlarr[2],$possible_urls_step2)){
+	$curstep = 2;
+	$back_url1 = __BASE_URL__.'sk/'.$urlarr[1];
+}else{
+	$curstep = 1;
+}
+
+
+$text1 = 'Vyberte si bytový dom';
+$text2 = 'Zvoľte si dom, ktorý najlepšie zodpovedá vašim predstavám. ';
+
+if($curstep==2){
+	$text1 = 'Vyberte si byt';
+	$text2 = 'Zvoľte si byt, ktorý najlepšie zodpovedá vašim predstavám<br /> a vyberte si poschodie. ';
+}
+if($curstep==3){
+	$text1 = 'Byt: '.strtoupper($urlarr[3]);
+	$text2 = '';
+}
+
+$stepcontent .= '
+<div id="stepheader">
+	<div class="left-navigation">
+		<!--
+		<div class="title">'.$text1.'</div> <br />
+		-->
+		<div class="desc">'.$text2.'</div>
+		<div class="choose-step">
+			<div class="left-steps">
+				<span>{{ "Vyberte si blok<br /> a podlažie"|t|raw }}</span>
+				<div>{{ "Krok:"|t }}</div>
+			</div>
+			<div class="right-steps">
+				<a '.(($back_url1=='')?'':'href="'.$back_url1.(isset($_GET['dreamhouse'])?'?dreamhouse':'').'"').' class="'.(($back_url1=='')?'':'clickable').' '.(($curstep==1)?'active':'').'">01</a>
+				<a '.(($back_url2=='')?'':'href="'.$back_url2.(isset($_GET['dreamhouse'])?'?dreamhouse':'').'"').' class="'.(($back_url2=='')?'':'clickable').' '.(($curstep==2)?'active':'').'">02</a>
+				<a class="'.(($curstep==3)?'active':'').'">03</a>
+			</div>
+			<div class="clear"></div>
+		</div>
+	</div>
+		
+	<div class="right-navigation">
+		<!--
+		<div class="locality">Lokalita</div>
+		-->
+		<div class="clear"></div>
+		<input type="hidden" value="Byty na predaj" id="map_address" />
+		<div id="mapelem"></div>
+	</div>
+	
+	<div class="clear"></div>
+</div>
+';
+
+//$stepcontent .= "
+global $_js_AFTER;
+$_js_AFTER.= "
+<script>
+$(function(){
+	$('.map').maphilight({
+		stroke: true,
+		fillOpacity: 0.4,
+		strokeOpacity: 0.7
+	});
+	$('area.green').data('maphilight', {fillColor:'55d003',strokeColor:'55d003'});
+	$('area.orange').data('maphilight', {fillColor:'eca203',strokeColor:'eca203'});
+	$('area.red').data('maphilight', {fillColor:'ec0308',strokeColor:'ec0308'});
+	
+	/*var dopulse = true;
+	var direction = true;
+	
+	setInterval(function(){ 
+		if(dopulse){
+			if(direction){
+				$('#house1').trigger('mouseenter');
+				dopulse = true;
+			}else{
+				$('#house1').trigger('mouseleave');
+			}
+			direction = !direction;
+		}
+	}, 1000);
+	
+	
+	$('#stepcontent').on('mouseenter', function(){
+		dopulse = false;
+	}).on('mouseleave', function(){
+		dopulse = true;
+	});*/
+	
+});
+</script>";
+
+if($curstep==3){
+	include_once('_byty_na_predaj_step3.php');
+}elseif($curstep==2){
+	include_once('_byty_na_predaj_step2.php');
+}else{
+
+//$houses=$mysql->get_from_table_all('step1_data'," ORDER BY RAND() ASC LIMIT 0,9");
+$houses=$mysql->get_from_table_all_inc('step1_data');
+$housesData = array();
+$step2data=$mysql->get_from_table_all_inc('step2_data');
+for($i=0;$i<count($step2data);$i++){
+	if(isset($housesData[$step2data[$i]['step1_id']])){
+		$housesData[$step2data[$i]['step1_id']] += ($step2data[$i]['status']==1)?1:0;
+	}else{
+		$housesData[$step2data[$i]['step1_id']] = ($step2data[$i]['status']==1)?1:0;
+	}
+}
+//print_r($housesData);
+
+for($i=0;$i<count($houses);$i++){
+
+	$freecount = (isset($housesData[$houses[$i]['id']])?$housesData[$houses[$i]['id']]:0);
+	$posat = 'right';
+	if($i==(count($houses)-1)){
+		$posat = 'left';
+	}
+	$hovercolor = 'red';
+	if($freecount>0){
+		$hovercolor = 'green';
+	}
+	//BAD URL>>>>	$maps .= '<area id="house'.$houses[$i]['id'].'" class="'.$hovercolor.'" alt="" title="" href="'.__BASE_URL__.'sk/'.$urlarr[1].'/'.$houses[$i]['url'].'" shape="poly" coords="'.$houses[$i]['map_area_code'].'" />';
+	$maps .= '<area id="house'.$houses[$i]['id'].'" class="'.$hovercolor.'" alt="" title="" href="'.__BASE_URL__.'sk/byty_na_predaj/'.($houses[$i]['url']=="ab"?"_ab":$houses[$i]['url']).(isset($_GET['dreamhouse'])?'?dreamhouse':'').'" shape="poly" coords="'.$houses[$i]['map_area_code'].'" />';
+	$tooltips .= "
+	$('#house".$houses[$i]['id']."').qtip({
+        content:{
+             title: {text: '".$houses[$i]['project_name']."'},
+            text: '<span class=\"qtip_variable\">{{ "Voľné byty:"|t }} <strong>".$freecount."</strong></span>'
+        },
+        position: 	{my: 'bottom left', at: '".$posat." center'},
+        style:		{
+            classes:'qtip-shadow qtip-rounded qtip-cluetip wider gray-tooltip ".$hovercolor."'
+                    }
+
+            });
+	";
+	$mobiledropdown .= '<option value="'.__BASE_URL__.'sk/byty_na_predaj/'.$urlarr[1].'/'.$houses[$i]['url'].(isset($_GET['dreamhouse'])?'?dreamhouse':'').'">'.$houses[$i]['project_name'].'</option>';
+	
+}	
+
+//$stepcontent .= '
+$_js_AFTER.= '
+<script type="text/javascript">
+	$(document).ready(function() {
+				
+    '.$tooltips.'
+			
+	});
+</script>
+';
+$stepcontent .= '
+	<div id="stepcontent">
+		<img class="map mapstep1" usemap="#mainmap" id="step-big-img" src="'.__STEP_IMAGES__.'steps/main_area.jpg" alt="Main Area" />
+		<map name="mainmap" id="mainmap">
+			'.$maps.'
+		</map>
+		<img class="map2" src="'.__STEP_IMAGES__.'steps/main_area.jpg" alt="Main Area Mobile" />
+	</div>';
+
+
+$stepcontent .= '
+<select id="housemobiledropdown">
+	<option>{{ "Vyberte si blok"|t }}</option>
+	'.$mobiledropdown.'
+</select>
+';
+
+}
+
+$additionalpadding = '
+<style>
+.content{padding-top: 20px !important;}
+@media all and (max-width: 1000px) {
+	.content{padding-top: 0px !important;}
+}</style>
+';
+
+$content = $stepcontent.$additionalpadding.'<p style="text-align: center;font-size: 1.6em;">{{ "KLIKNITE NA DOM, KTORÝ VÁS ZAUJAL!"|t }}</p>';
+
+$mysql->disconnect();
+?>
+

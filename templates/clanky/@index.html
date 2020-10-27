@@ -1,0 +1,82 @@
+{#
+ # Homepage template
+ # ---------------
+ #
+ # When this template gets loaded, it will be because someone has accessed
+ # http://yoursite.com/ (without any URI). Craft checks to see if you have
+ # a Single section set to be the Homepage (as you do, by default), and
+ # loads the section’s Template (this file). A special ‘entry’ variable
+ # will already be set for you, assigned to the Homepage entry.
+ #
+ # It's worth noting that even if you didn't have a Homepage Single section,
+ # as long as this template remains at craft/templates/index.html, it
+ # would still be the one to get loaded when accessing http://yoursite.com/,
+ # albeit without an ‘entry’ variable already set for you.
+ #
+ # See this page for more details on how Craft routes requests:
+ # http://craftcms.com/docs/routing
+ #}
+
+{% extends "_layout" %}
+
+{% block content %}
+
+    <!-- CONTENT CONTAINER -->
+        <div class="main">
+
+         <!-- FILTER + HOUSE LISTING -->
+            <div class="filter-house-listing article-listing">
+
+            <!-- HOUSE LISTING -->
+                <div class="house-listing no-margin">
+                    <div class="articles-list">
+
+                        {# defaults #}
+                        {% set queryParams = {
+                            section: 'blog',
+                            limit: settings.articlesListCountListView,
+                        } %}
+
+                        {% set filteredBlogList = craft.entries(queryParams) %}
+                        {% paginate filteredBlogList as paginateInfo, articles %}
+
+                        <!-- LISTING -->
+                            <div class="list exported-list">
+
+                                {% for entry in articles %}
+                                    <!-- ARTICLE ELEM -->
+                                        <a href="{{ entry.url }}" class="article-elem exported">
+                                            {% set cover = entry.obrazok.one() %}
+                                            <img src="{{ cover.url }}" alt="{{ cover }} - {{ entry.blog_title }}" />
+                                            <div class="title">{{ entry.blog_title }}</div>
+                                            <div class="short-description">{{ entry.shortText }}</div>
+                                            <div class="continue-reading">Prečítať článok</div>
+                                        </a>
+                                    <!-- /ARTICLE ELEM -->
+                                {% endfor %}
+
+                            </div>
+                        <!-- /LISTING -->
+
+                        {% if filteredBlogList|length > 0 %}
+                            {% set queryString      = craft.app.request.getQueryStringWithoutPath() %}
+                            {% set queryStringFull  = (queryString is not empty) ? '?' ~ queryString : '' %}
+
+                            {% if paginateInfo.nextUrl %}
+                                <a href="{{ paginateInfo.nextUrl ~ queryStringFull }}">
+                                    <span>{{ settings.articlesListCountListView }} ďalsích...</span>
+                                </a>
+                            {% endif %}
+                        {% endif %}
+
+                    </div>
+                </div>
+            <!-- HOUSE LISTING -->
+
+            </div>
+         <!-- /FILTER + HOUSE LISTING -->
+
+        </div>
+    <!-- /CONTENT CONTAINER -->
+
+{% endblock %}

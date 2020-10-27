@@ -1,0 +1,128 @@
+{#
+ # Homepage template
+ # ---------------
+ #
+ # When this template gets loaded, it will be because someone has accessed
+ # http://yoursite.com/ (without any URI). Craft checks to see if you have
+ # a Single section set to be the Homepage (as you do, by default), and
+ # loads the section’s Template (this file). A special ‘entry’ variable
+ # will already be set for you, assigned to the Homepage entry.
+ #
+ # It's worth noting that even if you didn't have a Homepage Single section,
+ # as long as this template remains at craft/templates/index.html, it
+ # would still be the one to get loaded when accessing http://yoursite.com/,
+ # albeit without an ‘entry’ variable already set for you.
+ #
+ # See this page for more details on how Craft routes requests:
+ # http://craftcms.com/docs/routing
+ #}
+
+{% extends "_layout" %}
+{% set seo = entry.seoUpdated %}
+
+{% block content %}
+
+    <div class="main grid-2-layout article-page no-filter">
+        <div class="filter-house-listing">
+            {% embed '_components/left' %}{% endembed %}
+
+            <div class="house-listing-2 cms">
+                {% if entry.blogAdsUrl is empty %}
+                    <h1 class="article-title">{{ entry.title }}</h1>
+                {% endif %}
+
+                <!-- CONTENT CONTAINER -->
+                <div class="main article-content">
+
+                    {% for block in entry.blogContent %}
+
+                    {% switch block.type %}
+
+                    {% case "blogTitle" %}
+                    <{{ block.blogTitleLevel.value }}>{{ block.text }}</{{ block.blogTitleLevel.value }}>
+
+                {% case "blogText" %}
+                    <p>{{ block.text }}</p>
+
+                {% case "image" %}
+                    {% set imageEntry = block.image.one() %}
+                    {% if block.position == 'left' %}
+                        <div class="img-container {{ block.position }}" style="float:left; width: {{ block.width }}%;margin: 0 20px 20px 0;">
+                            <img src="{{ imageEntry.url }}" alt="{{ block.alt }}"/>
+                        </div>
+                    {% endif %}
+
+                {% if block.position == 'right' %}
+                    <div class="img-container {{ block.position }}" style="float:right; width: {{ block.width }}%; margin: 0 0 20px 20px;">
+                        <img src="{{ imageEntry.url }}" alt="{{ block.alt }}" />
+                    </div>
+                {% endif %}
+
+                {% if block.position == 'full' or block.position == 'center' %}
+                    <div class="img-container {{ block.position }}" style="width: 100%">
+                        <img src="{{ imageEntry.url }}" alt="{{ block.alt }}" />
+                    </div>
+                {% endif %}
+
+                {% case "blogQuote" %}
+                    <blockquote>{{ block.quote }}</blockquote>
+
+                {% case "matrixButtons" %}
+                    {% if block.matrixButtonUrl is  empty %}
+                        <div class="clearfix"></div>
+                        <a href="{{ block.matrixButtonUrl }}" class="matrix-btn-plain matrix-btn-{{ block.matrixButtonStyle }} {{ block.matrixButtonPosition }}">
+                            <span>{{ block.matrixButtonText }}</span>
+                        </a>
+                    {% endif %}
+
+                {% case "matrixRelatedArticles" %}
+                    {% if block.matrixRelatedArticlesList is not empty %}
+                        <div class="matrix-related-container">
+                            <h3>{{ block.matrixRelatedArticlesTitle }}</h3>
+                            <div class="matrix-related-list">
+                                {% for _article in block.matrixRelatedArticlesList %}
+                                    <a href="{{ _article.url }}">
+                                        {% set _imageUrl   = _article.obrazok is not empty ? _article.obrazok.one().url : '' %}
+                                        {% set _imageTitle = _article.obrazok is not empty ? _article.obrazok.one().title : '' %}
+                                        <img src="{{ _imageUrl }}" alt="{{ _imageTitle }}"/>
+                                        <h4>{{ _article.title }}</h4>
+                                    </a>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% endif %}
+
+                {% case "matrixRelatedHouses" %}
+                    {% if block.housesList is not empty %}
+                        <div class="matrix-related-container">
+                            <h3>{{ block.matrixRelatedHousesTitle }}</h3>
+                            <div class="matrix-related-list">
+                                {% for _article in block.housesList %}
+                                <a href="{{ _article.url }}">
+                                    {% set _imageUrl   = _article.vizualy is not empty ? _article.vizualy.one().url : '' %}
+                                    {% set _imageTitle = _article.vizualy is not empty ? _article.vizualy.one().title : '' %}
+                                    <img src="{{ _imageUrl }}" alt="{{ _imageTitle }}"/>
+                                    <h4>{{ _article.nazov }}</h4>
+                                </a>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% endif %}
+
+
+
+                {% endswitch %}
+
+                {% endfor %}
+
+                {% set backUrl  = craft.app.request.getUrlReferrer | default(siteUrl~'projekty-domov') %}
+                <a class="back-url" href="{{ backUrl }}">
+                    <span>{{ "Naspäť"|t }}</span>
+                </a>
+            </div>
+            <!-- /CONTENT CONTAINER -->
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

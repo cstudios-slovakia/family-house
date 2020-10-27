@@ -1,0 +1,149 @@
+
+<div class="dom-nav-sidebar-container">
+    <div class="dom-nav-sidebar-wrapper" data-simplebar data-simplebar-auto-hide="false">
+        <div class="dom-nav-sidebar">
+            <div class="name-row">
+                <h1>{{ dom.nazov }}</h1>
+            </div>
+            <div class="options-row">
+                {% if dom.type == 'dom' %}
+                <div class="option">
+                    <img src="{{craft.categories().group('houseClass').slug('murovany-dom').one().obrazok.one().url}}" alt="">
+                    <div class="active">murovaný</div>
+                </div>
+                {% endif %}
+
+                {% if dom.type == 'dom_v2' %}
+                {% for block in entry.priceNew.all() %}
+                    {% switch block.type %}
+
+                        {% case 'price' %}
+                        <div class="option">
+                            <img src="{{block.triedaKamPrisluchaCena.one().obrazok.one().url}}" alt="">
+                            <div class="ch-border">
+                                <input type="radio" name="{{block.triedaKamPrisluchaCena.one().slug}}" id="{{block.triedaKamPrisluchaCena.one().slug}}" class="ch">
+                            </div>
+                            <label for="{{block.triedaKamPrisluchaCena.one().slug}}" class="">{{block.triedaKamPrisluchaCena.one().title}}</label>
+                        </div>
+
+
+                    {% endswitch %}
+                {% endfor %}
+                
+                {% endif %}
+            </div>
+            <div class="dom-img">
+                {% set ss = dom.vizualy.first() %}
+                <img src="{{ ss.getUrl('houseDetailGalleryThumbs320w') }}" width="{{ ss.getWidth('houseDetailGalleryThumbs320w') }}" height="{{ ss.getHeight('houseDetailGalleryThumbs320w') }}" alt="">
+            </div>
+            <div class="nav-title-row">
+                <div class="line"></div>
+                <div class="title">
+                    <h2>Informácie o dome</h2>
+                </div>
+            </div>
+            <div class="table" style="position: relative;">
+                <div class="item">zastavaná plocha</div>
+                <div class="item">
+                    {% for row in dom.legendaMiestnostiUzitkovaPlocha %}
+                        {% if loop.last %}
+                            {{ row.value }}
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                <div class="item">úžitková plocha</div>
+                <div class="item">{{ dom.uzhitkovaPlocha|number_format(2, ',', '.') }} m&sup2;</div>
+                <div class="item">počet izieb</div>
+                <div class="item">
+                    {% switch dom.izby.value %}
+                        {% case "obyvacka2" %}
+                             3 
+                        {% case "obyacka3" %}
+                             4 
+                        {% case "obyacka4" %}
+                             5 
+                        {% case "obyacka5" %}
+                             5 + viac 
+                    {% endswitch %}
+                </div>
+                <div class="item">počet kúpeľní</div>
+                <div class="item">
+                    {% if dom.volitelne.contains('kupelna') %}
+                        2x
+                    {% else %}
+                        1x
+                    {% endif %}
+                </div>
+                <div class="item">garáž</div>
+                <div class="item">
+                    {% if dom.garaz == 'g0' %}
+                        Bez garáže
+                    {% elseif dom.garaz == 'g1' %}
+                        1x
+                    {% else %}
+                        2x
+                    {% endif %}
+                </div>
+            </div>
+
+            {% if craft.app.request.segments|last == 'zaujem-stavba-domu' %}
+
+            <div class="nav-title-row">
+                <div class="line"></div>
+                <div class="title">
+                    <h2>Cena stanovená podľa nastavenia konfigurátora!</h2>
+                </div>
+            </div>
+
+            <div class="sidebar-zlava">
+                <p>
+                    Cena vybraného balíka je&nbsp;<span class="cena">{{ dom.kompletSDph }}</span><span class="red">&nbsp;&euro;</span>
+                </p>
+                <p>
+                    Pri on-line objednávke získate zľavu:
+                </p>
+                <p>
+                    <span class="big-red"></span><span class="big-red">&nbsp;&euro;</span>
+                </p>
+                
+                <div class="zdarma">
+                    <span>celkom s DPH:</span> <span class="big-cena"></span>
+                </div>
+            </div>
+            {% endif %}
+
+            {% if craft.app.request.segments|last == 'poradenstvo' %}
+            <div class="sidebar-zlava">
+                <p>
+                    Veľmi si vážime Váš záujem o náš projekt!
+                </p>
+                <p>
+                    Práve preto Vám ponúkame bezplatné poradenstvo, aby sa Vám lepšie rozhodovalo.
+                </p>
+                <div class="zdarma">
+                    <span>PORADENSTVO</span>  <span>ZDARMA</span>
+                </div>
+            </div>
+            {% endif %}
+
+            {% if craft.app.request.segments|last == 'zaujem-vizualizacia' %}
+            <div class="sidebar-zlava">
+                <p>
+                    ZÁKLADNÁ CENA VIZUALIZÁCIE JE <span class="red">150 &euro;</span> <br>
+                    PRI ONLINE OVBJEDNÁVKE <br>
+                    ZÍSKATE ZĽAVU:
+                </p>
+                <div class="big-red">-25%</div>
+
+                <div class="zdarma">
+                    <span>celkom s DPH:</span> <span>112&euro;</span>
+                </div>
+            </div>
+            {% endif %}
+                    
+        </div>
+    </div>
+    <div class="dom-nav-sidebar-mobile-button">
+        Navigácia
+    </div>
+</div>

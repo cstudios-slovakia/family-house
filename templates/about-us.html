@@ -1,0 +1,102 @@
+{% extends "_layout" %}
+{% set seo = entry.seoUpdated %}
+
+{% block bodyClass %}dom-list-view{% endblock bodyClass %}
+
+{% block content %}
+
+<h1 class="_hidden">{{ "O nás"|t }}</h1>
+
+<!-- CONTENT CONTAINER -->
+    <div class="main grid-2-layout no-filter">
+
+        <!-- FILTER + HOUSE LISTING -->
+            <div class="filter-house-listing">
+                {% embed '_components/left' %}{% endembed %}
+
+                <!-- HOUSE LISTING -->
+                    <div class="house-listing">
+                        <div>
+
+                            <!-- CONTACT CONTENT -->
+                                <div class="house-details contact-container">
+
+                                    <div class="house-header">
+                                        <div>
+                                            <div class="name">
+                                                <div class="counter"></div>
+                                                <div class="no-padding">{{ "O nás"|t }}</div>
+                                            </div>
+                                        </div>
+                                        <div class="beadcrumbs">
+                                            <a href="{{ siteUrl }}" class="elem">{{ "Hlavná stránka"|t }}</a>
+                                            <div>O nás</div>
+                                        </div>
+                                    </div>
+
+                                    <!-- DETAILS -->
+                                        <div class="details contentable">
+                                            <div class="about-layout-grid ">
+                                                <div class="left">
+
+                                                    <div>
+                                                        <div class="title">{{ "Výstavba rodinných domov"|t }}</div>
+                                                        <p>{{ "Spoločnosť FamilyHouse, spol. s.r.o. poskytuje širokospektrálne a profesionálne služby v oblasti výstavby klasických rodinných domov na kľúč, taktiež výstavby domov vo variantoch hrubá stavba, či holodom. Ďalšou hlavnou činnosťou spoločnosti je aj predaj"|t }} <a href="{{ siteUrl }}projekty-domov">{{ "projektov rodinných domov."|t }}</a></p>
+                                                    </div>
+
+                                                    <div>
+                                                        <div class="title">{{ "Prečo sa máte obrátiť práve na nás?"|t }}</div>
+                                                        <ul>
+                                                            <li>{{ "Rozmýšľate nad výstavbou rodinného domu"|t }}</li>
+                                                            <li>{{ "Máte záujem o projekt rodinného domu"|t }}</li>
+                                                            <li>{{ "Je pre vás dôležitá kvalita za primeranú cenu"|t }}</li>
+                                                            <li>{{ "Ak zháňate odborníkov z tejto oblasti s dlhoročnými skúsenosťami"|t }}</li>
+                                                            <li>{{ "Nemáte čas riešiť všetko svojpomocne a z vlastných síl"|t }}</li>
+                                                            <li>{{ "Nechcete sa starať o každú maličkosť, potrebujete stavbu na kľúč"|t }}</li>
+                                                        </ul>
+                                                    </div>
+                                                    <p>{{ "Samozrejmosťou je realizovať diela spĺňajúce požiadavky patričných noriem, predpisov a moderných technológií."|t }}</p>
+
+                                                </div>
+                                                <div class="right">
+
+                                                    <div>
+                                                        <div class="title">{{ "Predaj bytov"|t }}</div>
+                                                        <p>{{ "Naša spoločnosť má bohaté skúsenosti s výstavbou bytových domov a rodinných domov, taktiež sa zaoberáme predajom týchto bytov na západnom Slovensku. Ponúkame Vám možnosť získať nový moderný dvoj- alebo trojizbový byt v kľudnom a krásnom prostredí za výhodnú cenu . Pozrite si naše"|t }} <a href="{{ siteUrl }}projekty-domov">{{ "referencie"|t }}</a>{{ ", ktoré svedčia o našej odbornosti a vysokej profesionalite. Tieto fakty prinášajú stovky spokojných zákazníkov, ktorí už bývajú v nami ponúkaných bytoch. Pre viac informácií"|t }} <a href="{{ siteUrl }}kontakt">{{ "kontaktujte nás"|t }}</a>.</p>
+                                                    </div>
+
+                                                    <div>
+                                                        <div class="title">{{ "Stavba rodinného domu na kľúč obsahuje:"|t }}</div>
+                                                        <ol>
+                                                            <li>{{ "výber vhodného projektu podľa požiadaviek zákazníka"|t }}</li>
+                                                            <li>{{ "zameranie stavby"|t }}</li>
+                                                            <li>{{ "výkop a vyliatie základových pásov"|t }}</li>
+                                                            <li>{{ "základová doska – platňa"|t }}</li>
+                                                            <li>{{ "napojenie na inžinierske siete"|t }}</li>
+                                                            <li>{{ "výstavba rodinného domu z kvalitných materiálov"|t }}</li>
+                                                            <li>{{ "komplet kúrenie na plyn, elektro- a vodoinštalácie"|t }}</li>
+                                                            <li>{{ "obklady, dlažby, podlahy, sanita, okná a dvere"|t }}</li>
+                                                        </ol>
+
+                                                        <p>{{ "V prípade otázok neváhajte prosím kontaktovať nášho projetkového manažéra,"|t }} <a href="{{ siteUrl }}kontakt">{{ "Ing. Dávida Lovasa"|t }}</a>.</p>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    <!-- /DETAILS -->
+
+                                </div>
+                            <!-- /CONTACT CONTENT-->
+
+                        </div>
+                    </div>
+                <!-- /HOUSE LISTING -->
+
+            </div>
+        <!-- /FILTER + HOUSE LISTING -->
+
+    </div>
+<!-- /CONTENT CONTAINER -->
+
+{% endblock %}

@@ -1,0 +1,118 @@
+<div class="checkout-top-nav">
+    <div class="baliky-options">
+        <a href="{{ siteUrl }}dom/{{entry.slug}}/poradenstvo" class="option">
+            <div class="ch-border {% if craft.app.request.segments|last == 'poradenstvo' %} {{ 'active' }} {% endif %}">
+                <div name="poradenstvo" id="poradenstvo" class="ch"></div>
+            </div>
+            <label for="poradenstvo" class="{% if craft.app.request.segments|last == 'poradenstvo' %} {{ 'active' }} {% endif %}">
+                <div class="top">
+                    poradenstvo/
+                </div>
+                <div class="bottom">
+                    <span>konzultácia</span>
+                    <div class="info-icon">
+                        <div class="i">
+                            {% embed "new/svg/info-icon.svg" %}
+                            {% endembed %}
+                        </div>
+                        <div class="info-txt">
+                            <h3>PORADENSTVO / KONZULTÁCIA</h3>
+                            <p>
+                                Vám ponúkame bezplatne a flexibilne.
+                                Vyberte si frmu ako sa máme s Vami
+                                spojiť a časový horizont, kedy Vám
+                                vyhovuje.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </label>
+        </a>
+        <a href="{{ siteUrl }}dom/{{entry.slug}}/zaujem-projekt-domu" class="option">
+            <div class="ch-border {% if craft.app.request.segments|last == 'zaujem-projekt-domu' %} {{ 'active' }} {% endif %}">
+                <div name="murovany" id="murovany" class="ch"></div>
+            </div>
+            <label for="murovany" class="{% if craft.app.request.segments|last == 'zaujem-projekt-domu' %} {{ 'active' }} {% endif %}">
+                <div class="top">
+                    objednávam
+                </div>
+                <div class="bottom">
+                    <span>projekt domu</span>
+                    <div class="info-icon">
+                        <div class="i">
+                            {% embed "new/svg/info-icon.svg" %}
+                            {% endembed %}
+                        </div>
+                        <div class="info-txt">
+                            <h3>OBJEDNÁVAM PROJEKT DOMU</h3>
+                            <p>
+                                Objednávka projektu nikdy nebola
+                                jednoduchšia. Stačí si vybrať, o aký typ
+                                projektu máte záujem: klasický katalógový
+                                projekt bez zmien, alebo Vami nakonfigurovaný,
+                                podľa Vašich požiadaviek.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </label>
+        </a>
+        <a href="{{ siteUrl }}dom/{{entry.slug}}/zaujem-stavba-domu" class="option">
+            <div class="ch-border {% if craft.app.request.segments|last == 'zaujem-stavba-domu' %} {{ 'active' }} {% endif %}">
+                <div name="murovany" id="murovany" class="ch"></div>
+            </div>
+            <label for="murovany" class="{% if craft.app.request.segments|last == 'zaujem-stavba-domu' %} {{ 'active' }} {% endif %}">
+                <div class="top">
+                    mám záujem o
+                </div>
+                <div class="bottom">
+                    <span>stavbu domu</span>
+                    <div class="info-icon">
+                        <div class="i">
+                            {% embed "new/svg/info-icon.svg" %}
+                            {% endembed %}
+                        </div>
+                        <div class="info-txt">
+                            <h3>MÁM ZÁUJEM O STAVBU</h3>
+                            <p>
+                                Objednajte si rýchlo a jednoducho stavbu domu,
+                                kde sa nemusíte obávať toho, že niečo Vám unikne.
+                                Pri objednávke stavby domu je nutné aj osobné stretnutie,
+                                kde si upresníme všetky Vaše požiadavky.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </label>
+        </a>
+        <a href="{{ siteUrl }}dom/{{entry.slug}}/zaujem-vizualizacia" class="option">
+            <div class="ch-border {% if craft.app.request.segments|last == 'zaujem-vizualizacia' %} {{ 'active' }} {% endif %}">
+                <div name="murovany" id="murovany" class="ch"></div>
+            </div>
+            <label for="murovany" class="{% if craft.app.request.segments|last == 'zaujem-vizualizacia' %} {{ 'active' }} {% endif %}">
+                <div class="top">
+                    objednávam
+                </div>
+                <div class="bottom">
+                    <span>vizualizáciu</span>
+                    <div class="info-icon">
+                        <div class="i">
+                            {% embed "new/svg/info-icon.svg" %}
+                            {% endembed %}
+                        </div>
+                        <div class="info-txt">
+                            <h3>OBJEDNÁVAM VIZUALIZÁCIU</h3>
+                            <p>
+                                Ak máte záujem o vizualizáciu domu podľa
+                                Vašich požiadaviek, jednoducho si objednajte
+                                vizualizáciu exteriéru alebo interiéru a po
+                                telefonickej/osobnej konzultácii Vám vypracujeme
+                                dizajn domu, šitý na mieru.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </label>
+        </a>
+    </div>
+</div>

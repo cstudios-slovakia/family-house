@@ -1,0 +1,41 @@
+{# REQUIRED VARIABLE house #}
+{% if entry.viacInfoMatrix is not empty %}
+    <div class="index-slider-matrix">
+        <div>
+            <div class="close">
+                <svg style="width:24px;height:24px" viewBox="0 0 24 24">
+                    <path fill="red" d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z" />
+                </svg>
+            </div>
+            <div class="inner">
+                {% for _matrixElem in entry.viacInfoMatrix %}
+                    {% switch _matrixElem.type %}
+                        {% case 'nazov' %}
+                            <div class="title">{{ _matrixElem.matrixNazov }}</div>
+                        {% case 'mcontent' %}
+                            <div class="matrix-content">
+                                {{ _matrixElem.matrixObsah }}
+                            </div>
+                        {% case 'table' %}
+                            {% if _matrixElem.matrixTabulka|length %}
+                                <div class="table">
+                                    <table>
+                                        {% for row in _matrixElem.matrixTabulka %}
+                                            <tr>
+                                                <td>{{ row.col1 }}</td>
+                                                <td>{{ row.col2 }}</td>
+                                            </tr>
+                                        {% endfor %}
+                                    </table>
+                                </div>
+                            {% endif %}
+                        {% case 'button' %}
+                            <a href="{% if _matrixElem.matrixButtonUrl is not empty %}{{ _matrixElem.matrixButtonUrl }}{% else %}javascript:;{% endif %}" class="button">
+                                <span>{{ _matrixElem.matrixButtonText }}</span>
+                            </a>
+                    {% endswitch %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endif %}

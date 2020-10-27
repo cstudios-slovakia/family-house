@@ -1,0 +1,127 @@
+@import url('https://fonts.googleapis.com/css?family=Montserrat:400,700&display=swap');
+
+$color--brand : #adc526;
+$titleRectangleSize : 53px;
+
+@import "elements/input/radio";
+@import "elements/input/slider";
+
+#module_reviewer {
+  font-family: 'Montserrat', sans-serif;
+
+
+  button[type="submit"]{
+    cursor: pointer;
+  }
+
+  &.container{
+    width: 516px;
+    margin: 0 auto;
+
+    padding-bottom: 40px;
+
+    .submit{
+      text-align: right;
+    }
+
+    button[type="submit"]{
+      background-color: #e53030;
+      padding: 12px 36px;
+      text-transform: lowercase;
+      border: none;
+      font-weight: bold;
+      color: #fff;
+      font-size: 14px;
+      border-radius: 20px;
+    }
+  }
+
+  .reviewer_title__container{
+    position: relative;
+
+    .title-rectangle{
+      position: absolute;
+      left:0;
+      bottom:0;
+      border: 8px solid $color--brand;
+      width: $titleRectangleSize;
+      height: $titleRectangleSize;
+      z-index: -1;
+    }
+
+    .reviewer__title{
+      padding-left: 40px;
+      font-weight: bold;
+      font-size: 40px;
+      line-height:1;
+      letter-spacing: 2px;
+    }
+  }
+
+  .field-mark__required,.field-error{
+    color: #e53030;
+  }
+
+
+  .question__block{
+    margin-bottom: 50px;
+
+  &.question-type__slider {
+    .comment{
+      display: none;
+      position: relative;
+      top: 20px;
+      &.comment--show{
+        display: block;
+      }
+    }
+  }
+
+    textarea{
+      width: 100%;
+    }
+
+    & > p{
+      font-weight: bold;
+      font-size: 16px;
+    }
+
+    &.question-type__radio{
+      fieldset > div{
+        margin-bottom: 14px;
+      }
+    }
+
+    fieldset{
+      padding: 5px 0px;
+      //height: 50px;
+    }
+
+    fieldset > div.question__slider-orientation{
+      position: relative;
+      top: 10px;
+      display: flex;
+      justify-content: space-between;
+
+      &:first-child(1){
+        top: -28px;
+      }
+
+      span{
+        line-height: 18px;
+        font-size: 14px;
+        font-weight: 300;
+      }
+    }
+  }
+
+
+
+}
+
+.chart-container{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-row-gap: 30px;
+
+}

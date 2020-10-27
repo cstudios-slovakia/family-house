@@ -1,0 +1,52 @@
+<div class="review-container--review">
+    <div class="review--image">
+        <img src="{{ siteUrl }}/imager/vizualy/bungalov-angi-7/2584/projekt-domu-Bungalov_Angi7_1_d2799ae4d9532e75c7b76f8fe7c80560.webp" alt="">
+    </div>
+    <div class="review--block">
+        <div class="review-block--head">
+            <div class="review-block--person">
+                {{ review.client}}
+                <span class="review-block--date">{{ review.dateCreated|date('d.m.Y')}}</span>
+            </div>
+            <div class="review-block--rating">
+                {% set emptyStars = 5 - review.stars.value %}
+                {% set fullStars =  review.stars.value %}
+
+                <ul>
+                    {% if fullStars > 0  %}
+                        {% for i in 1..review.stars.value  %}
+                            <li>
+                                <svg class="icon">
+                                    <use xlink:href="#star-full" />
+                                </svg>
+                            </li>
+                        {% endfor %}
+                    {% endif %}
+                    {% if fullStars < 5 %}
+                        {% for i in 1..emptyStars  %}
+                            <li>
+                                <svg class="icon">
+                                    <use xlink:href="#star-empty" />
+                                </svg>
+                            </li>
+                        {% endfor %}
+                    {% endif %}
+
+                </ul>
+            </div>
+        </div>
+        <div class="review-block--content">
+            {{  review.reviewContent }}
+        </div>
+        {% if review.answer is not empty %}
+            <div class="review-block--answer-content">
+                <div class="answer-content--heading">{{ "Family House"|t }}
+                    <span class="answer-content--subtitle">{{  "reakcia"|t }}</span>
+                </div>
+                <div class="answer-content--comment more-content">
+                    {{ review.answer}}
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</div>

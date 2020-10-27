@@ -1,0 +1,108 @@
+{% extends "_layout" %}
+{% set seo = entry.seoUpdated %}
+
+{% block bodyClass %}dom-list-view{% endblock bodyClass %}
+
+{% block content %}
+
+{% import "_components/macros/images_output.html" as imagesMacro %}
+
+
+<!-- CONTENT CONTAINER -->
+    <div class="main grid-2-layout article-page no-filter">
+
+        <!-- FILTER + HOUSE LISTING -->
+            <div class="filter-house-listing">
+                {% embed '_components/left' %}{% endembed %}
+
+                <!-- HOUSE LISTING -->
+                    <div class="house-listing">
+                        <div>
+
+                            <!-- CONTACT CONTENT -->
+                                <div class="house-details contact-container">
+
+                                    <div class="house-header">
+                                        <div>
+                                            <div class="name">
+                                                <div class="counter"></div>
+                                                <div class="no-padding">{{ "Blog"|t }}</div>
+                                            </div>
+                                        </div>
+                                        <div class="beadcrumbs">
+                                            <a href="{{ siteUrl }}" class="elem">{{ "Hlavná stránka"|t }}</a>
+                                            <div>{{ "Blog"|t }}</div>
+                                        </div>
+                                    </div>
+
+                                    <div class="articles-list updated">
+
+                                        {# defaults #}
+                                        {% set queryParams = {
+                                        section: 'blog',
+                                        limit: settings.articlesListCountListView,
+                                        } %}
+
+                                        {% set filteredBlogList = craft.entries(queryParams) %}
+                                        {% paginate filteredBlogList as paginateInfo, articles %}
+
+                                        <!-- LISTING -->
+                                        <div class="list exported-list">
+
+                                            {% for entry in articles %}
+                                                <!-- ARTICLE ELEM -->
+                                            <div class="article-content article-elem exported">
+                                                    {% set cover = entry.obrazok.one() %}
+                                                    <a href="{{ entry.url }}">
+<!--                                                        <img srcset="{{ cover.url('blogcoverlist320w') }} 320w,-->
+<!--                                                                     {{ cover.url('blogcoverlist480w') }} 480w,-->
+<!--                                                                     {{ cover.url('blogcoverlist800w') }} 800w"-->
+<!--                                                             sizes="(max-width: 320px) 280px,-->
+<!--                                                                    (max-width: 480px) 440px,-->
+<!--                                                                     800px"-->
+<!--                                                             src="{{ cover.url('blogcoverlist800w') }}" alt="{{ cover }}"/>-->
+
+                                                        {{ imagesMacro.imageWebp(cover) }}
+                                                    </a>
+                                                    <div class="title">
+                                                        <a href="{{ entry.url }}">{{ entry.blog_title }}</a>
+                                                    </div>
+                                                    <div class="short-description">{{ entry.shortText }}</div>
+                                                    <div class="continue-reading">
+                                                        <a href="{{ entry.url }}">{{ "Prečítať článok"|t }}</a>
+                                                    </div>
+                                            </div>
+
+                                                <!-- /ARTICLE ELEM -->
+                                            {% endfor %}
+
+                                        </div>
+                                        <!-- /LISTING -->
+
+                                        {% if filteredBlogList|length > 0 %}
+                                            {% set queryString      = craft.app.request.getQueryStringWithoutPath() %}
+                                            {% set queryStringFull  = (queryString is not empty) ? '?' ~ queryString : '' %}
+
+                                                {% if paginateInfo.nextUrl %}
+                                                    <a href="{{ paginateInfo.nextUrl ~ queryStringFull }}">
+                                                        <span>{{ settings.articlesListCountListView }} {{ "ďalsích..."|t }}</span>
+                                                    </a>
+                                                {% endif %}
+                                        {% endif %}
+
+                                    </div>
+
+                                </div>
+                            <!-- /CONTACT CONTENT-->
+
+                        </div>
+                    </div>
+                <!-- /HOUSE LISTING -->
+
+            </div>
+        <!-- /FILTER + HOUSE LISTING -->
+
+    </div>
+<!-- /CONTENT CONTAINER -->
+
+{% endblock %}

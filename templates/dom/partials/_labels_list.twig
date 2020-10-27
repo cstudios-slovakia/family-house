@@ -1,0 +1,17 @@
+{% if activeLabels is defined and activeLabels is not empty %}
+    {% if activeLabels|length > 1 %}
+        <ul class="filter--labels-list" data-length="{{ activeLabels|length }}">
+            {% for activeLabel in activeLabels %}
+            <li>
+                {{ activeLabel|raw }}
+            </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <h1 class="filter--labels-list" style="font-size: 32px;">
+            {% for activeLabel in activeLabels %}
+                {{ activeLabel|t|raw }}
+            {% endfor %}
+        </h1>
+    {% endif %}
+{% endif %}

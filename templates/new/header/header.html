@@ -1,0 +1,123 @@
+
+
+<header class="top-menu">
+    <div class="menu-fold">
+        <div class="info">
+            <span>menu</span>
+            <div class="close">
+                <div class="line"></div>
+                <div class="line"></div>
+            </div>
+        </div>
+        <div class="menu-grid">
+            <div class="top-row">
+                <a href="{{siteUrl}}projekty-domov" class="item">Projekty domov</a>
+                <a href="{{siteUrl}}stavba-domu" class="item">Stavba Domu</a>
+                <a href="{{siteUrl}}referencie" class="item">Referencie</a>
+                <a href="{{siteUrl}}exteriérový-dizajn" class="item">Dizajn</a>
+            </div>
+            {% set menu1 = craft.categories().group('navigacia').level('1').all() %}
+                
+
+                
+            {% for i in menu1|batch(3) %}
+            <div class="col">
+                {% for e in i %}
+
+                {% set menu2 = craft.categories().group('navigacia').level('2').descendantOf(e).all() %}
+                
+                <div class="block">
+                    <a class="line">{{e.title}}</a>
+                    <img src="{% if e.obrazok.one().url|length > 0%}{{e.obrazok.one().url}}{% else %}{% endif %}" alt="">
+                    {% for ee in menu2 %}
+                        <a href="{%if ee.target|length%}{{ee.target.one().url}}{%endif%}" class="line">{{ ee.title }}</a>
+                    {% endfor %}
+                </div>
+                {% endfor %}
+            </div>
+            {% endfor %}
+
+            
+        </div>
+    </div>
+    <a href="{{siteUrl}}index" class="logo">
+        <img src="{{ sitebase }}assets/new/img/familyhouse-logo.svg" alt="home">
+    </a>
+    <nav>
+        <ul>
+            <li><a href="{{siteUrl}}projekty-domov" class="menu-item">
+                <div>projekty domov</div>
+
+            </a></li>
+            <li><a href="{{siteUrl}}stavba-domu" class="menu-item">
+                <div>stavba domu</div>
+
+            </a></li>
+            <li><a href="{{siteUrl}}referencie" class="menu-item">
+                <div>referencie</div>
+
+            </a></li>
+            <li><a href="{{siteUrl}}exteriérový-dizajn" class="menu-item">
+                <div>dizajn</div>
+
+            </a></li>
+        </ul>
+    </nav>
+    <div class="tel">
+        <a href="tel:+421948141840">
+            <!-- +421 948 141 840 -->
+            <img src="{{ sitebase }}assets/new/img/tel.svg" alt="">
+        </a>
+    </div>
+    <div class="right">
+        <a href="{{ siteUrl }}oblubene" class="heart" >
+            <img src="{{ sitebase }}assets/new/img/heart-white.svg" alt="heart">
+            <div class="num"></div>
+        </a>
+        <div class="eye">
+            <img src="{{ sitebase }}assets/new/img/eye-white.svg"  alt="recent">
+            <div class="drop">
+                <div class="item">
+                    <div class="text">
+                        Naposledy prezerané:
+                    </div>
+                </div>
+                {% if getCookie('last-viewed') %}
+                            
+                    {% set c = getCookie('last-viewed') %}
+
+                    {% set cu = craft.app.json.decode(c) %}
+
+                    {% for u in cu %}
+                        <div class="item">
+                            {% set e = craft.entries().slug(u).one() %}
+                            <img src="{{ e.vizualy.first().getUrl('houseDetailGalleryThumbs320w') }}" width="{{ e.vizualy.first().getWidth('houseDetailGalleryThumbs320w') }}" height="{{ e.vizualy.first().getHeight('houseDetailGalleryThumbs320w') }}" alt="{{e.title}}">
+                            <a href="{{ e.url }}">
+                                {{ e.title }}
+                            </a>
+                        </div>
+                    {% endfor %}
+                    
+                {% else %}
+
+                    <div class="item">
+                        <div class="text">
+                            Žiadne domy
+                        </div>
+                    </div>
+
+                {% endif %}
+            </div>
+        </div>
+        <div class="menu">
+            <div class="label">
+                menu
+            </div>
+            <div class="lines">
+                <div class="line"></div>
+                <div class="line"></div>
+                <div class="line"></div>
+            </div>
+        </div>
+    </div>
+</header>

@@ -1,0 +1,134 @@
+
+
+
+<!-- FILTER -->
+    <div class="filter">
+        <a class="h2-container" href="{{ siteUrl }}projekty-domov">
+            <h2>{{ "Rodinné <i>domy</i>"|t|raw }}</h2>
+        </a>
+
+        <!-- FILTER TRIGGER -->
+            <div class="filter-trigger">
+                <span>{{ "Filtrovať"|t }}</span>
+            </div>
+        <!-- /FILTER TRIGGER -->
+
+        {% embed '_components/left/_filter' %}{% endembed %}
+
+        <!-- PROFESSIONAL CONSULTATION -->
+            <div class="professional-consultation">
+
+                <!-- CONTACT LINE -->
+                    <div class="contact-line">
+                        <div>
+                            <div>
+                                {{ "Potrebujete odbornú konzultáciu?"|t }}
+                                <strong>{{ "Radi Vám pomôžeme."|t }}</strong>
+                            </div>
+                        </div>
+                        <div>
+                            <a href="tel:00421948141840">+421 948 141 840</a>
+                            <a href="mailto:david@familyhouse.sk">david@familyhouse.sk</a>
+                            <a href="https://familyhouse.sk/kontakt" class="contact-redirect">{{ "Napísať správu"|t }}</a>
+                            <a href="https://familyhouse.sk/kontakt" class="contact-redirect">{{ "Kde nás nájdete"|t }}</a>
+                        </div>
+                    </div>
+                <!-- /CONTACT LINE -->
+
+            </div>
+        <!-- /PROFESSIONAL CONSULTATION -->
+
+        <!-- TEXT BOX GRID -->
+            <div class="text-box-grid">
+                <div class="grid-list" id="text-grid-swiper">
+                    <div class="swiper-container">
+                        <div class="swiper-wrapper">
+                            {% set bulletEntries = craft.entries.section('bullets').limit(6).all() %}
+                            {% for entry in bulletEntries %}
+
+                                <div class="swiper-slide">
+
+                                    <!-- TEXT BOX ELEM -->
+                                        <a class="text-box" href="{% if entry.bulletsurl is not empty %} {{ entry.bulletsurl }} {% else %}javascript:;{% endif %}">
+                                            <div>
+                                                <div class="title">
+                                                    {{ entry.title }}
+                                                    <div style="box-shadow: inset 8px 8px #{{ entry.textColors }}, inset -8px -8px #{{ entry.textColors }}" class="after-border"></div>
+                                                </div>
+                                                <p>{{ entry.shortText }}</p>
+                                            </div>
+                                        </a>
+                                    <!-- /TEXT BOX ELEM -->
+
+                                </div>
+
+                            {% endfor %}
+
+                        </div>
+                    </div>
+
+                    <div class="swiper-pagination-container">
+                        <div class="swiper-pagination"></div>
+                    </div>
+                </div>
+            </div>
+        <!-- /TEXT BOX GRID -->
+
+        {% if entry is defined %}
+            {% if entry.type == 'clanok' %}
+
+                {% if entry.blogAdsImage is not empty %}
+                    {% set _image = entry.blogAdsImage is not empty ? entry.blogAdsImage.one().url : '' %}
+                    {% set _imageAlt = entry.blogAdsImage is not empty ? entry.blogAdsImage.one().title : '' %}
+                    <a href="{{ entry.blogAdsUrl }}" style="display: block; width: 100%; height: auto; margin: 50px 0;">
+                        <img src="{{ _image }}" alt="{{ _imageAlt }}" style="display: block; width: 100%"/>
+                    </a>
+                {% endif %}
+
+            {% endif %}
+        {% endif %}
+
+        <!-- ARTICLES -->
+            <div class="articles-list">
+                <h2>Články</h2>
+
+                <div class="grid-list" id="article-grid-swiper">
+                    <div class="swiper-container">
+                        <div class="swiper-wrapper">
+                            {% set blogEntries = craft.entries.section('blog').limit(6).all() %}
+                            {% for entry in blogEntries %}
+
+                                <div class="swiper-slide">
+
+                                    <!-- ARTICLE ELEM -->
+                                        <a href="{{ entry.url }}" class="article-elem">
+                                            {% set cover = entry.obrazok.one() %}
+<!--                                            <img src="{{ cover.url }}" alt="{{ cover }} - {{ entry.blog_title }}" />-->
+                                            {% import "_components/macros/images_output.html" as imagesMacro %}
+                                            {{ imagesMacro.imageWebp(cover) }}
+                                            <div class="title">{{ entry.blog_title }}</div>
+                                            <div class="short-description">{{ entry.shortText }}</div>
+                                            <div class="continue-reading">{{ "Prečítať článok"|t }}</div>
+                                        </a>
+                                    <!-- /ARTICLE ELEM -->
+
+                                </div>
+
+                            {% endfor %}
+
+                        </div>
+                    </div>
+
+                    <div class="swiper-pagination-container">
+                        <div class="swiper-pagination"></div>
+                    </div>
+                </div>
+
+                <a href="{{ siteUrl }}clanky">
+                    <span>{{ "Zobraziť všetky články"|t }}</span>
+                </a>
+            </div>
+        <!-- /ARTICLES -->
+
+    </div>
+<!-- /FILTER -->

@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+    {% set sitebase = 'https://familyhouse.sk/' %}
+
+    {% set entry = craft.entries().slug(craft.app.request.getSegment('2')).one() %}
+    {% set dom = entry %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projekty Domov - Family House 2020</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="{{ sitebase }}assets/css/vendor/swiper.min.css">
+
+    <link rel="stylesheet" href="{{ sitebase }}assets/new/css/simplebar.css">
+    <link rel="stylesheet" href="{{ sitebase }}assets/new/css/main.css?=ver{{ random(1, 100) }}">
+</head>
+<body>
+    <div class="page-container">
+        
+        {% embed "new/header/header.html" %}
+        {% endembed %}
+
+        <div class="page" id="otazky-domu">
+
+            {% embed "new/dom_sidebar.twig" %}
+            {% endembed %}
+
+
+            <div class="otazky-domu">
+
+                {% embed "new/otazky_menu.html" %}
+                {% endembed %}
+
+                <div class="prevedenia">
+                    <div class="col">
+                        <div class="title-row">
+                            <img src="{{ sitebase }}assets/new/img/brickicon-blue.svg" alt="">
+                            <h2>
+                                {{ craft.entries().section('prevedenia').level(1).first().title }}
+                            </h2>
+                        </div>
+                        <div class="items">
+                            {% for row in craft.entries().section('prevedenia').level(1).first().houseAttrs %}
+                                <div class="item">
+                                    <div class="num">
+                                        {{ loop.index }}
+                                    </div>
+                                    <div class="label">
+                                        {{ row.attribute }}
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="title-row">
+                            <img src="{{ sitebase }}assets/new/img/holodomicon-blue.svg" alt="">
+                            <h2>
+                                {{ craft.entries().section('prevedenia').level(1).nth(1).title }}
+                            </h2>
+                        </div>
+                        <div class="items">
+                            {% for row in craft.entries().section('prevedenia').level(1).first().houseAttrs %}
+                                <div class="item">
+                                    <div class="num">
+                                        {{ loop.index }}
+                                    </div>
+                                    <div class="label">
+                                        {{ row.attribute }}
+                                    </div>
+                                </div>
+                            {% endfor %}
+
+                            {% for row in craft.entries().section('prevedenia').level(1).nth(1).houseAttrs %}
+                            <div class="item">
+                                <div class="num">
+                                    {{ loop.index }}
+                                </div>
+                                <div class="label">
+                                    {{ row.attribute }}
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="title-row">
+                            <img src="{{ sitebase }}assets/new/img/completicon-blue.svg" alt="">
+                            <h2>
+                                {{ craft.entries().section('prevedenia').level(1).nth(2).title }}
+                            </h2>
+                        </div>
+                        <div class="items">
+                            {% for row in craft.entries().section('prevedenia').level(1).first().houseAttrs %}
+                                <div class="item">
+                                    <div class="num">
+                                        {{ loop.index }}
+                                    </div>
+                                    <div class="label">
+                                        {{ row.attribute }}
+                                    </div>
+                                </div>
+                            {% endfor %}
+
+                            {% for row in craft.entries().section('prevedenia').level(1).nth(1).houseAttrs %}
+                            <div class="item">
+                                <div class="num">
+                                    {{ loop.index }}
+                                </div>
+                                <div class="label">
+                                    {{ row.attribute }}
+                                </div>
+                            </div>
+                            {% endfor %}
+
+                            {% for row in craft.entries().section('prevedenia').level(1).nth(2).houseAttrs %}
+                            <div class="item">
+                                <div class="num">
+                                    {{ loop.index }}
+                                </div>
+                                <div class="label">
+                                    {{ row.attribute }}
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="title-row">
+                            <img src="{{ sitebase }}assets/new/img/housekey-blue.svg" alt="">
+                            <h2>
+                                {{ craft.entries().section('prevedenia').level(1).nth(3).title }}
+                            </h2>
+                        </div>
+                        <div class="items">
+                            {% for row in craft.entries().section('prevedenia').level(1).first().houseAttrs %}
+                                <div class="item">
+                                    <div class="num">
+                                        {{ loop.index }}
+                                    </div>
+                                    <div class="label">
+                                        {{ row.attribute }}
+                                    </div>
+                                </div>
+                            {% endfor %}
+
+                            {% for row in craft.entries().section('prevedenia').level(1).nth(1).houseAttrs %}
+                            <div class="item">
+                                <div class="num">
+                                    {{ loop.index }}
+                                </div>
+                                <div class="label">
+                                    {{ row.attribute }}
+                                </div>
+                            </div>
+                            {% endfor %}
+                            
+                            {% for row in craft.entries().section('prevedenia').level(1).nth(2).houseAttrs %}
+                            <div class="item">
+                                <div class="num">
+                                    {{ loop.index }}
+                                </div>
+                                <div class="label">
+                                    {{ row.attribute }}
+                                </div>
+                            </div>
+                            {% endfor %}
+
+                            {% for row in craft.entries().section('prevedenia').level(1).nth(3).houseAttrs %}
+                            <div class="item">
+                                <div class="num">
+                                    {{ loop.index }}
+                                </div>
+                                <div class="label">
+                                    {{ row.attribute }}
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+
+
+
+                {% embed "new/embed_interest.html" %}
+                {% endembed %}
+
+
+
+            </div>
+        
+        
+        </div>
+
+
+
+
+
+
+
+        {% embed "new/footer.twig" %}
+        {% endembed %}
+    
+    </div>
+    
+    
+        <script src="{{ sitebase }}assets/js/vendor/jquery-3.2.1.min.js"></script>
+        <script src="{{ sitebase }}assets/js/vendor/jquery-waypoints-and-sticky.js"></script>
+        <script src="{{ sitebase }}assets/js/vendor/simplebar.min.js"></script>
+        <script src="{{ sitebase }}assets/js/vendor/vue.js"></script>
+        <script src="{{ sitebase }}assets/js/vendor/vue-router.js"></script>
+        <script src="{{ sitebase }}assets/js/vendor/swiper.min.js"></script>
+
+        <script>
+
+            // set item numbers
+            $('.prevedenia .col').each(function(){
+                $(this).find('.num').each(function(index){
+                    $(this).html(index + 1);
+                });
+            });
+
+            // custom hover
+            $('.items .item').hover(function(){
+                var idx = $(this).index() + 1;
+                $('.items .item:nth-child('+idx+')').addClass('gray-hover');
+            },function(){
+                var idx = $(this).index() + 1;
+                $('.items .item:nth-child('+idx+')').removeClass('gray-hover');
+            });
+            // click
+            $('.items .item').click(function(){
+                var idx = $(this).index() + 1;
+                $('.items .item').removeClass('gray-click');
+                $('.items .item:nth-child('+idx+')').addClass('gray-click');
+            });
+
+        </script>
+
+        <script src="{{ sitebase }}assets/new/js/main.js?=ver{{ random(1, 100) }}"></script>
+    
+        {% embed 'new/cookies-embed.html'%}
+    {% endembed %}
+</body>
+</html>

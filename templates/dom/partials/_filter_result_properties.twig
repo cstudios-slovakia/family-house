@@ -1,0 +1,15 @@
+<div class="filter--result">
+    <div class="get-values" data-id="_legend" data-fsrc="filter_fns">
+        {% set activeFilterLabelsList = craft.housefilterModule.getActiveFilterLabelList %}
+        {% set filterVars = {'activeLabels': activeFilterLabelsList } %}
+
+        {% include 'dom/partials/_labels_list' with filterVars %}
+
+    </div>
+</div>
+<h2>
+    <a class="h2-container" href="{{ siteUrl }}projekty-domov" data-params-data=""
+       data-ids-data="">
+        {{ "Projekty domov - Nízkoenergetické rodinné domy"|t }}
+    </a>
+</h2>

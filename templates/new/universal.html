@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+    {% set sitebase = 'https://familyhouse.sk/' %}
+
+    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projekty Domov - Family House 2020</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,700;1,800&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+    <link rel="stylesheet" href="{{ sitebase }}assets/css/vendor/swiper.min.css">
+
+    <link rel="stylesheet" href="{{ sitebase }}assets/new/css/simplebar.css">
+    <link rel="stylesheet" href="{{ sitebase }}assets/new/css/main.css?=ver{{ random(1, 100) }}">
+</head>
+<body>
+    <div class="page-container">
+        
+        {% embed "new/header/header.html" %}
+        {% endembed %}
+
+        <div class="page" id="multipage">
+            
+            {% embed "new/pages/page_sidebar.html" %}
+            {% endembed %}
+
+
+                <div class="multipage-container">
+
+                    <h1>
+                        {{ entry.title }}
+                    </h1>
+                
+                    {% for block in entry.universalEntry.all() %}
+
+                        {% switch block.type %}
+
+                            {% case 'textTitle' %}
+                            <div class="textTitle">
+                                <{{ block.uroven }} style="color: {{ block.farba.one().colorHEX }};font-size: {{ block.velkostPismena }}em;line-height: {{ block.velkostPismena }}em;text-align: {{ block.pozicia }}" class="{% for o in block.variacie %}{{ o.value }} {% endfor %}">
+                                    {{ block.text }}
+                                </{{ block.uroven }}>
+                            </div>
+
+                            {% case 'textSObrazkom' %}
+                            <div class="textSObrazkom">
+                                {% set s = block.obrazok.one() %}
+                                <img src="{{ s.getUrl('housedetailgallerythumbs1600w') }}" width="{{ s.getWidth('housedetailgallerythumbs1600w') }}" height="{{ s.getHeight('housedetailgallerythumbs1600w') }}" alt="" style="float: {{ block.poziciaObrazka }};width: {{ block.sirkaObrazka }}">
+                                <div class="text">
+                                    {{ block.text }}
+                                </div>
+                            
+                            </div>
+                            {% case 'tlacitko' %}
+                                
+                                <div class="btn-link">
+                                    <a href="{% if block.ciel|length %}{{ block.ciel.one().getUrl() }}{% endif %}" class="btn {{ block.dizajn }} {{ block.pozicia }}" style="border-color: {{ block.farba.one().colorHEX }}; background-color: {{ block.farba.one().colorHEX }};{% if block.dizajn == 'light' %}color: {{ block.farba.one().colorHEX }}{% endif %}">
+                                            <div class="label">
+                                                {{ block.napis }}
+                                            </div>
+                                        </a>
+                                    
+                                    
+                                    </div>
+                                
+
+                            {% case 'fullWidthImage' %}
+                            <div class="fullWidthImage">
+                                {% set s = block.obrazok.one() %}
+                                <img src="{{ s.getUrl('housedetailgallerythumbs1600w') }}" width="{{ s.getWidth('housedetailgallerythumbs1600w') }}" height="{{ s.getHeight('housedetailgallerythumbs1600w') }}" alt="" style="{% if block.sirka|length %}width: {{block.sirka}}%"{%else%}width: 100%;"{%endif%}>
+                            </div>
+
+                            {% case 'galeria' %}
+                            <div class="galeria">
+                                {% if block.typ == 'grid' %}
+                                    <div class="grid">
+                                        {% for ss in block.obrazky.all() %}
+                                        <a href="{{ ss.getUrl('housedetailgallerythumbs1600w') }}" data-fancybox="gallery">
+                                            <img src="{{ ss.getUrl('houseDetailGalleryThumbs320w') }}" width="{{ ss.getWidth('houseDetailGalleryThumbs320w') }}" height="{{ ss.getHeight('houseDetailGalleryThumbs320w') }}" alt="">
+                                        </a>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+
+
+                                {% if block.typ == 'slide' %}
+                                    <div class="swiper-container">
+                                        <div class="swiper-wrapper">
+                                            {% set i = block.obrazky.all() %}
+                                            {% for ss in i %}
+                                            <div class="swiper-slide">
+                                                
+                                                <img src="{{ ss.getUrl('houseDetailGalleryThumbs320w') }}" width="{{ ss.getWidth('houseDetailGalleryThumbs320w') }}" height="{{ ss.getHeight('houseDetailGalleryThumbs320w') }}" alt="">
+                                                
+                                            </div>
+                                            {% endfor %}
+                                        </div>
+                                        <div class="pagination">
+
+                                        </div>
+                                    </div>
+
+                                {% endif %}
+                            </div>
+                            
+                            {% case 'kontaktnaKarta' %}
+                            <div class="kontaktnaKarta">
+                                {% for i in block.clen.all() %}
+                                <div class="item">
+                                    <div class="left">
+                                        <img src="{{ i.personalPhoto.one().url }}" alt="">
+                                    </div>
+                                    <div class="right">
+                                        <div class="name-row">
+                                            {{ i.memberName }}
+                                        </div>
+                                        <div class="rows">
+                                            <div class="row">
+                                                <div class="col">
+                                                    Čo {% if i.pohlavie == 'muz' %}ho{% elseif i.pohlavie == 'zena' %}ju{% elseif i.pohlavie == 'pes' %}ich{% endif %} baví najviac v práci:
+                                                </div>
+                                                <div class="col">
+                                                    {{ i.baviVPraci }}
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col">
+                                                    Obľúbený projekt:
+                                                </div>
+                                                <div class="col">
+                                                    {{ i.oblubenyProjekt }}
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col">
+                                                    Obľúbená časť domu:
+                                                </div>
+                                                <div class="col">
+                                                    {{ i.oblubenaCastDomu }}
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col">
+                                                    Čo {% if i.pohlavie == 'muz' %}ho{% elseif i.pohlavie == 'zena' %}ju{% elseif i.pohlavie == 'pes' %}ich{% endif %} baví vo voľnom čase:
+                                                </div>
+                                                <div class="col">
+                                                    {{ i.volnyCas }}
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+
+                            {% case 'textSOdkrievanymObrazkom' %}
+                            <div class="odkrievany {{ block.orientacia }}">
+                                <div class="left"> 
+                                    <a href="" class="nazov">
+                                        {{ block.nazov }}
+                                        <div class="arrow">
+                                            >>
+                                        </div>
+                                    </a>
+                                    <div class="text">
+                                        {{ block.text }}
+                                    </div>
+                                </div>
+                                <div class="right">
+                                    <div class="obrazok">
+                                        {% set ss = block.obrazok.one() %}
+                                        <img src="{{ ss.getUrl('houseDetailGalleryThumbs480w') }}" width="{{ ss.getWidth('houseDetailGalleryThumbs480w') }}" height="{{ ss.getHeight('houseDetailGalleryThumbs480w') }}" alt="">
+                                        <div class="tlacitko">
+                                            {{ block.nadpisTlacitka }}
+                                        </div>
+                                    </div>
+                                    <div class="text">
+                                        {{ block.skrytyText }}
+                                    </div>
+                                </div>
+                            </div>
+
+                            {% case 'whitespace' %}
+                            <div class="whitespace" style="width: 100%; height: {{ block.vyska * 10 }}px">
+
+                            </div>
+
+                            {% case 'hr' %}
+                            <div class="hr" style="border-top: 1px solid {{ block.farba }};opacity: 0.75;">
+
+                            </div>
+
+                            {% case 'zrkadlenyTextSObrazkami' %}
+                            <div class="zrkadleny">
+                                <div class="col">
+                                    {% set ss = block.obrazok.first() %}
+                                    <img src="{{ ss.getUrl('houseDetailGalleryThumbs480w') }}" width="{{ ss.getWidth('houseDetailGalleryThumbs480w') }}" height="{{ ss.getHeight('houseDetailGalleryThumbs480w') }}" alt="">
+                                    <div class="text-col">
+                                        <div class="nadpis">
+                                            {{ block.nadpis1 }}
+                                        </div>
+                                        <div class="text">
+                                            {{ block.text1 }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    {% set ss = block.obrazok.nth(1) %}
+                                    <img src="{{ ss.getUrl('houseDetailGalleryThumbs480w') }}" width="{{ ss.getWidth('houseDetailGalleryThumbs480w') }}" height="{{ ss.getHeight('houseDetailGalleryThumbs480w') }}" alt="">
+                                    <div class="text-col">
+                                        <div class="nadpis">
+                                            {{ block.nadpis2 }}
+                                        </div>
+                                        <div class="text">
+                                            {{ block.text2 }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {% case 'text' %}
+                            <div class="fluid-text {{ block.pocetStlpcov }}">
+                                {{ block.text }}
+                            </div>
+
+
+                        {% endswitch %}
+
+                    {% endfor %}
+
+    
+                </div>
+            
+            
+            </div>
+    
+    
+    
+    
+    
+    
+    
+            {% embed "new/footer.twig" %}
+            {% endembed %}
+        
+        </div>
+        
+        
+            <script src="{{ sitebase }}assets/js/vendor/jquery-3.2.1.min.js"></script>
+            <script src="{{ sitebase }}assets/js/vendor/jquery-waypoints-and-sticky.js"></script>
+            <script src="{{ sitebase }}assets/js/vendor/simplebar.min.js"></script>
+            <script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+            <script src="{{ sitebase }}assets/js/vendor/vue.js"></script>
+            <script src="{{ sitebase }}assets/js/vendor/vue-router.js"></script>
+            <script src="{{ sitebase }}assets/js/vendor/swiper.min.js"></script>
+            <script src="{{ sitebase }}assets/new/js/main.js?=ver{{ random(1, 100) }}"></script>
+        
+            <script>
+                 var swiper = new Swiper('.swiper-container', {
+                     slidesPerView: 4,
+                     spaceBetween: 20,
+                        pagination: {
+                            el: '.pagination',
+                            clickable: true,
+                        },
+                    breakpoints: {
+                        1400: {
+                            slidesPerView: 2,
+                        }
+                    },
+                    });
+
+                $('.obrazok .tlacitko').click(function(){
+                    $(this).siblings('img').addClass('hide');
+                    $(this).addClass('hide');
+                });
+
+                $('a.title > div.label').click(function(){
+                    if ($(this).children('.mark').html() == '-') {
+                        $(this).children('.mark').html('+')
+                    };
+                });
+        
+            </script>
+            {% embed 'new/cookies-embed.html'%}
+            {% endembed %}
+</body>
+</html>

@@ -1,0 +1,166 @@
+
+{% extends "_layout" %}
+
+{% block bodyClass %}dom-list-view{% endblock bodyClass %}
+
+{% block customSeo %}
+    <title>{{ "Referencie"|t }} - {{ siteName }}</title>
+{% endblock customSeo %}
+
+{% block content %}
+
+<!-- CONTENT CONTAINER -->
+    <div class="main grid-2-layout">
+
+        <!-- FILTER + HOUSE LISTING -->
+            <div class="filter-house-listing">
+                {% embed '_components/left' %}{% endembed %}
+
+                <!-- HOUSE LISTING -->
+                    <div class="house-listing">
+                        <div>
+
+                            <!-- CONTACT CONTENT -->
+                                <div class="house-details contact-container">
+
+                                    <div class="house-header">
+                                        <div>
+                                            <div class="name">
+                                                <div class="counter"></div>
+                                                <div class="no-padding">{{ "Referencie"|t }}</div>
+                                            </div>
+                                        </div>
+                                        <div class="beadcrumbs">
+                                            <a href="{{ siteUrl }}" class="elem">{{ "Hlavná stránka"|t }}</a>
+                                            <a href="{{ siteUrl }}referencie" class="elem">{{ "Referencie"|t }}</a>
+
+                                            {% if entry.parent is not empty %}
+                                                <a href="{{ siteUrl }}referencie/{{ entry.parent.slug }}" class="elem">{{ entry.parent.title }}</a>
+                                            {% endif %}
+
+                                            <div>{{ entry.title }}</div>
+                                        </div>
+                                    </div>
+
+                                    <!-- MAP DETAILS -->
+                                        <div class="references-map">
+                                            <div id="stepheader" class="">
+                                                <div class="left-navigation">
+                                                    <div class="choose-step">
+                                                        <div class="left-steps">
+                                                            <span>{{ "Vyberte si <br>okres"|t|raw }}</span>
+                                                            <div>{{ "Krok:"|t }}</div>
+                                                        </div>
+                                                        <div class="right-steps">
+                                                            <a href="{{ siteUrl }}referencie" style="cursor: pointer !important;">01</a>
+                                                            <a class="clickable active">02</a>
+                                                        </div>
+                                                        <div class="legend">
+                                                            <div>{{ "Projektovanie vykonávame v rámci  územia celého Slovenska"|t }}</div>
+                                                            <div>{{ "Realizácie vykonávame v oblastiach vyznačených s červenou farbou."|t }}</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="clear"></div>
+                                            </div>
+
+                                            <div class="step-2-selector">
+
+                                                <div class="map-selector {{ entry.slug }}">
+                                                    {% embed '_components/regions/banskabystrica' %}{% endembed %}
+                                                    {% embed '_components/regions/bratislava' %}{% endembed %}
+                                                    {% embed '_components/regions/kosice' %}{% endembed %}
+                                                    {% embed '_components/regions/nitra' %}{% endembed %}
+                                                    {% embed '_components/regions/presov' %}{% endembed %}
+                                                    {% embed '_components/regions/trencin' %}{% endembed %}
+                                                    {% embed '_components/regions/trnava' %}{% endembed %}
+                                                    {% embed '_components/regions/zilina' %}{% endembed %}
+                                                </div>
+
+                                                <div class="list reference-entry-list">
+                                                    <div class="title">{{ "Okres"|t }}</div>
+
+                                                    <!-- CHILDS LIST -->
+                                                        <div class="childs">
+                                                            {% set regionsList = craft.entries.section('referencie').type('okres') %}
+
+                                                            <div class="select-region">{{ "Vyberte si okres"|t }}</div>
+                                                            <div class="select-region _empty">{{ "Žiadne výsledky"|t }}</div>
+
+                                                            {% if regionsList is not empty %}
+
+                                                                    {% for region in regionsList %}
+                                                                        {% if region.parent is defined %}
+                                                                            {% if entry.slug == region.parent.slug %}
+
+                                                                                {% if region.hasDescendants() %}
+                                                                                    <div class="region-title code-{{ region.skratka|lower }}" style="display: none">{{ region.title }}</div>
+                                                                                    {% for child in region.children %}
+
+                                                                                        <!-- ROW ELEM -->
+                                                                                            <div class="row code-{{ region.skratka|lower }}">
+                                                                                                <div class="title">{{ child.title }}</div>
+
+                                                                                                {% if child.slideHouse is not empty %}
+                                                                                                    <div class="entry">
+                                                                                                        <a href="{{ child.slideHouse.first().url }}">{{ child.slideHouse.first().title }}</a>
+                                                                                                    </div>
+                                                                                                {% else %}
+                                                                                                    <div class="entry">
+                                                                                                        <a href="javascript:;">-</a>
+                                                                                                    </div>
+                                                                                                {% endif %}
+
+                                                                                                <div class="status">{{ child.zmeny.label }}</div>
+
+                                                                                                {% if child.googleMapsUrl is not empty %}
+                                                                                                    <a href="{{ child.googleMapsUrl }}" class="map">
+                                                                                                        <img src="{{ settings.baseUrl }}assets/img/svg/pin.svg" alt="Pin">
+                                                                                                        <span>{{ "zobrazit na mape"|t }}</span>
+                                                                                                    </a>
+                                                                                                {% else %}
+                                                                                                    <a href="javascript:;" class="map _empty">
+                                                                                                        <img src="{{ settings.baseUrl }}assets/img/svg/pin.svg" alt="Pin">
+                                                                                                        <span>{{ "zobrazit na mape"|t }}</span>
+                                                                                                    </a>
+                                                                                                {% endif %}
+
+
+                                                                                            </div>
+                                                                                        <!-- /ROW ELEM -->
+
+                                                                                    {% endfor %}
+                                                                                {% endif %}
+
+                                                                            {% endif %}
+                                                                        {% endif %}
+
+                                                                    {% endfor %}
+
+                                                            {% endif %}
+
+                                                        </div>
+                                                    <!-- /CHILDS LIST -->
+
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+                                    <!-- /MAP DETAILS -->
+
+                                </div>
+                            <!-- /CONTACT CONTENT-->
+
+                        </div>
+                    </div>
+                <!-- /HOUSE LISTING -->
+
+            </div>
+        <!-- /FILTER + HOUSE LISTING -->
+
+    </div>
+<!-- /CONTENT CONTAINER -->
+
+{% endblock %}

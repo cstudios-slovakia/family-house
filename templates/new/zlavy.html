@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+    {% set sitebase = 'https://familyhouse.sk/' %}
+
+    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projekty Domov - Family House 2020</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,700;1,800&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="{{ sitebase }}assets/css/vendor/swiper.min.css">
+
+    <link rel="stylesheet" href="{{ sitebase }}assets/new/css/simplebar.css">
+    <link rel="stylesheet" href="{{ sitebase }}assets/new/css/main.css?=ver{{ random(1, 100) }}">
+</head>
+<body>
+    <div class="page-container">
+        
+        {% embed "new/header/header.html" %}
+        {% endembed %}
+
+        <div class="page" id="baliky">
+            
+            {% embed "new/pages/page_sidebar.html" %}
+            {% endembed %}
+
+
+                <div class="baliky">
+                    
+                    <h1>
+                        Výhody Family Klubu
+                    </h1>
+
+                    <div class="zlavy">
+                        <h2>
+                            NECHAJTE SA ODMENIŤ ZA TO, ŽE VOLÍTE PRÁVE NÁS
+                        </h2>
+                        <p>
+                            Za rozhodnutie, ktorú nám preukazujete nákupom u nás alebo registráciou do nášho klubu
+                            sme pre Vás pripravili balíček výhod a špeciálne odmeny, ktoré sú určené iba pre členov<span>&nbsp;FAMILY KLUBU</span>.
+                        </p>
+                        <div class="grid">
+                            <div class="left">
+                                <img src="{{ sitebase }}assets/new/img/piggy.png" alt="">
+                            </div>
+                            <div class="right">
+                                <h2 class="red">
+                                    VÝHODY VSTUPU DO FAMILY KLUBU
+                                </h2>
+                                <div class="list">
+                                    <div class="item">
+                                        <div class="checkmark">&#10004;</div>
+                                        <ul>
+                                            <li>
+                                                <span class="high">zľava na projekty katalógových domov&nbsp;</span> vo výške <span class="red">&nbsp;5%</span>
+                                            </li>
+                                            <li><span class="high">zľava na individuálne projekty domov&nbsp;</span> vo výške <span class="red">&nbsp;10%</span></li>
+                                            <li>vernostná zľava pri&nbsp;<span class="high">&nbsp;objednávke ďalšieho projektu</span><span class="red">&nbsp;20%</span></li>
+                                        </ul>
+                                    </div>
+                                    <div class="item">
+                                        <div class="checkmark">&#10004;</div>
+                                        <ul>
+                                            <li>
+                                                <span class="high">zľava na na stavbu domu&nbsp;</span> v závislosti od veľkosti objednávky <span class="red">1%</span> až <span class="red">2%</span>
+                                            </li>
+                                            <li><span class="high">vernostná zľava&nbsp;</span> pri objednávke druhej stavby vo výške <span class="red">2%</span> až <span class="red">3%</span></li>
+                                        </ul>
+                                    </div>
+                                    <div class="item">
+                                        <div class="checkmark">&#10004;</div>
+                                        <ul>
+                                            <li>
+                                                <span class="high">zľava za odporúčanie ďalšiemu zákazníkovi&nbsp;</span> - pri podpise objednávky <span class="red">1%</span>
+                                                z celkovej ceny pripísané na Váš účet
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="item">
+                                        <div class="checkmark">&#10004;</div>
+                                        <ul>
+                                            <li>
+                                                počas stavby <span class="high">&nbsp;ZNÍŽENIE celkovej ceny&nbsp;</span> o zľavu získanú na stavebný materiál,
+                                                na základe aktuálne prebiehajúcich akcií
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="item">
+                                        <div class="checkmark">&#10004;</div>
+                                        <ul>
+                                            <li>
+                                                <span class="high">pozáručný servis&nbsp;</span> na nami postavené domy
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="item">
+                                        <div class="checkmark">&#10004;</div>
+                                        <ul>
+                                            <li>
+                                                <span class="high">2 katalógy zadarmo&nbsp;</span> /projekty domov aj katalóg interiérov/ zaslané bezplatne
+                                                na Vašu adresu - na vyžiadanie
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="item">
+                                        <div class="checkmark">&#10004;</div>
+                                        <ul>
+                                            <li>
+                                                voliteľné: <span class="high">&nbsp;informovanie o novinkách, akciách</span>, nových projektoch a užitočných
+                                                informáciách priamo na Váš mail
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="item">
+                                        <div class="checkmark">&#10004;</div>
+                                        <ul>
+                                            <li>
+                                                <span class="high">bezplatná konzultácia&nbsp;</span> na mieste plánovanej stavby
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    
+                                    <div class="item">
+                                        <div class="checkmark">&#10004;</div>
+                                        <ul>
+                                            <li>
+                                                <span class="high">malá pozornosť&nbsp;</span> pri odovzdaní stavby / projektu domu
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <a href="{{siteUrl}}register" class="vstupit">
+                                    vstúpiť do klubu
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    
+
+    
+                </div>
+            
+            
+            </div>
+    
+    
+    
+    
+    
+    
+    
+            {% embed "new/footer.twig" %}
+            {% endembed %}
+        
+        </div>
+        
+        
+            <script src="{{ sitebase }}assets/js/vendor/jquery-3.2.1.min.js"></script>
+            <script src="{{ sitebase }}assets/js/vendor/jquery-waypoints-and-sticky.js"></script>
+            <script src="{{ sitebase }}assets/js/vendor/simplebar.min.js"></script>
+            <script src="{{ sitebase }}assets/js/vendor/vue.js"></script>
+            <script src="{{ sitebase }}assets/js/vendor/vue-router.js"></script>
+            <script src="{{ sitebase }}assets/js/vendor/swiper.min.js"></script>
+            <script src="{{ sitebase }}assets/new/js/main.js?=ver{{ random(1, 100) }}"></script>
+        
+            <script>
+
+
+                // custom hover
+            $('.items .item').hover(function(){
+                var idx = $(this).index() + 1;
+                $('.items .item:nth-child('+idx+')').addClass('gray-hover');
+            },function(){
+                var idx = $(this).index() + 1;
+                $('.items .item:nth-child('+idx+')').removeClass('gray-hover');
+            });
+            // click
+            $('.items .item').click(function(){
+                var idx = $(this).index() + 1;
+                $('.items .item').removeClass('gray-click');
+                $('.items .item:nth-child('+idx+')').addClass('gray-click');
+            });
+
+                
+                
+        
+            </script>
+
+{% embed 'new/cookies-embed.html'%}
+{% endembed %}
+</body>
+</html>

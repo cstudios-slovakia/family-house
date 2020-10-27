@@ -1,0 +1,68 @@
+{% set layout =  "reviewermodule-site/_layout"  %}
+    {% extends layout  %}
+
+
+{% do view.registerAssetBundle("modules\\reviewermodule\\assetbundles\\reviewermodule\\ReviewerModuleAsset") %}
+{% set requiredMark = craft.reviewerModule.formFieldRequires %}
+
+
+{% block content %}
+
+
+
+    <div id="module_reviewer" class="container">
+        <div class="reviewer_title__container">
+            <div class="title-rectangle"></div>
+            <h3 class="reviewer__title">
+                Váš názor je dôležitý <br>Family House
+            </h3>
+        </div>
+
+
+
+        <p>
+            Chceme sa Vám poďakovať za prejavený záujem, dovoľte nám spýtať sa na Váš názor ohľadne vybavenia Vašej objednávky. Ďakujeme pekne
+
+
+        </p>
+        <span class="field-mark__required">
+            * Povinné
+        </span>
+        <div class="reviewer__questions">
+            <form method="post" accept-charset="UTF-8">
+                {{ csrfInput() }}
+            {{ craft.reviewerModule.renderPart('q_10',questionModel) | raw }}
+            {{ craft.reviewerModule.renderPart('q_20',questionModel) | raw }}
+            {{ craft.reviewerModule.renderPart('q_30',questionModel) | raw }}
+            {{ craft.reviewerModule.renderPart('q_40',questionModel) | raw }}
+            {{ craft.reviewerModule.renderPart('q_50',questionModel) | raw }}
+            {{ craft.reviewerModule.renderPart('q_60',questionModel) | raw }}
+            {{ craft.reviewerModule.renderPart('q_70',questionModel) | raw }}
+            {{ craft.reviewerModule.renderPart('q_80',questionModel) | raw }}
+
+
+            <div class="question__block">
+                <p>
+                    Ďalšie Vaše podnety, pripomienky:
+                </p>
+                <fieldset>
+                    <div>
+                        <textarea name="questions[q_90]" id="q_90"   rows="5"></textarea>
+                    </div>
+                </fieldset>
+            </div>
+
+            <div class="submit">
+                <button type="submit">Odoslať</button>
+            </div>
+            </form>
+        </div>
+    </div>
+
+{% endblock %}
+
+
+
+
+
+

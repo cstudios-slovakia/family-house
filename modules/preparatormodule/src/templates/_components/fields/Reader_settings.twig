@@ -1,0 +1,26 @@
+{# @var craft \craft\web\twig\variables\CraftVariable #}
+{#
+/**
+ * preparator module for Craft CMS
+ *
+ * Reader Field Settings
+ *
+ * @author    @lostika
+ * @copyright Copyright (c) 2019 @lostika
+ * @link      cstudios.sk
+ * @package   PreparatorModule
+ * @since     1.0.0
+ */
+#}
+
+{% import "_includes/forms" as forms %}
+
+{% do view.registerAssetBundle("modules\\preparatormodule\\assetbundles\\preparatormodule\\PreparatorModuleAsset") %}
+
+{{ forms.textField({
+    label: 'Some Attribute',
+    instructions: 'Enter some attribute here.',
+    id: 'someAttribute',
+    name: 'someAttribute',
+    value: field['someAttribute']})
+}}

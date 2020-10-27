@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="en">
+    {% set sitebase = 'https://familyhouse.sk/' %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projekty Domov - Family House 2020</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    
+    <link rel="stylesheet" href="{{ sitebase }}assets/new/css/simplebar.css">
+    <link rel="stylesheet" href="{{ sitebase }}assets/new/css/main.css?=ver{{ random(1, 100) }}">
+</head>
+<body>
+    <div class="page-container">
+        {% embed 'new/header/header.html' %}
+        {% endembed %}
+
+        <script>
+
+            {% set e = craft.categories().group('elevatedCat').slug(craft.request.lastSegment).one() %}
+
+            // $.ajax({
+            //     url: "{{ craft.request.getUrl() }}{{ e.bulletsurl|raw }}",
+            //     })
+            //     .done(function() {
+            //         $("html").html(pageData);
+                
+            // });
+            function get(name){
+                if(name=(new RegExp('[?&]'+encodeURIComponent(name)+'=([^&]*)')).exec(location.search))
+                    return decodeURIComponent(name[1]);
+            }
+
+            var fb = get('fbclid');
+            console.log(fb);
+
+            if (window.location.search == '') {
+                window.location = '{{ craft.request.getUrl() }}{{ e.bulletsurl|raw }}';
+            }
+            
+            
+
+        </script>
+
+        <div class="page">
+
+            {% set elevated = craft.categories().group('elevatedCat').slug(craft.request.lastSegment).one() %}
+
+            {#builds up a request friendly query string with '?'#}
+            {% set enabledFilterQueryString = craft.housefilterModule.getEnabledFilterQueryString %}
+            {# ?? #}
+            {% set comingSoon = false %}
+
+            {# the filtered houses list#}
+            {% set housesListData = craft.housefilterModule.getHousesList %}
+
+            {# {% set housesListData = elevated.entryNoLimit.limit(20) %} #}
+            {% paginate housesListData as paginateInfo, housesList %}
+
+
+            {# set filtered house amount through a module#}
+            {% set filterResult = paginateInfo.total %}
+
+            {# builds up the filtered labels from module#}
+            {% set activeFilterLabelsList = craft.housefilterModule.getActiveFilterLabelList %}
+
+
+
+
+            <div class="filter-slide-container">
+                <div class="filter-wrapper" id="filter">
+                    <div class="set-filter-btn">
+                        <div class="">nastaviť filter</div>
+                        <img src="{{ sitebase }}assets/new/img/jump-blue.svg" alt="">
+                    </div>
+                    <div class="filtered-wrapper">
+                        <div class="filtered">
+                            Filtrovaných <span class="red">{{ housesListData|length }}</span> rodinných domov
+                        </div>
+                    </div>
+                    <div class="filter-sidebar" data-simplebar data-simplebar-auto-hide="false">
+                        
+                        {% embed '/new/../_components/left/filter_new.html' %}
+                        {% endembed %}
+                        
+                        
+                    </div>
+                    <div class="filter-buttons">
+                        <div class="filter-button-wrapper">
+                            <button class="submit" type="submit" form="filterForm">Filtrovať</button>
+                        </div>
+                        <div class="filter-button-wrapper">
+                            <a href="{{siteUrl}}projekty-domov" class="filter-button">
+                                zrušiť
+                            </a>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+
+
+
+            {% set _sortingSelected = 'id desc' %}
+            {% if craft.app.request.getParam('sort') is not empty %}
+                {% set _sortingSelected = craft.app.request.getParam('sort') %}
+            {% endif %}
+
+            <div class="projekty-wrapper">
+
+                <div class="tag-row">
+                    <div class="inner">
+                        {% set activeFilterLabelsList = craft.housefilterModule.getActiveFilterLabelList %}
+                        {% set filterVars = {'activeLabels': activeFilterLabelsList } %}
+                
+                        
+                        {% with filterVars %}
+
+                            {% if activeLabels is defined and activeLabels is empty %}
+                                <div class="tag">
+                                    Projekty domov - Nízkoenergetické rodinné domy
+                                </div>
+                            {% endif %}
+
+                            {% if activeLabels is defined and activeLabels is not empty %}
+                                {% if activeLabels|length > 1 %}
+                                    
+                                    {% for activeLabel in activeLabels %}
+                                        <div class="tag">
+                                            {{ activeLabel|raw }}
+                                        </div>
+                                    {% endfor %}
+                                    
+                                {% else %}
+                                    <h1>
+                                        {% for activeLabel in activeLabels %}
+                                            {{ activeLabel|t|raw }}
+                                        {% endfor %}
+                                    </h1>
+                                {% endif %}
+                            {% endif %}
+                        {% endwith %}
+                    </div>
+                </div>
+
+                <div class="option-row">
+                    <form class="search">
+                        <input type="text" name="q" id="" placeholder="Hľadať">
+                        <div class="button" onclick="this.form.submit()">
+                            <img src="{{ sitebase }}assets/new/img/search.svg" alt="search">
+                        </div>
+                    </form>
+                    <!-- <div class="order">
+                        <div class="label">Zoradenie</div>
+                        <div class="button">
+                            <img src="{{ sitebase }}assets/new/img/dropdown-white.svg" alt="list">
+                        </div>
+                        <div class="drop">
+                            <div class="drop-item" id="0">Cena</div>
+                            <div class="drop-item" id="1">Názov</div>
+                        </div>
+                    </div> -->
+
+                    <form class="order">
+                        <div class="button">
+                            <img src="{{ sitebase }}assets/new/img/dropdown-white.svg" alt="list">
+                        </div>
+                        <select class="sort" name="sort" onchange="this.form.submit()">
+                            <option value="id desc" {% if _sortingSelected == 'id desc' %}selected{% endif %}>{{"Zoradenie"|t}}</option>
+                            <option value="nazov asc" {% if _sortingSelected == 'nazov asc' %}selected{% endif %}>{{"Meno"|t}}</option>
+                            <option value="kompletSDph asc" {% if _sortingSelected == 'kompletSDph asc' %}selected{% endif %}>{{"Cena: Od najnižšej po najvyššiu"|t}}</option>
+                            <option value="kompletSDph desc" {% if _sortingSelected == 'kompletSDph desc' %}selected{% endif %}>{{ "Cena: Od najvyššej po najnižšíu"|t}}</option>
+                            <option value="uzhitkovaPlocha desc" {% if _sortingSelected == 'uzhitkovaPlocha desc' %}selected{% endif %}>{{ "Úžitková plocha: Od najvyššej po najnižšiu"|t}}</option>
+                            <option value="uzhitkovaPlocha asc" {% if _sortingSelected == 'uzhitkovaPlocha asc' %}selected{% endif %}>{{ "Úžitková plocha: Od najnižšej po najvyššiu"|t}}</option>
+                        </select>
+                    </form>
+
+                    <script>
+                        // $('select.sort').on('change', function() {
+                        //     var _getParams = getUrlVars(),
+                        //         _chain     = [],
+                        //         _sort      = $(this).find('option:selected').val();
+
+                        //     $.each(getUrlVars(), function(i, v) {
+                        //         if (v !== window.location.href && v !== 'sort') {
+                        //             _chain.push(v + '=' + getUrlVars()[v]);
+                        //         }
+                        //     });
+
+                        //     _chain.push('sort=' + _sort);
+
+                        //     window.location.href = window.location.href.split('?')[0] + '?' + _chain.join('&');
+                        //     $('form.order').submit();
+                            
+                        // });
+                    </script>
+
+
+                    <div class="view-foundation">
+                        <img src="{{ sitebase }}assets/new/img/podorys.png" alt="">
+                        <div class="label">Zobraziť pôdorysy</div>
+                        <label for="" class="switch">
+                            <input type="checkbox" id="" checked="checked">
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+                    <div class="catalogue">
+                        <img src="{{ sitebase }}assets/new/img/catalogue.svg" alt="">
+                        <div class="label">potrebujem katalóg</div>
+                    </div>
+                    <div class="membership">
+                        <img src="{{ sitebase }}assets/new/img/membership.svg" alt="">
+                        <div class="label">členstvo family house</div>
+                    </div>
+                    <div class="decor-drop">
+                        <!-- <div class="view-foundation">
+                            <img src="{{ sitebase }}assets/new/img/podorys.png" alt="">
+                            <div class="label">Zobraziť pôdorysy</div>
+                            <label for="" class="switch">
+                                <input type="checkbox" id="" checked="checked">
+                                <span class="slider round"></span>
+                            </label>
+                        </div> -->
+                        <div class="detection"></div>
+                        <!-- <div class="decor-inner-circle"></div> -->
+                        <div class="decor-arrow">
+                            <img src="{{ sitebase }}assets/new/img/dropdown-green.svg" alt="">
+                        </div>
+                        <div class="catalogue">
+                            <img src="{{ sitebase }}assets/new/img/catalogue.svg" alt="">
+                            <div class="label">potrebujem katalóg</div>
+                        </div>
+                        <div class="membership">
+                            <img src="{{ sitebase }}assets/new/img/membership.svg" alt="">
+                            <div class="label">členstvo family house</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="projekty-flex-container">
+
+                    <div class="extra-text">
+                        <h3>
+                            {{ elevated.title }}
+                        </h3>
+                        <div class="text">
+                            {{ elevated.body }}
+                        </div>
+                    </div>
+
+                    <div class="projekty">
+
+                        {# SEOP Filter #}
+                        {% set filterSeops = craft.entries.section('seopFilter') %}
+                        {% set custom_seo = true %}
+                        {% set filterTitle = 'Filter' %}
+                        {% set finalKeywords = [] %}
+                        {% set finalDescription = [] %}
+
+                        {% if filterSeops|length > 0 %}
+                            {% set queryString      = craft.app.request.getQueryStringWithoutPath() %}
+                            {% set queryStringFull  = (queryString is not empty) ? '?' ~ queryString : '' %}
+
+                            {% for elem in filterSeops %}
+
+                                {% if '?' ~ elem.seopFilterQuery == queryStringFull %}
+
+                                    {% set filterTitle = elem.title %}
+                                        {% if elem.seopKeys is not empty %}
+                                            {% for key in elem.seopKeys %}
+                                                {% set currentLoopIndex = loop.index %}
+                                                {% set keywordIndex = key.keywordKey - 1 %}
+                                                {% set descriptionIndex = key.descriptionKey - 1 %}
+
+                                                    {% if elem.seopFilterSeopEntry|length %}
+                                                        {% for seoObject in elem.seopFilterSeopEntry %}
+                                                            {% if currentLoopIndex == loop.index %}
+
+                                                                {# Entry keywords #}
+                                                                {% if seoObject.keywords|length and keywordIndex >= 0 %}
+                                                                    {% if seoObject.keywords[keywordIndex] is defined %}
+                                                                        {% set finalKeywords = finalKeywords|merge([seoObject.keywords[keywordIndex].keyword]) %}
+                                                                    {% endif %}
+                                                                {% endif %}
+
+                                                                {# Entry descriptions #}
+                                                                {% if seoObject.descriptions|length and descriptionIndex >= 0 %}
+                                                                    {% if seoObject.descriptions[descriptionIndex] is defined %}
+                                                                        {% set finalDescription = finalDescription|merge([seoObject.descriptions[descriptionIndex].description]) %}
+                                                                    {% endif %}
+                                                                {% endif %}
+
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                    {% endif %}
+                                            {% endfor %}
+                                        {% endif %}
+                                    {% endif %}
+                            {% endfor %}
+                        {% endif %}
+
+                        
+                    
+
+
+                        
+
+
+
+                        {% for entry in housesList %}
+
+                            {# descrition content for entry #}
+                            {% set finalContent = [] %}
+                            {% if entry.seopKeys is not empty %}
+
+                                {% for elem in entry.seopKeys %}
+                                    {% set currentLoopIndex = loop.index %}
+                                    {% set contentIndex = elem.contentKey - 1 %}
+
+                                    {% if entry.seo|length %}
+                                        {% for seoObject in entry.seo %}
+                                            {% if currentLoopIndex == loop.index %}
+                                                {# Entry content #}
+                                                {% if seoObject.contents|length and contentIndex >= 0 %}
+                                                    {% if seoObject.contents[contentIndex] is defined %}
+                                                        {% set finalContent = finalContent|merge([seoObject.contents[contentIndex].content]) %}
+                                                    {% endif %}
+                                                {% endif %}
+
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% endif %}
+
+                                {% endfor %}
+
+                            {% endif %}
+
+                            <div class="card">
+                                <div class="title">
+                                    <h2>{{ entry.nazov }}</h2>
+                                    <div class="label">{{ entry.podlaznost.label }}, {{ entry.uzhitkovaPlocha }}m&sup2;</div>
+                                    <div class="heart" id="{{entry.id}}">
+                                        <img src="{{ sitebase }}assets/new/img/heart.svg" alt="heart">
+                                        <div class="fill"></div>
+                                    </div>
+                                </div>
+                                <div class="image">
+                                    <a href="{{ entry.url }}" class="thumb">
+                                        <img class="big found" src="{{ entry.podorysVykres.first().getUrl('houseDetailGalleryThumbs480w') }}" width="{{ entry.vizualy.first().getWidth('houseDetailGalleryThumbs480w') }}" height="{{ entry.vizualy.first().getHeight('houseDetailGalleryThumbs480w') }}" alt="">
+                                        <img class="big" src="{{ entry.vizualy.first().getUrl('houseDetailGalleryThumbs480w') }}" width="{{ entry.vizualy.first().getWidth('houseDetailGalleryThumbs480w') }}" height="{{ entry.vizualy.first().getHeight('houseDetailGalleryThumbs480w') }}" alt="">
+                                    </a>
+                                    <div class="foundation fo">
+                                        <img src="{{ sitebase }}assets/new/img/podorys.png" alt="">
+                                    </div>
+                                    <div class="foundation alt">
+                                        <img src="{{ sitebase }}assets/new/img/podorys.png" alt="">
+                                    </div>
+                                    
+                                    {% if entry.stitok != '' %}
+                                        <div class="new" style="color: {{ entry.stitokFarba.value }} ">
+                                            <span>{{ entry.stitok }}</span>
+                                        </div>
+                                    {% endif %}
+                                    <div target="{{entry.url}}" name="{{entry.title}}" class="jump">
+                                        <img class="jump" src="{{ sitebase }}assets/new/img/jump.svg" alt="">
+                                    </div>
+                                    <div class="share-elem">
+                                        <div class="close">
+                                            <div class="line"></div>
+                                            <div class="line"></div>
+                                        </div>
+                                        <div class="wrapper">
+                                            <div class="title">Zdielať:</div>
+                                            <a href="https://www.facebook.com/sharer/sharer.php?u={{entry.url}}" target="_blank" class="fb">
+                                                <img src="{{sitebase}}assets/new/img/face.svg" alt="">
+                                                <div class="text">Facebook</div>
+                                            </a>
+                                            <a href="mailto:?&subject=Family House&body={{entry.url}}" class="mail">
+                                                <img src="" alt="">
+                                                <div class="text">Email</div>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                                <div class="description">
+                                    {% if finalContent|length %}
+                                    {% set fullDescription = finalContent|join(' ')|length > 220 ? finalContent|join(' ') : finalContent|join(' ') %}
+                                    {{ fullDescription|slice(0,233) ~ '...'}}
+                                {% endif %}
+                                </div>
+                                <div class="projects-detail-grid">
+                                    <div class="left">
+                                        <div class="line">
+                                            <img src="{{ sitebase }}assets/new/img/bed-blue.svg" alt="">
+                                            <div class="label">
+                                                <div class="top">počet izieb</div>
+                                                <div class="bottom red">
+                                                    {{ entry.izby.label }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="line">
+                                            <img src="{{ sitebase }}assets/new/img/measure-blue.svg" alt="">
+                                            <div class="label">
+                                                <div class="top">úžitková plocha</div>
+                                                <div class="bottom red">{{ entry.uzhitkovaPlocha }}m&sup2;</div>
+                                            </div>
+                                        </div>
+                                        <div class="line">
+                                            <img src="{{ sitebase }}assets/new/img/bath-blue.svg" alt="">
+                                            <div class="label">
+                                                <div class="top">počet kúpeľní</div>
+                                                <div class="bottom red">
+                                                    {% if entry.volitelne.contains('kupelna') %}
+                                                        2x
+                                                    {% else %}
+                                                        1x
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="line">
+                                            <img src="{{ sitebase }}assets/new/img/parking-blue.svg" alt="">
+                                            <div class="label">
+                                                <div class="top">Garážové státie</div>
+                                                <div class="bottom red">
+                                                    {% if entry.garaz == 'g0' %}
+                                                        Bez garáže
+                                                    {% elseif entry.garaz == 'g1' %}
+                                                        1x
+                                                    {% else %}
+                                                        2x
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="line">
+                                            <img src="{{ sitebase }}assets/new/img/wardrobe-blue.svg" alt="">
+                                            <div class="label">
+                                                <div class="top">šatník</div>
+                                                <div class="bottom red">
+                                                    {% if entry.volitelne.contains('satnik') %}
+                                                        Ano
+                                                    {% else %}
+                                                        Nie
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mid">
+                                        {% if entry.type == 'dom' %}
+                                            {% if entry.konstrukcia.contains('montovaneDomy') %}
+                                                <div class="line">
+                                                    <img src="{{ sitebase }}assets/new/img/lowprice-blue.svg" alt="">
+                                                    <div class="label">
+                                                        <div class="top">montovaný dom</div>
+                                                    </div>
+                                                </div>
+                                            {% endif %}
+                                            {% if entry.konstrukcia.contains('murovaneDomy') %}
+                                                <div class="line">
+                                                    <img src="{{ sitebase }}assets/new/img/highquality-blue.svg" alt="">
+                                                    <div class="label">
+                                                        <div class="top">klasický murovaný dom</div>
+                                                    </div>
+                                                </div>
+                                            {% endif %}
+                                        {% endif %}
+
+                                        {% if entry.type == 'dom_v2' %}
+
+                                        {% for block in entry.priceNew.all() %}
+                                            {% switch block.type %}
+
+                                                {% case 'price' %}
+                                                <div class="line">
+                                                    <img src="{{block.triedaKamPrisluchaCena.one().obrazok.one().url}}" alt="">
+                                                    <div class="label">
+                                                        <div class="top">{{ block.triedaKamPrisluchaCena.one().title }}</div>
+                                                    </div>
+                                                </div>
+
+                                            {% endswitch %}
+
+                                        {% endfor %}
+
+                                        <a href="{{ entry.url}}/konfigurator" class="material tyrk">
+                                            Zmením <br> materiály
+                                        </a>
+                                        {% endif %}
+
+                                    {#  {% if entry.volitelne.contains('domnauzkypozemok') %}
+                                        
+                                            <div class="line">
+                                                <img src="{{ sitebase }}assets/new/img/highquality-blue.svg" alt="">
+                                                <div class="label">
+                                                    <div class="top">Dom na úzky pozemok 0-8m</div>
+                                                </div>
+                                            </div>
+                                            
+                                        {% endif %}
+
+                                        {% if entry.volitelne.contains('domnauzkypozemok89') %}
+                                        
+                                            <div class="line">
+                                                <img src="{{ sitebase }}assets/new/img/highquality-blue.svg" alt="">
+                                                <div class="label">
+                                                    <div class="top">Dom na úzky pozemok 8-9m</div>
+                                                </div>
+                                            </div>
+                                            
+                                        {% endif %}
+
+                                        {% if entry.volitelne.contains('domvtvarel') %}
+                                        
+                                            <div class="line">
+                                                <img src="{{ sitebase }}assets/new/img/highquality-blue.svg" alt="">
+                                                <div class="label">
+                                                    <div class="top">Dom v tvare L</div>
+                                                </div>
+                                            </div>
+                                            
+                                        {% endif %}
+
+                                        {% if entry.volitelne.contains('podpivnicenyDom') %}
+                                        
+                                            <div class="line">
+                                                <img src="{{ sitebase }}assets/new/img/highquality-blue.svg" alt="">
+                                                <div class="label">
+                                                    <div class="top">Podpivničený</div>
+                                                </div>
+                                            </div>
+                                            
+                                        {% endif %} #}
+
+                                    </div>
+                                    <div class="right">
+                                        
+                                        
+                                        {% if entry.type == 'dom' %}
+                                            <div class="line">
+                                                <img src="{{ sitebase }}assets/new/img/blueprint-blue.svg" alt="">
+                                                <div class="label">
+                                                    <div class="top">cena projektu</div>
+                                                    <div class="bottom red">{{ entry.projekt|number_format(2, ',', '.') }}&euro;</div>
+                                                </div>
+                                            </div>
+                                            <div class="line">
+                                                <img src="{{ sitebase }}assets/new/img/brickicon-blue.svg" alt="">
+                                                <div class="label">
+                                                    <div class="top">holodom</div>
+                                                    <div class="bottom red">{{ entry.holodomSDph|number_format(0, ',', '.') }}&euro;</div>
+                                                </div>
+                                            </div>
+                                            <div class="line">
+                                                <img src="{{ sitebase }}assets/new/img/housekey-blue.svg" alt="">
+                                                <div class="label">
+                                                    <div class="top">cena domu na kľúč</div>
+                                                    <div class="bottom red">
+                                                        Na vyžiadanie
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                        {% endif %}
+                                        {% if entry.type == 'dom_v2' %}
+                                        
+                                            {% set block = entry.priceNew.first() %}
+
+                                                <div class="line">
+                                                    <img src="{{ sitebase }}assets/new/img/blueprint-blue.svg" alt="">
+                                                    <div class="label">
+                                                        <div class="top">cena projektu</div>
+                                                        <div class="bottom red">{{ block.cenaProjektu|number_format(2, ',', '.') }}&euro;</div>
+                                                    </div>
+                                                </div>
+                                                <div class="line">
+                                                    <img src="{{ sitebase }}assets/new/img/brickicon-blue.svg" alt="">
+                                                    <div class="label">
+                                                        <div class="top">cena stavby domu</div>
+                                                        <div class="bottom red">{{ block.cenaStavbyDomu|number_format(0, ',', '.') }}&euro;</div>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="line">
+                                                    <img src="{{block.triedaKamPrisluchaCena.one().obrazok.one().url}}" alt="">
+                                                    <div class="label">
+                                                        <div class="top">cena domu na kľúč</div>
+                                                        <div class="bottom red">
+                                                            {{block.cenaNaKluc|number_format(2, ',', '.')}}
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                
+
+                                            
+                                        {% endif %}
+                                        <a href="{{ entry.url }}" class="look">
+                                            pozriem <br> projekt
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+
+    
+                    </div>
+
+                    {% if housesList|length > 0 %}
+
+                        <div class="paginate-info">
+                            {% for page, prevUrl in paginateInfo.getPrevUrls(5) %}
+                                {% set prevUrl = prevUrl|replace({'filter/house-filter/index': 'projekty-domov' }) %}
+                                <a href="{{ prevUrl ~ enabledFilterQueryString }}">{{ page }}</a>
+                            {% endfor %}
+                            <span class="current">{{ paginateInfo.currentPage }}</span>
+                            {% for page, nextUrl in paginateInfo.getNextUrls(5) %}
+                                {% set nextUrl = nextUrl|replace({'filter/house-filter/index': 'projekty-domov' }) %}
+                                <a href="{{ nextUrl ~ enabledFilterQueryString }}">{{ page }}</a>
+                            {% endfor %}
+                        </div>
+
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% embed 'new/footer.twig' %}
+        {% endembed %}
+
+    </div>
+
+
+    <script src="{{ sitebase }}assets/js/vendor/jquery-3.2.1.min.js"></script>
+    <script src="{{ sitebase }}assets/js/vendor/swiper.min.js"></script>
+    <script src="{{ sitebase }}assets/js/vendor/jquery-waypoints-and-sticky.js"></script>
+    <script src="{{ sitebase }}assets/js/vendor/simplebar.min.js"></script>
+    <script src="{{ sitebase }}assets/js/vendor/vue.js"></script>
+    <script src="{{ sitebase }}assets/js/vendor/vue-router.js"></script>
+    <script src="{{ sitebase }}assets/new/js/main.js?=ver{{ random(1, 100) }}"></script>
+    <script src="{{ sitebase }}assets/js/main.js?=ver{{ random(1, 100) }}"></script>
+
+</body>
+</html>

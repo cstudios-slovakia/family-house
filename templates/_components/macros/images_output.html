@@ -1,0 +1,16 @@
+{% macro imageWebp(image, altContent = '', imageSizes = [{ width: 320 }, { width: 450 }, { width: 780 }], class = '', options = null ) %}
+    {% set options = options is null ?  { format: 'webp' } : options %}
+    {% set altContent = altContent is empty ? image.title : altContent %}
+    {% set imageSizes = imageSizes %}
+
+    {% if craft.imager.serverSupportsWebp() and craft.imager.clientSupportsWebp() %}
+        {% set transformedImages = craft.imager.transformImage(image, imageSizes, options) %}
+    {% else %}
+        {% set transformedImages = craft.imager.transformImage(image, imageSizes) %}
+    {% endif %}
+    <picture>
+        <source sizes="100vw" srcset="{{ craft.imager.srcset(transformedImages) }}" type="image/webp">
+        <img class="{{ class }}" src="{{ transformedImages[0].url }}" sizes="100vw" srcset="{{ craft.imager.srcset(transformedImages) }}" alt="{{ altContent }}" height="auto" width="100%" data-support="{{ craft.imager.clientSupportsWebp()  }}">
+    </picture>
+
+{% endmacro %}

@@ -1,0 +1,214 @@
+<div class="interest">
+    <div class="title">
+        {% if   (craft.app.request.getSegment(1) == "dom") or
+                (craft.app.request.segments|last == "prehliadka") or
+                (craft.app.request.segments|last == "podorys") or
+                (craft.app.request.segments|last == "osadenie") or
+                (craft.app.request.segments|last == "konfigurator") or
+                (craft.app.request.segments|last == "financovanie")
+            %}
+
+            <h2>
+                máte záujem o projekt / stavbu / vizualizáciu ?
+            </h2>
+
+        {% else %}
+
+            
+
+        {% endif %}
+    </div>
+    <div class="bottom">
+        
+        {% switch craft.app.request.segments|last %}
+
+            {% case "prehliadka" %}
+            <a href="{{ sitebase }}new/dom" class="prev">
+                <div class="text">
+                    <div class="row">
+                        ďalej na stránku
+                    </div>
+                    <div class="row">
+                        informácie
+                    </div>
+                </div>
+                <div class="nav-btn">
+                    <img src="{{ sitebase }}assets/new/img/dropdown-green.svg" alt="">
+                </div>
+            </a>
+
+            {% case "podorys" %}
+            <a href="{{ sitebase }}new/prehliadka" class="prev">
+                <div class="text">
+                    <div class="row">
+                        ďalej na stránku
+                    </div>
+                    <div class="row">
+                        prehliadka 3d
+                    </div>
+                </div>
+                <div class="nav-btn">
+                    <img src="{{ sitebase }}assets/new/img/dropdown-green.svg" alt="">
+                </div>
+            </a>
+
+            {% case "osadenie" %}
+            <a href="{{ sitebase }}new/podorys" class="prev">
+                <div class="text">
+                    <div class="row">
+                        ďalej na stránku
+                    </div>
+                    <div class="row">
+                        pôdorys
+                    </div>
+                </div>
+                <div class="nav-btn">
+                    <img src="{{ sitebase }}assets/new/img/dropdown-green.svg" alt="">
+                </div>
+            </a>
+
+            {% case "konfigurator" %}
+            <a href="{{ sitebase }}new/osadenie" class="prev">
+                <div class="text">
+                    <div class="row">
+                        ďalej na stránku
+                    </div>
+                    <div class="row">
+                        osadenie
+                    </div>
+                </div>
+                <div class="nav-btn">
+                    <img src="{{ sitebase }}assets/new/img/dropdown-green.svg" alt="">
+                </div>
+            </a>
+
+            {% case "dom-financovanie" %}
+            <a href="{{ sitebase }}new/konfigurator" class="prev">
+                <div class="text">
+                    <div class="row">
+                        ďalej na stránku
+                    </div>
+                    <div class="row">
+                        konfigurátor
+                    </div>
+                </div>
+                <div class="nav-btn">
+                    <img src="{{ sitebase }}assets/new/img/dropdown-green.svg" alt="">
+                </div>
+            </a>
+            {% case "faq" %}
+            
+
+            {% default %}
+
+        {% endswitch %}
+
+        {% if   (craft.app.request.getSegment(1) == "dom") or
+                (craft.app.request.segments|last == "prehliadka") or
+                (craft.app.request.segments|last == "podorys") or
+                (craft.app.request.segments|last == "osadenie") or
+                (craft.app.request.segments|last == "konfigurator") or
+                (craft.app.request.segments|last == "financovanie")
+            %}
+
+            <a href="{{ siteUrl }}dom/{{entry.slug}}/zaujem-projekt-domu" class="btn red">
+                mám záujem
+            </a>
+            <a href="{{ siteUrl }}dom/{{entry.slug}}/poradenstvo" class="btn green margin">
+                ešte mám otázku
+            </a>
+
+        {% else %}
+
+            <a href="{{ siteUrl }}/poradenstvo" class="btn green" style="margin-top:40px">
+                ešte mám otázku
+            </a>
+
+        {% endif %}
+
+        {% switch craft.app.request.segments|last %}
+
+            {% case entry.slug %}
+            <a href="{{ sitebase }}new/prehliadka" class="next">
+                <div class="text">
+                    <div class="row">
+                        ďalej na stránku
+                    </div>
+                    <div class="row">
+                        virtuálna prehliadka 3d
+                    </div>
+                </div>
+                <div class="nav-btn">
+                    <img src="{{ sitebase }}assets/new/img/dropdown-green.svg" alt="">
+                </div>
+            </a>
+
+            {% case "prehliadka" %}
+            <a href="{{ sitebase }}new/podorys" class="next">
+                <div class="text">
+                    <div class="row">
+                        ďalej na stránku
+                    </div>
+                    <div class="row">
+                        pôdorys
+                    </div>
+                </div>
+                <div class="nav-btn">
+                    <img src="{{ sitebase }}assets/new/img/dropdown-green.svg" alt="">
+                </div>
+            </a>
+
+            {% case "podorys" %}
+            <a href="{{ sitebase }}new/osadenie" class="next">
+                <div class="text">
+                    <div class="row">
+                        ďalej na stránku
+                    </div>
+                    <div class="row">
+                        osadenie domu
+                    </div>
+                </div>
+                <div class="nav-btn">
+                    <img src="{{ sitebase }}assets/new/img/dropdown-green.svg" alt="">
+                </div>
+            </a>
+
+            {% case "osadenie" %}
+            <a href="{{ sitebase }}new/konfigurator" class="next">
+                <div class="text">
+                    <div class="row">
+                        ďalej na stránku
+                    </div>
+                    <div class="row">
+                        konfigurátor
+                    </div>
+                </div>
+                <div class="nav-btn">
+                    <img src="{{ sitebase }}assets/new/img/dropdown-green.svg" alt="">
+                </div>
+            </a>
+
+            {% case "konfigurator" %}
+            <a href="{{ sitebase }}new/financovanie" class="next">
+                <div class="text">
+                    <div class="row">
+                        ďalej na stránku
+                    </div>
+                    <div class="row">
+                        financovanie
+                    </div>
+                </div>
+                <div class="nav-btn">
+                    <img src="{{ sitebase }}assets/new/img/dropdown-green.svg" alt="">
+                </div>
+            </a>
+
+            {% default %}
+
+        {% endswitch %}
+        
+    </div>
+</div>
+<script>
+    var lastSegment = {{ craft.request.segments|last }};
+</script>

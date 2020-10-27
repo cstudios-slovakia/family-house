@@ -1,0 +1,569 @@
+{#
+ # Homepage template
+ # ---------------
+ #
+ # When this template gets loaded, it will be because someone has accessed
+ # http://yoursite.com/ (without any URI). Craft checks to see if you have
+ # a Single section set to be the Homepage (as you do, by default), and
+ # loads the section’s Template (this file). A special ‘entry’ variable
+ # will already be set for you, assigned to the Homepage entry.
+ #
+ # It's worth noting that even if you didn't have a Homepage Single section,
+ # as long as this template remains at craft/templates/index.html, it
+ # would still be the one to get loaded when accessing http://yoursite.com/,
+ # albeit without an ‘entry’ variable already set for you.
+ #
+ # See this page for more details on how Craft routes requests:
+ # http://craftcms.com/docs/routing
+ #}
+
+{% extends "_layout" %}
+{% set seo = entry.seoUpdated %}
+
+{% import "_components/macros/images_output.html" as imagesMacro %}
+
+{% block content %}
+
+    <h1 class="_hidden">{{ "Projektovanie a realizácia"|t }}</h1>
+    <h2 class="_hidden">{{ "Projekty domov"|t }}</h2>
+
+    <!-- CONTENT CONTAINER -->
+        <div class="main index-page">
+
+            {% set _bannerMessage = craft.entries.section('bannerMessage').one() %}
+            {% if _bannerMessage.bannerMessageContent is not empty or _bannerMessage.bannerImage is not empty %}
+                <a href="{% if _bannerMessage.bannerMessageUrl is not empty %}{{ _bannerMessage.bannerMessageUrl }}{% else %}javascript:;{% endif %}" class="banner-message">
+                    {% if _bannerMessage.bannerImage is not empty %}
+                        <div class="banner-image-container">
+                            {% set _imageUrl = _bannerMessage.bannerImage is not empty ? _bannerMessage.bannerImage.one().url : '' %}
+                            {% set _imageAlt = _bannerMessage.bannerImage is not empty ? _bannerMessage.bannerImage.one().url : '' %}
+                            <img src="{{ _imageUrl }}" alt="{{ _imageAlt }}"/>
+                        </div>
+                    {% else %}
+                        {% if _bannerMessage.bannerMessageContent is not empty %}
+                            <div class="banner-content">
+                                {{ _bannerMessage.bannerMessageContent|raw }}
+                            </div>
+                        {% endif %}
+                    {% endif %}
+                </a>
+            {% endif %}
+
+        <!-- MAIN SLIDER -->
+            {% set slidesLength = craft.entries.section('slide')|length %}
+            {% if  slidesLength > 0 %}
+                <div class="main-slider">
+                    <div id="main-slider-body">
+
+                        <div class="swiper-container">
+                            <div class="swiper-wrapper">
+
+                                {% for entry in craft.entries.section('slide').limit(10) %}
+
+                                    <div class="swiper-slide">
+
+                                        <!-- SLIDE ELEM -->
+                                            {% set SliderCover = entry.slideImage.one() %}
+                                            {% set house = entry.slideHouse.one() %}
+
+<!--                                            {% if craft.imager.serverSupportsWebp()   %}-->
+<!--                                            {% set transformedSlider = craft.imager.transformImage(SliderCover,[{ width:1920},{ width:320},{ width:480},{ width:800}],{ format: 'webp', allowUpscale: false, mode: 'crop', position: SliderCover.getFocalPoint(), interlace: true }) %}-->
+<!--                                            {% endif %}-->
+                                        {% set imageSizes = [{ width: 320 }, { width: 450 }, { width: 780 },{ width: 1200 }, { width: 1920 }] %}
+                                        {% if craft.imager.serverSupportsWebp() and craft.imager.clientSupportsWebp() %}
+                                        {% set transformedSlider = craft.imager.transformImage(SliderCover, imageSizes, { format: 'webp' } ) %}
+                                        {% else %}
+                                        {% set transformedSlider = craft.imager.transformImage(SliderCover, imageSizes) %}
+                                        {% endif %}
+
+                                            {% if entry.type == 'slide' %}
+
+
+                                                <div href="{{ house.url }}" class="slider-elem" data-cover="{{ transformedSlider[4].url }}" style="background: url({{  transformedSlider[4].url }}) no-repeat;background-position: center; background-size: cover">
+                                                    <a href="{{ house.url }}" class="hidden-link">{{ house.nazov }}</a>
+
+                                                    <!-- DETAILS -->
+                                                        <div class="details">
+
+                                                            <!-- NAME -->
+                                                                <div class="name">
+                                                                    {{ "Volám sa"|t }}
+                                                                    <strong>{{ house.nazov }}</strong>
+                                                                </div>
+                                                            <!-- /NAME -->
+
+                                                            <!-- SIZE -->
+                                                                <div class="size">
+                                                                    {{ "Úžitková<br>plocha:"|t|raw }}
+                                                                    <strong>{{ house.uzhitkovaPlocha }} m²</strong>
+                                                                </div>
+                                                            <!-- /SIZE -->
+
+                                                            <!-- PRICE -->
+                                                                <div class="price">
+                                                                    {{ "Komplet<br>s DPH:"|t|raw }}
+                                                                    <strong>{{ house.kompletSDph }} €</strong>
+                                                                </div>
+                                                            <!-- /PRICE -->
+
+                                                            <!-- PROJECT -->
+                                                            <div class="project">
+                                                                {{ "Projekt:"|t }}
+                                                                <strong>{{ house.projekt }} €</strong>
+                                                                {% if house.mesacne > 0 %}
+                                                                    {{ "Mesačne <br>len za"|t|raw }}
+                                                                    <strong class="monthly">{{ house.mesacne }} €</strong>
+                                                                {% endif %}
+                                                            </div>
+                                                            <!-- /PROJECT -->
+
+                                                            <!-- DETAILS LEFT -->
+                                                            <div class="details-left form-entity-{{ house.id }}">
+
+                                                                <!-- FLOATING FORM -->
+                                                                    <div class="floating-form">
+                                                                        <div class="message" style="padding: 0 !important;">
+                                                                            <div style="padding: 0 !important;">{{ "Ďakujeme, <br> budeme Vás kontaktovať"|t|raw }}</div>
+                                                                        </div>
+                                                                        <svg class="close" viewBox="0 0 24 24">
+                                                                            <path fill="#000000" d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z" />
+                                                                        </svg>
+                                                                        <div class="title" style="padding: 45px 0 0 0 !important;">{{ "Kontaktujte nás"|t }}</div>
+                                                                        <form method="post" name="inline-form-{{ house.id }}" class="form" style="padding: 0 30px !important;">
+                                                                            <input name="name" class="form_name" type="text" placeholder="{{ "Meno a priezvisko"|t }}" required/>
+                                                                            <input name="email" class="form_email" type="text" placeholder="{{ "E-mail"|t }}" required/>
+                                                                            <input name="phone" class="form_phone" type="text" placeholder="{{ "Telefón"|t }}" required/>
+                                                                            <textarea name="message" class="form_message" placeholder="{{ "Poznámka alebo otázka"|t }}" required></textarea>
+                                                                            <button type="submit" class="submit-mam-zaujem" data-form-id="{{ house.id }}" data-name="{{ house.nazov }}" data-url="{{ siteUrl }}mam-zaujem.php">{{ "Odoslať"|t }}</button>
+                                                                        </form>
+                                                                    </div>
+                                                                <!-- /FLOATING FORM -->
+
+                                                                {% set _class = 'redirect' %}
+                                                                {% if entry.viacInfoMatrix is not empty %}
+                                                                    {% set _class = '' %}
+                                                                {% endif %}
+
+                                                                <div class="{{ _class }} redirect_popup _a" href="{{ house.url }}" data-href="{{ house.url }}" data-id="{{ house.id }}">
+                                                                    <div>{{ "Viac <br>info"|t|raw }}</div>
+                                                                    <div></div>
+                                                                </div>
+                                                            </div>
+                                                            <!-- /DETAILS LEFT -->
+
+                                                        </div>
+                                                    <!-- /DETAILS -->
+
+                                                    <!-- MOBILE CONTENT -->
+                                                        <div class="mobile-details">
+                                                            <!-- NAME -->
+                                                                <div class="name">
+                                                                    {{ "Volám sa"|t }}
+                                                                    <strong>{{ house.nazov }}</strong>
+                                                                </div>
+                                                            <!-- /NAME -->
+
+                                                            <!-- SIZE -->
+                                                                <div class="size">
+                                                                    {{ "Úžitková plocha"|t }}
+                                                                    <strong>{{ house.uzhitkovaPlocha }} m²</strong>
+                                                                </div>
+                                                            <!-- /SIZE -->
+                                                        </div>
+                                                    <!-- /MOBILE CONTENT -->
+
+                                                    <!-- MATRIX INFO POPUP -->
+                                                        {% embed '_components/matrix/index-slider' %}{% endembed %}
+                                                    <!-- /MATRIX INFO POPUP -->
+                                            </div>
+                                            {% else %}
+                                                <div href="{{ house.url }}" class="slider-elem single" data-cover="{{ transformedSlider[4].url  }}" style="background: url({{ transformedSlider[4].url  }}) no-repeat;background-position: center; background-size: cover">
+                                                    <a href="{{ house.url }}" class="hidden-link">{{ house.nazov }}</a>
+
+                                                    <!-- MATRIX INFO POPUP -->
+                                                        {% embed '_components/matrix/index-slider' %}{% endembed %}
+                                                    <!-- /MATRIX INFO POPUP -->
+
+                                                </div>
+                                            {% endif %}
+                                        <!-- /SLIDE ELEM -->
+
+                                        <!-- MOBILE CONTENT OUTTER -->
+                                            <div class="mobile-content-outter">
+                                                <div class="left-side">
+                                                    <div class="grid-list {% if house.mesacne > 0 %} items-3 {% endif %}">
+                                                        <!-- SIZE -->
+                                                            <div class="size">
+                                                                {{ "Komplet s DPH:"|t }}
+                                                                <strong>{{ house.kompletSDph }} €</strong>
+                                                            </div>
+                                                        <!-- /SIZE -->
+
+                                                        <!-- PROJECT -->
+                                                            <div class="project">
+                                                                {{ "Projekt:"|t }}
+                                                                <strong>{{ house.projekt }} m²</strong>
+                                                            </div>
+                                                        <!-- /PROJECT -->
+
+                                                        <!-- MONTHLY -->
+                                                            {% if house.mesacne > 0 %}
+                                                                <div class="monthly">
+                                                                    {{ "Mesačne len za"|t }}
+                                                                    <strong class="monthly">{{ house.mesacne }} €</strong>
+                                                                </div>
+                                                            {% endif %}
+                                                        <!-- /MONTHLY -->
+                                                    </div>
+                                                </div>
+                                                <div class="right-side form-entity-mobile-{{ house.id }}">
+
+                                                    <!-- FLOATING FORM -->
+                                                        <div class="floating-form mobile">
+                                                            <div class="message" style="padding: 0 !important;">
+                                                                <div style="padding: 0 !important;">{{ "Ďakujeme, <br> budeme Vás kontaktovať"|t|raw }}</div>
+                                                            </div>
+                                                            <svg class="close" viewBox="0 0 24 24">
+                                                                <path fill="#000000" d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z" />
+                                                            </svg>
+                                                            <div class="title" style="padding: 10px 0 0 0 !important;">{{ "Kontaktujte nás"|t }}</div>
+                                                            <form method="post" name="inline-form-{{ house.id }}" class="form" style="padding: 0 30px !important;">
+                                                                <input name="name" class="form_name" type="text" placeholder="{{ "Meno a priezvisko"|t }}" required/>
+                                                                <input name="email" class="form_email" type="text" placeholder="{{ "E-mail"|t }}" required/>
+                                                                <input name="phone" class="form_phone" type="text" placeholder="{{ "Telefón"|t }}" required/>
+                                                                <textarea name="message" class="form_message" placeholder="{{ "Poznámka alebo otázka"|t }}" required></textarea>
+                                                                <button type="submit" class="submit-mam-zaujem" data-form-id="mobile-{{ house.id }}" data-name="{{ house.nazov }}" data-url="{{ siteUrl }}mam-zaujem.php">Odoslať</button>
+                                                            </form>
+                                                        </div>
+                                                    <!-- /FLOATING FORM -->
+
+                                                    <div class="link redirect" href="{{ siteUrl }}kontakt" data-id="mobile-{{ house.id }}">
+                                                        <div>{{ "Mám <br>záujem"|t|raw }}</div>
+                                                        <div></div>
+                                                    </div>
+                                                </div>
+                                                <div class="center-description">
+                                                    <div>{{ entry.upperText }}</div>
+                                                    <div>{{ entry.bottomText }}</div>
+                                                </div>
+                                            </div>
+                                        <!-- /MOBILE CONTENT OUTTER -->
+
+                                    </div>
+
+                                {% endfor %}
+
+                            </div>
+                        </div>
+
+                        <div class="controls">
+                            <div class="swiper-button-prev"></div>
+                            <div class="swiper-button-next"></div>
+                        </div>
+
+                    </div>
+                </div>
+            {% endif %}
+        <!-- /MAIN SLIDER -->
+
+        <!-- TEXT BOX GRID -->
+            <div class="text-box-grid">
+                {% for entry in craft.entries.section('bullets').limit(6) %}
+                    {% set _url = entry.bulletsCustomContent ? entry.url : entry.bulletsurl %}
+                    <a href="{% if entry.bulletsurl is not empty or entry.bulletsCustomContent %}{{ _url }}{% else %}javascript:;{% endif %}" class="text-box">
+                        <div data-url="{{ entry.bulletsurl }}">
+                            <div class="title">
+                                {{ entry.title }}
+                                <div style="box-shadow: inset 8px 8px #{{ entry.textColors }}, inset -8px -8px #{{ entry.textColors }}" class="after-border"></div>
+                            </div>
+                            <p>{{ entry.shortText }}</p>
+                            {% if entry.bulletsurl is not empty or entry.bulletsCustomContent %}
+                                <div class="link" href="{{ _url }}">{{ "Viac"|t }}</div>
+                            {% endif %}
+                        </div>
+                    </a>
+
+                    {% switch loop.index %}
+
+                        {% case 1 %}
+
+                            <div class="divider"></div>
+
+                        {% case 2 %}
+
+                            <div class="divider"></div>
+
+                        {% case 4 %}
+
+                            <div class="divider"></div>
+
+                        {% case 5 %}
+
+                            <div class="divider"></div>
+
+                    {% endswitch %}
+
+                {% endfor %}
+                <!-- MOBILE LIST -->
+                    <div class="mobile-list" id="text-mobile-swiper">
+
+                        <div class="swiper-container">
+                            <div class="swiper-wrapper">
+								{% cache %}
+                                {% for entry in craft.entries.section('bullets').limit(6) %}
+
+                                    <div class="swiper-slide">
+
+                                        <!-- TEXT BOX ELEM -->
+                                            <div class="text-box">
+                                                <div>
+                                                    <div class="title">
+                                                        {{ entry.title }}
+                                                        <div style="box-shadow: inset 8px 8px #{{ entry.textColors }}, inset -8px -8px #{{ entry.textColors }}" class="after-border"></div>
+                                                    </div>
+                                                    <p>{{ entry.shortText }}</p>
+
+                                                    {% if entry.blogContent is not empty %}
+                                                        <a href="{{ entry.url }}">{{ "Viac"|t }}</a>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        <!-- /TEXT BOX ELEM -->
+
+                                    </div>
+
+                                {% endfor %}
+								{% endcache %}
+                            </div>
+                        </div>
+
+                        <div class="swiper-pagination"></div>
+
+                    </div>
+                <!-- /MOBILE LIST -->
+
+            </div>
+        <!-- /TEXT BOX GRID -->
+
+        <!-- FILTER + HOUSE LISTING -->
+            <div class="filter-house-listing">
+
+                <!-- FILTER -->
+                    <div class="filter">
+                        <a class="h2-container" href="{{ siteUrl }}projekty-domov">
+                            <h2>{{ "Rodinné <i>domy"|t|raw }}</i></h2>
+                        </a>
+
+                        <!-- FILTER TRIGGER -->
+                            <div class="filter-trigger">
+                                <span>{{ "Filtrovať"|t }}</span>
+                            </div>
+                        <!-- /FILTER TRIGGER -->
+
+                        {% embed '_components/left/filter' %}{% endembed %}
+                    </div>
+                <!-- /FILTER -->
+
+                <!-- HOUSE LISTING -->
+                    <div class="house-listing">
+                        <div>
+                            <a class="h2-container" href="{{ siteUrl }}projekty-domov">
+                                <h2>{{ "Rodinné <i>domy</i>"|t|raw }}</h2>
+                            </a>
+
+                            <!-- LISTING -->
+                                <div class="list">
+                                    {% set housesTotal = craft.entries.section('dom').total() %}
+                                    {% set housesList = craft.entries.section('dom').limit(settings.houseListCount) %}
+									{% cache %}
+                                    {% for entry in housesList %}
+                                        <!-- HOUSE ELEM -->
+                                            <a href="{{ entry.url }}" class="house-elem">
+                                                {% set cover = entry.vizualy.one() %}
+
+                                                {{ imagesMacro.imageWebp(cover) }}
+<!--                                                <img srcset="{{ cover.url('houseDetailGalleryThumbs320w') }} 320w,-->
+<!--                                                             {{ cover.url('houseDetailGalleryThumbs480w') }} 480w,-->
+<!--                                                             {{ cover.url('houseDetailGalleryThumbs800w') }} 800w"-->
+<!--                                                     sizes="(max-width: 320px) 280px,-->
+<!--                                                            (max-width: 480px) 440px,-->
+<!--                                                            800px"-->
+<!--                                                     src="{{ cover.url('houselistcoversizeUpdated') }}" alt="{{ cover }}"/>-->
+
+                                                <div class="details">
+                                                    <div class="top">
+                                                        <div class="name">
+                                                            <div class="counter">#{% if entry.cisloDomu is not empty %}{{ entry.cisloDomu }}{% else %}{{ entry.id }}{% endif %}</div>
+                                                            <div>{{ entry.nazov }} <span>/&nbsp;&nbsp;&nbsp;{{ entry.uzhitkovaPlocha }} m<sup>2</sup></span></div>
+                                                        </div>
+
+                                                        {% if entry.stitok != '' %}
+                                                            <div class="label" style="background: {{ entry.stitokFarba.value }} ">
+                                                                <div>{{ entry.stitok }}</div>
+                                                            </div>
+                                                        {% endif %}
+
+                                                    </div>
+                                                    <div class="bottom">
+                                                        <div class="box"></div>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        <!-- /HOUSE ELEM -->
+                                    {% endfor %}
+									{% endcache %}
+                                </div>
+                            <!-- /LISTING -->
+
+                            <!-- MOBILE LISTING -->
+                                <div class="mobile-list" id="housing-mobile-swiper">
+                                    <div class="swiper-container">
+                                        <div class="swiper-wrapper">
+											{% cache %}
+                                            {% for entry in housesList %}
+                                                <div class="swiper-slide">
+
+                                                    <!-- HOUSE ELEM -->
+                                                        <a href="{{ entry.url }}" class="house-elem">
+                                                            {% set cover = entry.vizualy.one() %}
+<!--                                                            <img src="{{ cover.url('houselistcoversizeUpdated') }}" alt="{{ cover }} - {{ entry.nazov }}" />-->
+
+
+                                                            {{ imagesMacro.imageWebp(cover) }}
+
+                                                            <div class="details">
+                                                                <div class="top">
+                                                                    <div class="name">
+                                                                        <div class="counter">#{% if entry.cisloDomu is not empty %}{{ entry.cisloDomu }}{% else %}{{ entry.id }}{% endif %}</div>
+                                                                        <div>{{ entry.nazov }} <span>/&nbsp;&nbsp;&nbsp;{{ entry.uzhitkovaPlocha }} m<sup>2</sup></span></div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="bottom">
+                                                                    <div class="box"></div>
+                                                                </div>
+                                                            </div>
+                                                        </a>
+                                                    <!-- /HOUSE ELEM -->
+
+                                                </div>
+                                            {% endfor %}
+											{% endcache %}
+                                        </div>
+                                    </div>
+
+                                    <div class="swiper-pagination"></div>
+                                </div>
+                            <!-- /MOBILE LISTING -->
+
+                            {% if housesTotal > settings.houseListCount %}
+                                <a href="{{ siteUrl }}projekty-domov">
+                                    <span>{{ "Zobraziť katalóg"|t }}</span>
+                                </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                <!-- /HOUSE LISTING -->
+
+            </div>
+        <!-- /FILTER + HOUSE LISTING -->
+
+        <!-- PROFESSIONAL CONSULTATION -->
+            <div class="professional-consultation">
+
+                <!-- CONTACT LINE -->
+                    <div class="contact-line">
+                        <div>
+                            <div>
+                                {{ "Potrebujete odbornú konzultáciu?"|t }}
+                                <strong>{{ "Radi Vám pomôžeme."|t }}</strong>
+                            </div>
+                        </div>
+                        <div>
+                            <a href="tel:00421948141840">+421 948 141 840</a>
+                            <a href="mailto:david@familyhouse.sk">david@familyhouse.sk</a>
+                            <a href="mailto:david@familyhouse.sk" class="contact-redirect">{{ "Napísať správu"|t }}</a>
+                            <a href="{{ siteUrl }}kontakt" class="contact-redirect">{{ "Kde nás nájdete"|t }}</a>
+                        </div>
+                    </div>
+                <!-- /CONTACT LINE -->
+
+            </div>
+        <!-- /PROFESSIONAL CONSULTATION -->
+
+            <br>
+
+        <!-- ARTICLES -->
+            <div class="articles-list">
+                <h2>{{ "Články"|t }}</h2>
+
+                <!-- LIST CONTAINER -->
+                    <div class="list">
+
+                        {% for entry in craft.entries.section('blog').limit(3) %}
+                            <!-- ARTICLE ELEM -->
+                                <a href="{{ entry.url }}" class="article-elem">
+                                    {% set cover = entry.obrazok.one() %}
+<!--                                    <img srcset="{{ cover.url('blogcoverlist320w') }} 320w,-->
+<!--                                                 {{ cover.url('blogcoverlist480w') }} 480w,-->
+<!--                                                 {{ cover.url('blogcoverlist800w') }} 800w"-->
+<!--                                         sizes="(max-width: 320px) 280px,-->
+<!--                                                (max-width: 480px) 440px,-->
+<!--                                                 800px"-->
+<!--                                         src="{{ cover.url('blogcoverlist') }}" alt="{{ cover }}"/>-->
+
+
+                                    {{ imagesMacro.imageWebp(cover) }}
+
+                                    <div class="title">{{ entry.blog_title }}</div>
+<!--                                    <a class="short-description">{{ entry.shortText|replace({"<a ": "<span ", "</a>": "</span>"}) }}</div>-->
+                                    <div class="continue-reading">{{ "Prečítať článok"|t }}</div>
+                                </a>
+                            <!-- /ARTICLE ELEM -->
+                        {% endfor %}
+
+                    </div>
+                <!-- /LIST CONTAINER -->
+
+                <!-- MOBILE LIST -->
+                    <div class="mobile-list" id="articles-mobile-swiper">
+
+                        <div class="swiper-container">
+                            <div class="swiper-wrapper">
+
+                                {% for entry in craft.entries.section('blog').limit(3) %}
+                                    <div class="swiper-slide">
+
+                                        <!-- ARTICLE ELEM -->
+                                            <a href="{{ entry.url }}" class="article-elem">
+                                                {% set cover = entry.obrazok.one() %}
+<!--                                                <img src="{{ cover.url('blogcoverlist') }}" alt="{{ cover }} - {{ entry.blog_title }}" />-->
+
+
+                                                {{ imagesMacro.imageWebp(cover) }}
+
+                                                <div class="title">{{ entry.blog_title }}</div>
+                                                <div class="short-description">{{ entry.shortText }}</div>
+                                                <div class="continue-reading">{{ "Prečítať článok"|t }}</div>
+                                            </a>
+                                        <!-- /ARTICLE ELEM -->
+
+                                    </div>
+                                {% endfor %}
+
+                            </div>
+                        </div>
+
+                        <div class="swiper-pagination"></div>
+                    </div>
+                <!-- /MOBILE LIST -->
+
+                <a href="{{ siteUrl }}clanky">
+                    <span>{{ "Zobraziť všetky články"|t }}</span>
+                </a>
+            </div>
+        <!-- /ARTICLES -->
+
+    </div>
+    <!-- /CONTENT CONTAINER -->
+
+{% endblock %}

@@ -1,0 +1,135 @@
+{% extends "_layout" %}
+{% set seo = entry.seoUpdated %}
+
+{% block bodyClass %}dom-list-view{% endblock bodyClass %}
+
+{% set globalSeo = entry.globalSeo %}
+
+{% block content %}
+
+<h1 class="_hidden">{{ "FAQ"|t }}</h1>
+
+<!-- CONTENT CONTAINER -->
+    <div class="main grid-2-layout no-filter">
+
+        <!-- FILTER + HOUSE LISTING -->
+            <div class="filter-house-listing">
+                {% embed '_components/left' %}{% endembed %}
+
+                <!-- HOUSE LISTING -->
+                    <div class="house-listing">
+                        <div>
+
+                            <!-- CONTACT CONTENT -->
+                                <div class="house-details contact-container">
+
+                                    <div class="house-header">
+                                        <div>
+                                            <div class="name">
+                                                <div class="counter"></div>
+                                                <div class="no-padding">{{ "Faq"|t }}</div>
+                                            </div>
+                                        </div>
+                                        <div class="beadcrumbs">
+                                            <a href="{{ siteUrl }}" class="elem">{{ "Hlavná stránka"|t }}</a>
+                                            <div>{{ "Faq"|t }}</div>
+                                        </div>
+                                    </div>
+
+                                    <!-- DETAILS -->
+                                        <div class="details contentable">
+                                            <div class="about-layout-grid">
+                                                <div class="left">
+                                                    {% set faqList = craft.entries.section('faqElem') %}
+                                                    {% if faqList|length %}
+                                                        {% for entry in faqList %}
+                                                            {% if loop.index is odd %}
+                                                                <div>
+                                                                    <div class="title">{{ entry.otazka }}</div>
+                                                                    {{ entry.odpoved }}
+                                                                </div>
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                    {% endif %}
+                                                </div>
+                                                <div class="right">
+                                                    {% set faqList = craft.entries.section('faqElem') %}
+                                                    {% if faqList|length %}
+                                                        {% for entry in faqList %}
+                                                            {% if loop.index is even %}
+                                                                <div>
+                                                                    <div class="title">{{ entry.otazka }}</div>
+                                                                    {{ entry.odpoved }}
+                                                                </div>
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    <!-- /DETAILS -->
+
+                                    {% if craft.entries.section('slide') is not empty %}
+
+                                    <!-- RELATED HOUSES -->
+                                        <!--<div class="related-houses">-->
+                                            <!--<h2 class="plain">Podobné domy</h2>-->
+
+                                            <!--<div id="related-list-container">-->
+                                                <!--<div class="swiper-button-prev"></div>-->
+                                                <!--<div class="swiper-container">-->
+                                                    <!--<div class="swiper-wrapper">-->
+                                                        <!--{% for house in craft.entries.section('slide') %}-->
+
+                                                        <!--<div class="swiper-slide">-->
+                                                            <!--&lt;!&ndash; HOUSE ELEM &ndash;&gt;-->
+                                                                <!--<a href="{{ house.url }}" class="house-elem">-->
+                                                                    <!--{% set houseCover = house.slideImage.first() %}-->
+                                                                    <!--<img src="{{ houseCover.url('relatedHousesCover') }}" alt="{{ houseCover.title }} | {{ siteName }}" />-->
+                                                                    <!--<div class="details">-->
+                                                                        <!--<div class="top">-->
+                                                                            <!--<div class="name">-->
+                                                                                <!--<div class="counter">#{{ house.id }}</div>-->
+                                                                                <!--<div>{{ house.nazov }}</div>-->
+                                                                            <!--</div>-->
+
+                                                                            <!--{% if house.stitok != '' %}-->
+                                                                                <!--<div class="label" style="background: {{ house.stitokFarba.value }} ">-->
+                                                                                    <!--<div>{{ house.stitok }}</div>-->
+                                                                                <!--</div>-->
+                                                                            <!--{% endif %}-->
+
+                                                                        <!--</div>-->
+                                                                        <!--<div class="bottom">-->
+                                                                            <!--<div class="box"></div>-->
+                                                                        <!--</div>-->
+                                                                    <!--</div>-->
+                                                                <!--</a>-->
+                                                            <!--&lt;!&ndash; /HOUSE ELEM &ndash;&gt;-->
+                                                        <!--</div>-->
+
+                                                        <!--{% endfor %}-->
+                                                    <!--</div>-->
+                                                <!--</div>-->
+                                                <!--<div class="swiper-button-next"></div>-->
+                                            <!--</div>-->
+                                        <!--</div>-->
+                                    <!-- /RELATED HOUSES -->
+
+                                    {% endif %}
+
+                                </div>
+                            <!-- /CONTACT CONTENT-->
+
+                        </div>
+                    </div>
+                <!-- /HOUSE LISTING -->
+
+            </div>
+        <!-- /FILTER + HOUSE LISTING -->
+
+    </div>
+<!-- /CONTENT CONTAINER -->
+
+{% endblock %}

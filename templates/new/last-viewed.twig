@@ -1,0 +1,24 @@
+{# save last 10 viewed houses into cookie #}
+{% if getCookie('last-viewed') %}
+                            
+    {% set c = getCookie('last-viewed') %}
+
+    {% set cu = craft.app.json.decode(c) %}
+
+    {% set temp = [entry.slug] %}
+
+    {% set c = cu|merge(temp)|unique|reverse|slice(0, 10) %}
+
+    {% set cu = craft.app.json.encode(c) %}
+
+    {% do setCookie('last-viewed', cu) %}
+
+{% else %}
+
+    {% set t = [entry.slug] %}
+
+    {% set cu = craft.app.json.encode(t) %}
+
+    {% do setCookie('last-viewed', cu) %}
+    
+{% endif %}

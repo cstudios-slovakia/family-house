@@ -1,0 +1,52 @@
+{% extends '_layouts/cp' %}
+
+{% set title = "Question list" |t %}
+
+{% if crumbs is not defined %}
+    {% set crumbs = [
+    { label: craft.reviewerModule.name, url: url('reviewer') }
+    ] %}
+{% endif %}
+
+
+{#{% block actionButton %}#}
+{#    <a href="{{ url('actions/reviewer/person/do-something') }}" class="btn submit add icon">{{ "Add new person"|t('reviewer') }}</a>#}
+{#{% endblock %}#}
+
+{% block content %}
+
+{#    {{ dump(selectedSubnavItem) }}#}
+    <table class="data fullwidth collapsible">
+        <thead>
+        <tr>
+            <th>Dátum</th>
+            <th>Užívateľ</th>
+
+            <th></th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for review in reviews %}
+        {%  set questions  = review.question %}
+        {%  set lastQuestion = questions | last %}
+        <tr>
+            <th>
+                <a href="{{ url('actions/reviewer/review/show',{id:review.id}) }}" class="go">{{ lastQuestion.dateCreated|date('d.m.Y H:i') }}</a>
+            </th>
+            <td>{{  review.person.first_name }} {{ review.person.last_name }}</td>
+
+            <td>
+                <a href="{{ url('actions/reviewer/review/show',{id:review.id}) }}" data-icon="world"></a>
+            </td>
+
+            <td>
+                <a href="{{ url('actions/reviewer/review/delete',{id:review.id}) }}" data-icon="remove"></a>
+            </td>
+        </tr>
+        {% endfor %}
+
+        </tbody>
+    </table>
+
+{% endblock %}

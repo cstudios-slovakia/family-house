@@ -1,0 +1,49 @@
+@mixin radio-input($class-selector) {
+
+  $border-color: #000;
+  $check-transition: all 0.2s cubic-bezier(0.35, 0.9, 0.4, 0.9);
+  $radio-circle-size: 17px;
+  $radio-inner-circle-size: 9px;
+  $radio-inner-circle-position: ($radio-circle-size - $radio-inner-circle-size) / 2 - 1px ;
+
+  input{
+    display: none;
+  }
+
+  input[class="#{$class-selector}"]:checked + .label {
+    border-color: $border-color;
+    &:after{
+      transform: scale(1);
+      transition: $check-transition;
+      opacity: 1;
+    }
+  }
+
+  .label{
+    position: relative;
+    display: block;
+    float: left;
+    margin-right: 6.5px;
+    width: $radio-circle-size;
+    height: $radio-circle-size;
+    border: 1px solid $border-color;
+    border-radius: 100%;
+    -webkit-tap-highlight-color: transparent;
+    &:after{
+      content: '';
+      position: absolute;
+      top: $radio-inner-circle-position;
+      left: $radio-inner-circle-position;
+      width: $radio-inner-circle-size;
+      height: $radio-inner-circle-size;
+      border-radius: 100%;
+      background: $step--block-title--color;
+      transform: scale(0);
+      transition: all .2s ease;
+      opacity: .08;
+      pointer-events: none;
+    }
+  }
+
+
+}

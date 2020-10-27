@@ -1,0 +1,108 @@
+{% extends "_layout" %}
+{% set seo = entry.seoUpdated %}
+
+{% block content %}
+
+    <div class="main grid-2-layout article-page no-filter">
+        <div class="filter-house-listing">
+            {% embed '_components/left' %}{% endembed %}
+
+            <div class="house-listing-2 cms">
+                {% if entry.blogAdsUrl is empty %}
+                    <h1 class="article-title">{{ entry.title }}</h1>
+                {% endif %}
+
+                <!-- CONTENT CONTAINER -->
+                <div class="main article-content contentable">
+
+                    {% for block in entry.blogContent %}
+
+                    {% switch block.type %}
+
+                    {% case "blogTitle" %}
+                    <{{ block.blogTitleLevel.value }}>{{ block.text }}</{{ block.blogTitleLevel.value }}>
+
+                {% case "blogText" %}
+                    <p>{{ block.text }}</p>
+
+                {% case "image" %}
+                    {% set imageEntry = block.image.one() %}
+                    {% if block.position == 'left' %}
+                        <div class="img-container {{ block.position }}" style="float:left; width: {{ block.width }}%;margin: 0 20px 20px 0;">
+                            <img src="{{ imageEntry.url }}" alt="{{ block.alt }}"/>
+                        </div>
+                    {% endif %}
+
+                {% if block.position == 'right' %}
+                    <div class="img-container {{ block.position }}" style="float:right; width: {{ block.width }}%; margin: 0 0 20px 20px;">
+                        <img src="{{ imageEntry.url }}" alt="{{ block.alt }}" />
+                    </div>
+                {% endif %}
+
+                {% if block.position == 'full' or block.position == 'center' %}
+                    <div class="img-container {{ block.position }}" style="width: 100%">
+                        <img src="{{ imageEntry.url }}" alt="{{ block.alt }}" />
+                    </div>
+                {% endif %}
+
+                {% case "blogQuote" %}
+                    <blockquote>{{ block.quote }}</blockquote>
+
+                {% case "matrixButtons" %}
+                    {% if block.matrixButtonUrl is not empty %}
+                        <div class="clearfix"></div>
+                        <a href="{{ block.matrixButtonUrl }}" class="matrix-btn-plain matrix-btn-{{ block.matrixButtonStyle }} {{ block.matrixButtonPosition }}">
+                            <span>{{ block.matrixButtonText }}</span>
+                        </a>
+                    {% endif %}
+
+                {% case "matrixRelatedArticles" %}
+                    {% if block.matrixRelatedArticlesList is not empty %}
+                        <div class="matrix-related-container">
+                            <h3>{{ block.matrixRelatedArticlesTitle }}</h3>
+                            <div class="matrix-related-list">
+                                {% for _article in block.matrixRelatedArticlesList %}
+                                    <a href="{{ _article.url }}">
+                                        {% set _imageUrl   = _article.obrazok is not empty ? _article.obrazok.one().url : '' %}
+                                        {% set _imageTitle = _article.obrazok is not empty ? _article.obrazok.one().title : '' %}
+                                        <img src="{{ _imageUrl }}" alt="{{ _imageTitle }}"/>
+                                        <h4>{{ _article.title }}</h4>
+                                    </a>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% endif %}
+
+                {% case "matrixRelatedHouses" %}
+                    {% if block.housesList is not empty %}
+                        <div class="matrix-related-container">
+                            <h3>{{ block.matrixRelatedHousesTitle }}</h3>
+                            <div class="matrix-related-list">
+                                {% for _article in block.housesList %}
+                                <a href="{{ _article.url }}">
+                                    {% set _imageUrl   = _article.vizualy is not empty ? _article.vizualy.one().url : '' %}
+                                    {% set _imageTitle = _article.vizualy is not empty ? _article.vizualy.one().title : '' %}
+                                    <img src="{{ _imageUrl }}" alt="{{ _imageTitle }}"/>
+                                    <h4>{{ _article.nazov }}</h4>
+                                </a>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% endif %}
+
+
+
+                {% endswitch %}
+
+                {% endfor %}
+
+                <a class="back-url" href="{{ siteUrl }}clanky">
+                    <span>{{ "Naspäť"|t }}</span>
+                </a>
+            </div>
+            <!-- /CONTENT CONTAINER -->
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+    {% set sitebase = 'https://familyhouse.sk/' %}
+
+    {% set entry = craft.entries().section('dom').slug(craft.app.request.getSegment(2)).one() %}
+
+    {% set dom = entry %}
+
+    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pôdorys {{entry.title}} - Family House</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="{{ sitebase }}assets/css/vendor/swiper.min.css">
+
+    <link rel="stylesheet" href="{{ sitebase }}assets/new/css/simplebar.css">
+    <link rel="stylesheet" href="{{ sitebase }}assets/new/css/main.css?=ver{{ random(1, 100) }}">
+</head>
+<body>
+    <div class="page-container">
+        
+        {% embed "new/header/header.html" %}
+        {% endembed %}
+
+        <div class="page" id="podorys">
+            
+            {% embed "new/dom_sidebar.twig" %}
+            {% endembed %}
+
+            
+
+            <div class="podorys-container">
+                <div class="podorys-big-image-container">
+                    <div class="podorys-image">
+                        {% set podorysVykres = dom.podorysVykres.first() %}
+                        <img src="{{ podorysVykres.getUrl('housedetailgallerythumbs1600w') }}" width="{{ podorysVykres.getWidth('housedetailgallerythumbs1600w') }}" height="{{ podorysVykres.getHeight('housedetailgallerythumbs1600w') }}" alt="{{ dom.nazov }}">
+                        <div class="heart-flip">
+                            <div class="heart">
+                                <img src="{{ sitebase }}assets/new/img/heart.svg" alt="">
+                            </div>
+                            <div class="flip">
+                                <img src="{{ sitebase }}assets/new/img/flipicon.svg" alt="">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="description-container">
+                    <div class="description">
+                        <p>
+                            Pri navrhovaní projektov domov vždy dbáme na to, aby pôdorys a celkové dispozičné riešenie domu bol premyslený do najmenšíchdetailov, a tým sa získa plnohodnotný a funkčný domov. Vždy sa snažíme o to, aby dom bol plne funkčný nielen v interiéri ale malzaujímavý aj exterié. Vyberte si tento rodinný dom na základe jeho rozumného pôdorysu!
+                        </p>
+                    </div>
+                    <!-- <div class="line-vr"></div> -->
+                    <div class="mirror-legend">
+                        <div class="mirror">
+                            <h2>Zrkadlový obraz</h2>
+                            <img src="{{ podorysVykres.getUrl('houseDetailGalleryThumbs800w') }}" width="{{ podorysVykres.getWidth('houseDetailGalleryThumbs800w') }}" height="{{ podorysVykres.getHeight('houseDetailGalleryThumbs800w') }}" alt="{{ dom.nazov }}">
+                        </div>
+                        <div class="legend-colors">
+                            <h2>
+                                Legenda
+                            </h2>
+                            <ul>
+                                <li class="item">
+                                    <div class="square yellow"></div>
+                                    <div class="label">obývacia izba</div>
+                                </li>
+                                <li class="item">
+                                    <div class="square purple"></div>
+                                    <div class="label">izby</div>
+                                    
+                                </li>
+                                <li class="item">
+                                    <div class="square blue"></div>
+                                    <div class="label">kúpľne</div>
+                                    
+                                </li>
+                                <li class="item">
+                                    <div class="square brown"></div>
+                                    <div class="label">terasy</div>
+                                    
+                                </li>
+                                <li class="item">
+                                    <div class="square orange"></div>
+                                    <div class="label">ostatné miestnosti</div>
+                                    
+                                </li>
+                                <li class="item">
+                                    <div class="square green"></div>
+                                    <div class="label">zeleň</div>
+                                    
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="room-legend">
+                        <h2>Legenda miestností</h2>
+                        <div class="rooms">
+                            {% if dom.legendaMiestnosti1Poschodie|length %}
+                                <div class="row">
+                                    <div class="subject bold">
+                                        Prízemie
+                                    </div>
+                                </div>
+                                {% for row in dom.legendaMiestnosti1Poschodie %}
+                                    <div class="row {{ row.kiemelt ? 'high' : '' }}">
+                                        <div class="subject">
+                                            {{ row.subject }}
+                                        </div>
+                                        <div class="value">
+                                            {{ row.value }}
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+
+                        
+
+                            {% if dom.legendaMiestnosti2Poschodie|length %}
+
+                                <div class="row">
+                                    <div class="subject bold">
+                                        1. Poschodie
+                                    </div>
+                                </div>
+                                {% for row in dom.legendaMiestnosti2Poschodie %}
+                                    <div class="row {{ row.kiemelt ? 'high' : '' }}">
+                                        <div class="subject">
+                                            {{ row.subject }}
+                                        </div>
+                                        <div class="value">
+                                            {{ row.value }}
+                                        </div>
+                                    </div>
+                                {% endfor %}
+
+                            {% endif %}
+
+
+                            {% if dom.legendaMiestnostiUzitkovaPlocha|length %}
+                                {% for row in dom.legendaMiestnostiUzitkovaPlocha %}
+                                    <div class="row {{ row.kiemelt ? 'high' : '' }}">
+                                        <div class="subject">
+                                            {{ row.subject }}
+                                        </div>
+                                        <div class="value">
+                                            {{ row.value }}
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                {% embed "new/embed_interest.html" %}
+                {% endembed %}
+
+
+
+            </div>
+        
+        
+        </div>
+
+
+
+
+
+
+
+        {% embed "new/footer.twig" %}
+        {% endembed %}
+    
+    </div>
+    
+    
+        <script src="{{ sitebase }}assets/js/vendor/jquery-3.2.1.min.js"></script>
+        <script src="{{ sitebase }}assets/js/vendor/jquery-waypoints-and-sticky.js"></script>
+        <script src="{{ sitebase }}assets/js/vendor/simplebar.min.js"></script>
+        <script src="{{ sitebase }}assets/js/vendor/vue.js"></script>
+        <script src="{{ sitebase }}assets/js/vendor/vue-router.js"></script>
+        <script src="{{ sitebase }}assets/js/vendor/swiper.min.js"></script>
+        <script src="{{ sitebase }}assets/new/js/main.js?=ver{{ random(1, 100) }}"></script>
+    
+        <script>
+            // ref swiper
+            var ref_swiper = new Swiper('.ref-swiper', {
+                spaceBetween: 20,
+                slidesPerView: 5,
+                scrollbar: {
+                    el: '.ref-swiper-scroll'
+                },
+                navigation: {
+                    nextEl: '.ref-swiper-scroll .next',
+                    prevEl: '.ref-swiper-scroll .prev',
+                }
+            });
+    
+            // dom swiper thumbs
+            var dom_swiper_big_thumbs = new Swiper('.dom-swiper-big-thumbs', {
+                spaceBetween: 20,
+                slidesPerView: 6,
+                // freeMode: true,
+                watchSlidesVisibility: true,
+                watchSlidesProgress: true,
+                scrollbar: {
+                    el: '.dom-thumbs-swiper-scroll'
+                },
+                navigation: {
+                    nextEl: '.dom-thumbs-swiper-scroll .next',
+                    prevEl: '.dom-thumbs-swiper-scroll .prev',
+                },
+            });
+    
+            // dom swiper big
+            var dom_swiper_big = new Swiper('.dom-swiper-big', {
+                spaceBetween: 10,
+                pagination: {
+                    el: '.dom-swiper-big-nav .count',
+                    type: 'fraction',
+                },
+                navigation: {
+                    nextEl: '.dom-swiper-big-nav .next',
+                    prevEl: '.dom-swiper-big-nav .prev',
+                },
+                thumbs: {
+                    swiper: dom_swiper_big_thumbs,
+                },
+            }); 
+    
+    
+        </script>
+        {% embed 'new/cookies-embed.html'%}
+        {% endembed %}
+</body>
+</html>

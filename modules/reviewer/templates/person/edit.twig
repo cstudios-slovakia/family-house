@@ -1,0 +1,52 @@
+{% extends "_layouts/cp"  %}
+{% set title = "Create person"|t('reviewer') %}
+{% set fullPageForm = true %}
+
+{% block content %}
+
+    {% import "_includes/forms" as forms %}
+    {{ forms.textField({
+        label: "Client Number"|t('reviewer'),
+        placeholder: "Client Number"|t('reviewer'),
+        name: 'client_number',
+        value: person.client_number,
+        errors: person.getErrors('client_number'),
+        required: true,
+        autofocus: true,
+    }) }}
+    {{ forms.textField({
+        label: "First name"|t('reviewer'),
+        placeholder: "First name"|t('reviewer'),
+        name: 'first_name',
+        value: person.first_name,
+        errors: person.getErrors('first_name'),
+        required: true,
+        autofocus: true,
+    }) }}
+    {{ forms.textField({
+        label: "Last name"|t('reviewer'),
+        placeholder: "Last name"|t('reviewer'),
+        name: 'last_name',
+        value: person.last_name,
+        errors: person.getErrors('last_name'),
+        required: true,
+        autofocus: true,
+    }) }}
+    {{ forms.textField({
+        label: "To Email"|t('reviewer'),
+        placeholder: "To Email"|t('reviewer'),
+        name: 'email',
+        value: person.email,
+        errors: person.getErrors('email'),
+        required: true,
+        autofocus: true,
+    }) }}
+
+
+{% endblock %}
+
+
+
+
+
+

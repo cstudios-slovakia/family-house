@@ -1,0 +1,314 @@
+<div>
+    <h2>
+        <a class="h2-container" href="{{ siteUrl }}projekty-domov">
+            {{ "Projekty domov - Nízkoenergetické rodinné domy"|t }}
+        </a>
+    </h2>
+
+    <!-- LISTING -->
+    <div class="list">
+
+        {% set filterEntry = craft.entries.section('nastavenia').one() %}
+        {% set filterIsEmpty = false %}
+
+        <!-- FILTER volitelne -->
+            {# Filter volitelne #}
+            {# volitelne #}
+                {% set volitelneArray = [] %}
+                {% for option in filterEntry.volitelne.options %}
+                    {% set filterVolitelne = craft.app.request.getParam('volitelne_' ~ loop.index) %}
+                    {% if filterVolitelne is not empty %}
+                        {% set volitelneArray = volitelneArray|merge([filterVolitelne]) %}
+                    {% endif %}
+                {% endfor %}
+
+            {% set finalFilteredHousesListAll = [] %}
+            {% set finalFilteredHousesList = [] %}
+            {% set finalFilteredHousesList2 = [] %}
+            {% if volitelneArray is not empty %}
+                {% for house in craft.entries.section('dom') %}
+                    {% set finalFilteredHousesListAll = finalFilteredHousesListAll|merge([house.id]) %}
+                    {% set _added = false %}
+                    {% for volitelneParam in volitelneArray %}
+                        {% if house.volitelne.contains(volitelneParam) and _added == false %}
+                            {% set finalFilteredHousesList2 = finalFilteredHousesList2|merge([house.id]) %}
+                            {% set _added = true %}
+                        {% endif %}
+                    {% endfor %}
+                {% endfor %}
+            {% endif %}
+        <!-- FILTER volitelne -->
+
+        {# defaults #}
+        {% if finalFilteredHousesList2 is empty %}
+            {% set queryParams = {
+                section: 'dom',
+                limit: settings.houseListCountListView
+            }
+        %}
+        {% else %}
+            {% set queryParams = {
+                    section: 'dom'
+                }
+            %}
+        {% endif %}
+
+        {# typ #}
+            {% set typArray = [] %}
+            {% for option in filterEntry.typ.options %}
+                {% set filterTyp = craft.app.request.getParam('typ_' ~ loop.index) %}
+                {% if filterTyp is not empty %}
+                    {% set typArray = typArray|merge([filterTyp]) %}
+                {% endif %}
+            {% endfor %}
+
+            {% if typArray|length > 1 %}
+                {% set queryParams = queryParams|merge({
+                    typ: typArray,
+                }) %}
+            {% else %}
+                {% set queryParams = queryParams|merge({
+                    typ: typArray,
+                }) %}
+            {% endif %}
+
+        {# podlaznost #}
+            {% set podlaznostArray = [] %}
+                {% for option in filterEntry.podlaznost.options %}
+                {% set filterPodlaznost = craft.app.request.getParam('podlaznost_' ~ loop.index) %}
+                {% if filterPodlaznost is not empty %}
+                    {% set podlaznostArray = podlaznostArray|merge([filterPodlaznost]) %}
+                {% endif %}
+            {% endfor %}
+
+        {% if podlaznostArray|length > 1 %}
+            {% set queryParams = queryParams|merge({
+                podlaznost: podlaznostArray,
+            }) %}
+        {% else %}
+            {% set queryParams = queryParams|merge({
+                podlaznost: podlaznostArray,
+            }) %}
+        {% endif %}
+
+        {# strecha #}
+            {% set strechaArray = [] %}
+                {% for option in filterEntry.strecha.options %}
+                {% set filterStrecha = craft.app.request.getParam('strecha_' ~ loop.index) %}
+            {% if filterStrecha is not empty %}
+                {% set strechaArray = strechaArray|merge([filterStrecha]) %}
+            {% endif %}
+            {% endfor %}
+
+        {% if strechaArray|length > 1 %}
+            {% set queryParams = queryParams|merge({
+                strecha: strechaArray,
+            }) %}
+        {% else %}
+            {% set queryParams = queryParams|merge({
+                strecha: strechaArray,
+            }) %}
+        {% endif %}
+
+        {# metraz #}
+            {% set metrazArray = [] %}
+            {% for option in filterEntry.metraz.options %}
+                {% set filterMetraz = craft.app.request.getParam('metraz_' ~ loop.index) %}
+                {% if filterMetraz is not empty %}
+                    {% set metrazArray = metrazArray|merge([filterMetraz]) %}
+                {% endif %}
+            {% endfor %}
+
+        {% if metrazArray|length > 1 %}
+            {% set queryParams = queryParams|merge({
+                metraz: metrazArray,
+            }) %}
+        {% else %}
+            {% set queryParams = queryParams|merge({
+                metraz: metrazArray,
+            }) %}
+        {% endif %}
+
+        {# izby #}
+            {% set izbyArray = [] %}
+            {% for option in filterEntry.izby.options %}
+                {% set filterIzby = craft.app.request.getParam('izby_' ~ loop.index) %}
+                {% if filterIzby is not empty %}
+                    {% set izbyArray = izbyArray|merge([filterIzby]) %}
+                {% endif %}
+            {% endfor %}
+
+        {% if izbyArray|length > 1 %}
+            {% set queryParams = queryParams|merge({
+                izby: izbyArray,
+            }) %}
+        {% else %}
+            {% set queryParams = queryParams|merge({
+                izby: izbyArray,
+            }) %}
+        {% endif %}
+
+        {# garaz #}
+            {% set garazArray = [] %}
+            {% for option in filterEntry.garaz.options %}
+                {% set filterGaraz = craft.app.request.getParam('garaz_' ~ loop.index) %}
+                {% if filterGaraz is not empty %}
+                    {% set garazArray = garazArray|merge([filterGaraz]) %}
+                {% endif %}
+            {% endfor %}
+
+        {% if garazArray|length > 1 %}
+            {% set queryParams = queryParams|merge({
+                garaz: garazArray,
+            }) %}
+        {% else %}
+            {% set queryParams = queryParams|merge({
+                garaz: garazArray,
+            }) %}
+        {% endif %}
+
+        {% set filteredHousesList = craft.entries(queryParams) %}
+
+        <!-- FILTER volitelne part2 --->
+        {% if typArray|length > 0 or podlaznostArray|length > 0 or strechaArray|length > 0 or metrazArray|length > 0 or izbyArray|length > 0 or garazArray|length > 0 %}
+            {% set filterIsEmpty = true %}
+        {% endif %}
+
+        {% if finalFilteredHousesList2 is not empty %}
+            {% if filteredHousesList is not empty %}
+                {% for mergeHouse in filteredHousesList %}
+                    {% if mergeHouse.id in finalFilteredHousesList2 == false  and filterIsEmpty == true %}
+                        {% set finalFilteredHousesList2 = finalFilteredHousesList2|merge([mergeHouse.id]) %}
+                    {% endif %}
+                {% endfor %}
+
+                {% set queryParams = {
+                        section: 'dom',
+                        limit: settings.houseListCountListView,
+                        id: finalFilteredHousesList2
+                    }
+                %}
+                {% set filteredHousesList = craft.entries(queryParams) %}
+
+            {% endif %}
+        {% else %}
+            {% set queryParams = {
+                    section: 'dom',
+                    limit: settings.houseListCountListView,
+                    id: finalFilteredHousesList2
+                }
+            %}
+        {% endif %}
+        <!-- /FILTER volitelne part2 --->
+
+        {% paginate filteredHousesList as paginateInfo, houses %}
+
+        {% set filterQueryString = craft.app.request.getQueryStringWithoutPath() %}
+        {% for entry in houses %}
+
+            <!-- HOUSE ELEM -->
+                <a href="{{ entry.url }}{% if filterQueryString is not empty%}?{{ filterQueryString }}{% endif %}" class="house-elem">
+                    {% set cover = entry.vizualy.one() %}
+                    <img src="{{ cover.url('catalogViewListCover') }}" alt="{{ cover }} - {{ entry.nazov }}" />
+
+                    <div class="details">
+                        <div class="top">
+                            <div class="name">
+                                <div class="counter">#{% if entry.cisloDomu is not empty %}{{ entry.cisloDomu }}{% else %}{{ entry.id }}{% endif %}</div>
+                                <div>{{ entry.nazov }}</div>
+                            </div>
+                        </div>
+                        <div class="bottom">
+
+                            {% if entry.stitok != '' %}
+                            <div class="label" style="background: {{ entry.stitokFarba.value }} ">
+                                <div>{{ entry.stitok }}</div>
+                            </div>
+                            {% endif %}
+
+                            <div class="box"></div>
+                        </div>
+                    </div>
+
+                    {% set finalContent = [] %}
+                    {% if entry.seopKeys is not empty %}
+
+                        {% for elem in entry.seopKeys %}
+                            {% set currentLoopIndex = loop.index %}
+                            {% set contentIndex = elem.contentKey - 1 %}
+
+                            {% if entry.seo|length %}
+                                {% for seoObject in entry.seo %}
+                                    {% if currentLoopIndex == loop.index %}
+                                        {# Entry content #}
+                                        {% if seoObject.contents|length and contentIndex >= 0 %}
+                                            {% if seoObject.contents[contentIndex] is defined %}
+                                                {% set finalContent = finalContent|merge([seoObject.contents[contentIndex].content]) %}
+                                            {% endif %}
+                                        {% endif %}
+
+                                    {% endif %}
+                                {% endfor %}
+                            {% endif %}
+
+                        {% endfor %}
+
+                    {% endif %}
+
+                    <!-- DETAILS BOTTOM -->
+                    <div class="details-bottom">
+                        <div class="short-description">
+                            {% if finalContent|length %}
+                            <p>{{ finalContent|join(' ') }}</p>
+                            {% endif %}
+                        </div>
+                        <div class="info-grid">
+                            <div>
+                                <div class="row">
+                                    <div class="label">{{ "Úžitková plocha"|t }}</div>
+                                    <div>{{ entry.uzhitkovaPlocha }} m<sup>2</sup></div>
+                                </div>
+                                <div class="row">
+                                    <div class="label">{{ "Cena projektu"|t }}</div>
+                                    <div>{{ entry.projekt }} &euro;</div>
+                                </div>
+                                <div class="row">
+                                    <div class="label">{{ "Cena holodomu"|t }}</div>
+                                    <div>{{ entry.holodomSDph }} &euro;</div>
+                                </div>
+                                <div class="row">
+                                    <div class="label">{{ "Cena komplet"|t }}</div>
+                                    <div>
+                                        <strong class="red">{{ entry.kompletSDph }} &euro;</strong>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="interest">
+                                <div>{{ "Mám <br>záujem"|t|raw }}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /DETAILS BOTTOM -->
+                </a>
+            <!-- /HOUSE ELEM -->
+
+        {% endfor %}
+
+    </div>
+    <!-- /LISTING -->
+
+    {% if filteredHousesList|length > 0 %}
+    {% set queryString      = craft.app.request.getQueryStringWithoutPath() %}
+    {% set queryStringFull  = (queryString is not empty) ? '?' ~ queryString : '' %}
+
+        {% if paginateInfo.nextUrl %}
+            {% set nextPaginationUrl = paginateInfo.nextUrl %}
+
+            {% set _string = nextPaginationUrl|replace({'_filter': 'projekty-domov' }) %}
+
+            <a href="{{ _string ~ queryStringFull }}">
+                <span>{{ settings.houseListCountListView }} {{ "ďalsích..."|t }}</span>
+            </a>
+        {% endif %}
+    {% endif %}
+</div>

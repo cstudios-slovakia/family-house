@@ -1,0 +1,137 @@
+{% extends "_layout" %}
+{% set seo = entry.seoUpdated %}
+
+{% block bodyClass %}dom-list-view{% endblock bodyClass %}
+
+{% block content %}
+
+<h1 class="_hidden">{{ "Kontakt"|t }}</h1>
+
+<!-- CONTENT CONTAINER -->
+    <div class="main grid-2-layout no-filter">
+
+        <!-- FILTER + HOUSE LISTING -->
+            <div class="filter-house-listing">
+                {% embed '_components/left' %}{% endembed %}
+
+                <!-- HOUSE LISTING -->
+                    <div class="house-listing">
+                        <div>
+
+                            <!-- CONTACT CONTENT -->
+                                <div class="house-details contact-container">
+
+                                    <div class="house-header">
+                                        <div>
+                                            <div class="name">
+                                                <div class="counter"></div>
+                                                <div class="no-padding">{{ 'Kontakt'| t }}</div>
+                                            </div>
+                                        </div>
+                                        <div class="beadcrumbs">
+                                            <a href="{{ siteUrl }}" class="elem">{{ "Hlavná stránka"|t }}</a>
+                                            <div>{{ "Kontakt"|t }}</div>
+                                        </div>
+                                    </div>
+
+                                    <!-- DETAILS -->
+                                        <div class="details">
+
+                                            <div class="title">{{ "Kontaktné údaje"|t }}</div>
+                                            <address>
+                                                {{ contact.address }}
+                                                office@familyhouse.sk
+                                            </address>
+
+
+                                            <div class="contact-map">
+                                                <div id="map">
+                                                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d793.8050193109112!2d17.618606918970567!3d47.993784558492344!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x476b9d6698e20d79%3A0xcf1d2947c410d104!2sFAMILY+HOUSE%2C+s.r.o.!5e0!3m2!1shu!2ssk!4v1533208413675" width="600" height="450" frameborder="0" style="border:0" allowfullscreen></iframe>
+                                                </div>
+                                            </div>
+
+                                            <div class="contact-layout-grid">
+                                                <div class="left">
+                                                    {% import "_components/macros/images_output.html" as imagesMacro %}
+                                                    {% if craft.entries.section('member') is not empty %}
+                                                        {% for member in craft.entries.section('member') %}
+                                                            <div class="contact-box">
+                                                                {% set teamPhoto = member.personalPhoto.one() %}
+
+                                                                {% if teamPhoto is not null %}
+                                                                <div class="box--photo">
+                                                                    {{ imagesMacro.imageWebp(teamPhoto, member.memberName,[{ width:320, height: 320}], '',  { format: 'webp', allowUpscale: false, mode: 'crop', position: teamPhoto.getFocalPoint(), interlace: true }) }}
+                                                                </div>
+                                                                {% endif %}
+                                                                <div class="box--content">
+                                                                    <div class="info-box">
+                                                                        <div class="title">{{ member.function }}</div>
+                                                                        <div>{{ member.memberName }}</div>
+
+                                                                        {% if member.memberPhone is not empty %}
+                                                                        <a href="tel:{{ member.memberPhone }}">{{ member.memberPhone }}</a>
+                                                                        {% endif %}
+
+                                                                        {% if member.memberEmail is not empty %}
+                                                                        <a href="mailto:{{ member.memberEmail }}">{{ member.memberEmail }}</a>
+                                                                        {% endif %}
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+
+                                                        {% endfor %}
+                                                    {% endif %}
+
+                                                </div>
+                                                <div class="right">
+                                                    <form name="contactForm" id="contact-form-id" method="post" action="{{ siteUrl }}services/form.php" accept-charset="UTF-8">
+                                                        {{ getCsrfInput() }}
+                                                        <h3>{{ "Máte otázku?"|t }}</h3>
+                                                        <div class="errors">
+                                                            {% if errors is defined %}
+                                                                <ul class="errors">
+                                                                    {% for field in errors %}
+                                                                    {% for error in items %}
+                                                                    <li>{{ error }}</li>
+                                                                    {% endfor %}
+                                                                    {% endfor %}
+                                                                </ul>
+                                                            {% endif %}
+                                                        </div>
+                                                        <div>
+                                                            <input type="hidden" name="action" value="contactForm/message/add">
+                                                            <input type="hidden" name="formId" value="1">
+                                                            <input type="hidden" name="redirect" value="dakujeme">
+                                                            <input type="hidden" class="captcha-input" name="g-recaptcha-response" value="0">
+
+                                                            <input type="text" required="" name="name" placeholder="{{ "meno a priezvisko"|t }}" value="{% if message is defined %}{{ message.name }}{% endif %}">
+                                                            <input type="email" required="" name="email" placeholder="{{ "e-mail"|t }}" value="{% if message is defined %}{{ message.email }}{% endif %}">
+                                                            <textarea required="" name="message" placeholder="{{ "správa"|t }}">{% if message is defined %}{{ message.message }}{% endif %}</textarea>
+                                                        </div>
+                                                        <div class="footer">
+                                                            <button type="submit" disabled>
+                                                                <span>{{ "Odoslať"|t }}</span>
+                                                            </button>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    <!-- /DETAILS -->
+
+                                </div>
+                            <!-- /CONTACT CONTENT-->
+
+                        </div>
+                    </div>
+                <!-- /HOUSE LISTING -->
+
+            </div>
+        <!-- /FILTER + HOUSE LISTING -->
+
+    </div>
+<!-- /CONTENT CONTAINER -->
+
+{% endblock %}

@@ -1,0 +1,54 @@
+
+{% extends "_layout" %}
+
+{% block bodyClass %}dom-list-view{% endblock bodyClass %}
+
+{% block customSeo %}
+    <title>{{  "Referencie"|t }} - {{ siteName }}</title>
+{% endblock customSeo %}
+
+{% block content %}
+    <div class="main grid-2-layout">
+
+        <!-- FILTER + HOUSE LISTING -->
+        <div class="filter-house-listing">
+            {% embed '_components/left' %}{% endembed %}
+
+            <!-- HOUSE LISTING -->
+            <div class="house-listing">
+                <div>
+
+                    <!-- CONTACT CONTENT -->
+                    <div class="house-details contact-container">
+
+                        <div class="house-header">
+                            <div>
+                                <div class="name">
+                                    <div class="counter"></div>
+                                    <div class="no-padding">{{  "Referencie"|t }}</div>
+                                </div>
+                            </div>
+                            <div class="beadcrumbs">
+                                <a href="{{ siteUrl }}" class="elem">{{  "Hlavná stránka"|t }}</a>
+                                <a href="{{ siteUrl }}referencie" class="elem">{{  "Referencie"|t }}</a>
+
+
+                            </div>
+                        </div>
+
+                        {% include 'referencie/_blocks/_review_form' %}
+
+                    </div>
+                    <!-- /CONTACT CONTENT-->
+
+                </div>
+            </div>
+            <!-- /HOUSE LISTING -->
+
+        </div>
+        <!-- /FILTER + HOUSE LISTING -->
+
+    </div>
+
+
+{% endblock %}

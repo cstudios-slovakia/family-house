@@ -1,0 +1,75 @@
+
+{% extends "_layout" %}
+{% set seo = entry.seoUpdated %}
+
+{% block bodyClass %}dom-list-view{% endblock bodyClass %}
+
+{% block content %}
+{% import "_components/macros/images_output.html" as imagesMacro %}
+<h1 class="_hidden">{{ 'Realizácia' | t }}</h1>
+
+<!-- CONTENT CONTAINER -->
+    <div class="main grid-2-layout no-filter">
+
+        <!-- FILTER + HOUSE LISTING -->
+            <div class="filter-house-listing">
+                {% embed '_components/left' %}{% endembed %}
+
+                <!-- HOUSE LISTING -->
+                    <div class="house-listing">
+                        <div>
+
+                            <!-- CONTACT CONTENT -->
+                                <div class="house-details contact-container">
+
+                                    <div class="house-header">
+                                        <div>
+                                            <div class="name">
+                                                <div class="counter"></div>
+                                                <div class="no-padding">{{ 'Realizácia' | t }}</div>
+                                            </div>
+                                        </div>
+                                        <div class="beadcrumbs">
+                                            <a href="{{ settings.baseUrl }}" class="elem">{{ 'Hlavná stránka' | t }}</a>
+                                            <div>{{ 'Realizácia' | t }}</div>
+                                        </div>
+                                    </div>
+
+                                    <!-- DETAILS -->
+                                        <div class="details projektovanie-list">
+
+                                            {% set projectBlocks = entry.blockProjektovanie %}
+
+                                            {% for projectBlock in projectBlocks %}
+                                            {% if projectBlock.type == "projectBlock" %}
+                                            <!-- PROJEKTOVANIE BLOCK -->
+                                            <div class="block">
+                                                {% set blockImage = projectBlock.image.one() %}
+                                                {{ imagesMacro.imageWebp(blockImage) }}
+
+                                                <div class="contentable">
+                                                    <div class="title">{{ 'STAVEBNÉ PRÁCE' | t}}: <br>{{ projectBlock.projectBlockTitle }}</div>
+                                                    <p>{{ projectBlock.projectBlockContent }}</p>
+                                                </div>
+                                            </div>
+                                            <!-- /PROJEKTOVANIE BLOCK -->
+                                            {% endif %}
+                                            {% endfor %}
+
+                                        </div>
+                                    <!-- /DETAILS -->
+
+                                </div>
+                            <!-- /CONTACT CONTENT-->
+
+                        </div>
+                    </div>
+                <!-- /HOUSE LISTING -->
+
+            </div>
+        <!-- /FILTER + HOUSE LISTING -->
+
+    </div>
+<!-- /CONTENT CONTAINER -->
+
+{% endblock %}

@@ -1,0 +1,457 @@
+{% extends "_layout" %}
+
+{% block bodyClass %}dom-list-view{% endblock bodyClass %}
+
+{% block content %}
+<!-- CONTENT CONTAINER -->
+    <div class="main grid-2-layout has-reviews">
+
+        <!-- FILTER + HOUSE LISTING -->
+            <div class="filter-house-listing">
+                {% embed '_components/left' %}{% endembed %}
+
+                <!-- HOUSE LISTING -->
+                    <div class="house-listing">
+                        <div>
+
+                            <!-- CONTACT CONTENT -->
+                                <div class="house-details contact-container">
+
+                                    <div class="house-header">
+                                        <div>
+                                            <div class="name">
+                                                <div class="counter"></div>
+                                                <div class="no-padding">{{  "Referencie"|t }}</div>
+                                            </div>
+                                        </div>
+                                        <div class="beadcrumbs">
+                                            <a href="{{ siteUrl }}" class="elem">{{  "Hlavná stránka"|t }}</a>
+                                            <div>{{  "Referencie"|t }}</div>
+                                        </div>
+                                    </div>
+                                    {% set _highlightedReferences    = craft.entries.section('referencie').type('referencie').highlightedProject(true) %}
+                                    {% set _highlightedReferencesMap = craft.entries.section('referencie').type('referencie') %}
+
+                                    {% if _highlightedReferences|length >= 0 %}
+                                        <script src="{{ settings.baseUrl }}assets/js/vendor/markerclusterer.js"></script>
+                                        <script>
+                                            var map;
+
+                                            function initMap() {
+
+                                                // Display the map
+                                                map = new google.maps.Map(document.getElementById("map"), {
+                                                    center: {
+                                                        lat: 48.7977105,
+                                                        lng: 19.6416832,
+                                            },
+                                                zoom: 8
+                                            });
+
+
+                                                // Create an array of alphabetical characters used to label the markers.
+                                                var labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+
+                                                var infoWindows = [
+                                                    {% for _ref in _highlightedReferencesMap %}
+                                                        {
+                                                            title: '{% if _ref.slideHouse is not empty %}{{ _ref.slideHouse.one().title }}{% else %}{{ _ref.title }}{% endif %}',
+                                                            img: '{% if _ref.slideHouse is not empty %}{% if _ref.slideHouse.one().vizualy is not empty %} {{ _ref.slideHouse.one().vizualy.one().url }} {% endif %}{% else %}{{ _ref.title }}{% endif %}',
+                                                            url: '{% if _ref.slideHouse is not empty %}{{ _ref.slideHouse.one().url }}{% else %}{{ _ref.title }}{% endif %}'
+                                                        },
+                                                {% endfor %}
+                                            ];
+
+                                                var _getFilter = {% if craft.app.request.getParam('house-id') is not empty %}{{ craft.app.request.getParam('house-id') }}{% else %}-1{% endif %};
+                                                var locations = [
+                                                    {% for _ref in _highlightedReferencesMap %}
+                                                        {% if craft.app.request.getParam('house-id') > -1 %}
+                                                            {% if _ref.slideHouse is not empty %}
+                                                                {% if _ref.slideHouse.one().id == craft.app.request.getParam('house-id') %}
+                                                                    {lat: {{ _ref.locationMap.lat }}, lng: {{ _ref.locationMap.lng}}},
+                                                                {% endif %}
+                                                            {% endif %}
+                                                        {% else %}
+                                                            {lat: {{ _ref.locationMap.lat }}, lng: {{ _ref.locationMap.lng}}},
+                                                        {% endif %}
+                                                    {% endfor %}
+                                            ];
+
+
+
+                                                var contentString = '<div id="content">'+
+                                                    '<div id="siteNotice">'+
+                                                    '</div>'+
+                                                    '<h1 id="firstHeading" class="firstHeading">Uluru</h1>'+
+                                                    '<div id="bodyContent">'+
+                                                    '<p><b>Uluru</b>, also referred to as <b>Ayers Rock</b>, is a large ' +
+                                                    'sandstone rock formation in the southern part of the '+
+                                                    'Northern Territory, central Australia. It lies 335&#160;km (208&#160;mi) '+
+                                                    'south west of the nearest large town, Alice Springs; 450&#160;km '+
+                                                    '(280&#160;mi) by road. Kata Tjuta and Uluru are the two major '+
+                                                    'features of the Uluru - Kata Tjuta National Park. Uluru is '+
+                                                    'sacred to the Pitjantjatjara and Yankunytjatjara, the '+
+                                                    'Aboriginal people of the area. It has many springs, waterholes, '+
+                                                    'rock caves and ancient paintings. Uluru is listed as a World '+
+                                                    'Heritage Site.</p>'+
+                                                    '<p>Attribution: Uluru, <a href="https://en.wikipedia.org/w/index.php?title=Uluru&oldid=297882194">'+
+                                                    'https://en.wikipedia.org/w/index.php?title=Uluru</a> '+
+                                                    '(last visited June 22, 2009).</p>'+
+                                                    '</div>'+
+                                                    '</div>';
+
+                                                var markers = locations.map(function(location, i) {
+                                                    var marker = new google.maps.Marker({
+                                                        position: location,
+                                                        label: labels[i % labels.length],
+                                                        title: 'title'
+                                                    });
+
+                                                    var infowindow = new google.maps.InfoWindow({
+                                                        content: '<div style="display: flex;flex-direction: column;width: 340px;"><h3>' + infoWindows[i].title +'</h3><img style="width:100%" src="' + infoWindows[i].img + '" alt=""/><a style="display: block;padding:15px;text-align: center;margin:15px 0 0 0;font-weight: 600; color: #fff;background: red" href="' + infoWindows[i].url + '">Viac info</a></div>'
+                                                    });
+
+                                                    marker.addListener('click', function() {
+                                                        infowindow.open(map, marker);
+                                                    });
+
+                                                    return marker;
+                                                });
+
+                                                // Add a marker clusterer to manage the markers.
+                                                var markerCluster = new MarkerClusterer(map, markers,
+                                                    {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
+                                            }
+                                        </script>
+
+
+                                        <script src="https://maps.googleapis.com/maps/api/js?key={{ craft.maps.mapToken }}&callback=initMap" async defer></script>
+                                    {% endif %}
+                                    <!-- MAP DETAILS -->
+                                        <div class="references-map">
+
+                                            <div id="stepheader" class="">
+                                                <div class="left-navigation">
+                                                    <div class="choose-step">
+                                                        <div class="left-steps" style="display: none">
+                                                            <span>{{  "Vyberte si <br>kraj"|t|raw }}</span>
+                                                            <div>{{ "Krok:"|t }}</div>
+                                                        </div>
+                                                        <div class="right-steps" style="display: none">
+                                                            <a href="{{ siteUrl }}referencie" class="clickable active">01</a>
+                                                            <a class="javascript:;">02</a>
+                                                        </div>
+                                                        <div class="legend">
+                                                            <div>{{ "Projektovanie vykonávame v rámci  územia celého Slovenska"|t }}</div>
+                                                            <div>{{ "Realizácie vykonávame v oblastiach vyznačených červenou farbou."|t }}</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="clear"></div>
+                                            </div>
+
+                                            <div id="stepcontent" data-url="{{ siteUrl }}referencie/" >
+
+                                                <!-- UPDATE -->
+                                                {% if _highlightedReferencesMap|length >= 0 and craft.app.request.getParam('house-id') is not empty %}
+                                                    {% set _show = true %}
+                                                    {% for _ref in _highlightedReferencesMap %}
+                                                        {% if craft.app.request.getParam('house-id') > -1 %}
+                                                            {% if _ref.slideHouse is not empty %}
+                                                                {% if _ref.slideHouse.one().id == craft.app.request.getParam('house-id') %}
+                                                                    {% set _show = false %}
+                                                                {% endif %}
+                                                            {% endif %}
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                    {% if _show %}
+                                                        <div class="empty-map-overlay">
+                                                            <div>{{ "Aktuálne sme nerealizovali takýto projekt"|t }}</div>
+                                                        </div>
+                                                    {% endif %}
+                                                {% endif %}
+
+                                                <div id="map" style="height: 600px;"></div>
+
+                                                {% if _highlightedReferences|length > 0 %}
+                                                    <div class="highlighted-projects">
+                                                        <h2>{{ "Vybrané projekty"|t }}</h2>
+                                                        <div class="list-projects">
+
+
+                                                                {% for _project in _highlightedReferences %}
+                                                                    {% set _house = _project.slideHouse is not empty ? _project.slideHouse.one() : '' %}
+                                                                    <a href="{{ _house.url }}">
+                                                                        <div class="image-container">
+                                                                            {% set _houseImageUrl   = _house.vizualy is not empty ? _house.vizualy.one().url : '' %}
+                                                                            {% set _houseImageTitle = _house.vizualy is not empty ? _house.vizualy.one().title : '' %}
+                                                                            <img src="{{ _houseImageUrl }}" alt="{{ _houseImageTitle }}"/>
+                                                                        </div>
+                                                                        <div class="info">
+                                                                            <div class="name">{{ _project.highlightedName }}</div>
+                                                                            <div class="text">{{ _project.highlightedText }}</div>
+                                                                            {% if _project.highlightedQuote is not empty %}
+                                                                                <blockquote class="quote">{{ _project.highlightedQuote }}</blockquote>
+                                                                            {% endif %}
+                                                                        </div>
+                                                                    </a>
+                                                                {% endfor %}
+
+                                                        </div>
+                                                    </div>
+                                                {% endif %}
+                                            </div>
+
+                                        </div>
+                                    <!-- /MAP DETAILS -->
+
+
+                                </div>
+                            <!-- /CONTACT CONTENT-->
+
+                        </div>
+                        {% set reviews = craft.entries.section('recenzie').all() %}
+                        {% if reviews|length > 0 %}
+                        <div class="review-container">
+
+                            <div hidden="">
+                                <svg xmlns="http://www.w3.org/2000/svg" style="display: none;"><symbol id="star-empty" viewBox="0 0 55.867 55.867"><title>star-empty</title><path d="M11.287,54.548c-0.207,0-0.414-0.064-0.588-0.191c-0.308-0.224-0.462-0.603-0.397-0.978l3.091-18.018L0.302,22.602 c-0.272-0.266-0.37-0.663-0.253-1.024c0.118-0.362,0.431-0.626,0.808-0.681l18.09-2.629l8.091-16.393 c0.168-0.342,0.516-0.558,0.896-0.558l0,0c0.381,0,0.729,0.216,0.896,0.558l8.09,16.393l18.091,2.629 c0.377,0.055,0.689,0.318,0.808,0.681c0.117,0.361,0.02,0.759-0.253,1.024L42.475,35.363l3.09,18.017 c0.064,0.375-0.09,0.754-0.397,0.978c-0.308,0.226-0.717,0.255-1.054,0.076l-16.18-8.506l-16.182,8.506 C11.606,54.51,11.446,54.548,11.287,54.548z M3.149,22.584l12.016,11.713c0.235,0.229,0.343,0.561,0.287,0.885L12.615,51.72 l14.854-7.808c0.291-0.154,0.638-0.154,0.931,0l14.852,7.808l-2.836-16.538c-0.056-0.324,0.052-0.655,0.287-0.885l12.016-11.713 l-16.605-2.413c-0.326-0.047-0.607-0.252-0.753-0.547L27.934,4.578l-7.427,15.047c-0.146,0.295-0.427,0.5-0.753,0.547L3.149,22.584z " fill="#9D9D9D"></path></symbol><symbol id="star-full" viewBox="0 0 19.481 19.481"><title>star-full</title><path d="m10.201,.758l2.478,5.865 6.344,.545c0.44,0.038 0.619,0.587 0.285,0.876l-4.812,4.169 1.442,6.202c0.1,0.431-0.367,0.77-0.745,0.541l-5.452-3.288-5.452,3.288c-0.379,0.228-0.845-0.111-0.745-0.541l1.442-6.202-4.813-4.17c-0.334-0.289-0.156-0.838 0.285-0.876l6.344-.545 2.478-5.864c0.172-0.408 0.749-0.408 0.921,0z" fill="#9D9D9D"></path></symbol></svg>    </div>
+                            <div class="review-container--section-title">
+                                {{ "Názory nasich zákaznikov"|t }}
+                            </div>
+                            {% set starBox  = {
+                                'star5': 0,
+                                'star4': 0,
+                                'star3': 0,
+                                'star2': 0,
+                                'star1': 0,
+                                'star0': 0,
+                            } %}
+                            {% for review in reviews %}
+
+                                {% set starValue = review.stars.value %}
+
+                                {% set counter = starBox['star'~starValue] + 1 %}
+
+                                {% for star in starBox %}
+
+                                    {% if loop.index - 1 == starValue %}
+
+                                        {% set starBox = starBox|merge({('star'~(loop.index - 1)):counter}) %}
+                                    {% endif %}
+                                {% endfor %}
+
+                            {% endfor %}
+                            <div class="review-container--stats">
+                                <div>
+                                    <ul>
+                                        <li>
+                                            <svg class="icon">
+                                                <use xlink:href="#star-full" />
+                                            </svg>
+                                        </li>
+                                        <li>
+                                            <svg class="icon">
+                                                <use xlink:href="#star-full" />
+                                            </svg>
+                                        </li>
+                                        <li>
+                                            <svg class="icon">
+                                                <use xlink:href="#star-full" />
+                                            </svg>
+                                        </li>
+                                        <li>
+                                            <svg class="icon">
+                                                <use xlink:href="#star-full" />
+                                            </svg>
+                                        </li>
+                                        <li>
+                                            <svg class="icon">
+                                                <use xlink:href="#star-full" />
+                                            </svg>
+                                        </li>
+                                        <li>
+                                            {{ "%02d"|format(starBox['star'~5]) }}x
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <ul>
+                                        <li>
+                                            <svg class="icon">
+                                                <use xlink:href="#star-full" />
+                                            </svg>
+                                        </li>
+                                        <li>
+                                            <svg class="icon">
+                                                <use xlink:href="#star-full" />
+                                            </svg>
+                                        </li>
+                                        <li>
+                                            <svg class="icon">
+                                                <use xlink:href="#star-full" />
+                                            </svg>
+                                        </li>
+                                        <li>
+                                            <svg class="icon">
+                                                <use xlink:href="#star-full" />
+                                            </svg>
+                                        </li>
+                                        <li>
+                                            <svg class="icon">
+                                                <use xlink:href="#star-empty" />
+                                            </svg>
+                                        </li>
+                                        <li>{{ "%02d"|format(starBox['star'~4]) }}x</li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <ul>
+                                        <li>
+                                            <svg class="icon">
+                                                <use xlink:href="#star-full" />
+                                            </svg>
+                                        </li>
+                                        <li>
+                                            <svg class="icon">
+                                                <use xlink:href="#star-full" />
+                                            </svg>
+                                        </li>
+                                        <li>
+                                            <svg class="icon">
+                                                <use xlink:href="#star-full" />
+                                            </svg>
+                                        </li>
+                                        <li>
+                                            <svg class="icon">
+                                                <use xlink:href="#star-empty" />
+                                            </svg>
+                                        </li>
+                                        <li>
+                                            <svg class="icon">
+                                                <use xlink:href="#star-empty" />
+                                            </svg>
+                                        </li>
+                                        <li>{{ "%02d"|format(starBox['star'~3]) }}x</li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <ul>
+                                        <li>
+                                            <svg class="icon">
+                                                <use xlink:href="#star-full" />
+                                            </svg>
+                                        </li>
+                                        <li>
+                                            <svg class="icon">
+                                                <use xlink:href="#star-full" />
+                                            </svg>
+                                        </li>
+                                        <li>
+                                            <svg class="icon">
+                                                <use xlink:href="#star-empty" />
+                                            </svg>
+                                        </li>
+                                        <li>
+                                            <svg class="icon">
+                                                <use xlink:href="#star-empty" />
+                                            </svg>
+                                        </li>
+                                        <li>
+                                            <svg class="icon">
+                                                <use xlink:href="#star-empty" />
+                                            </svg>
+                                        </li>
+                                        <li>{{ "%02d"|format(starBox['star'~2]) }}x</li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <ul>
+                                        <li>
+                                            <svg class="icon">
+                                                <use xlink:href="#star-full" />
+                                            </svg>
+                                        </li>
+                                        <li>
+                                            <svg class="icon">
+                                                <use xlink:href="#star-empty" />
+                                            </svg>
+                                        </li>
+                                        <li>
+                                            <svg class="icon">
+                                                <use xlink:href="#star-empty" />
+                                            </svg>
+                                        </li>
+                                        <li>
+                                            <svg class="icon">
+                                                <use xlink:href="#star-empty" />
+                                            </svg>
+                                        </li>
+                                        <li>
+                                            <svg class="icon">
+                                                <use xlink:href="#star-empty" />
+                                            </svg>
+                                        </li>
+                                        <li>{{ "%02d"|format(starBox['star'~1]) }}x</li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <ul>
+                                        <li>
+                                            <svg class="icon">
+                                                <use xlink:href="#star-empty" />
+                                            </svg>
+                                        </li>
+                                        <li>
+                                            <svg class="icon">
+                                                <use xlink:href="#star-empty" />
+                                            </svg>
+                                        </li>
+                                        <li>
+                                            <svg class="icon">
+                                                <use xlink:href="#star-empty" />
+                                            </svg>
+                                        </li>
+                                        <li>
+                                            <svg class="icon">
+                                                <use xlink:href="#star-empty" />
+                                            </svg>
+                                        </li>
+                                        <li>
+                                            <svg class="icon">
+                                                <use xlink:href="#star-empty" />
+                                            </svg>
+                                        </li>
+                                        <li>{{ "%02d"|format(starBox['star'~0]) }}x</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="review-container--reviews">
+                                <div class="review-container--reviews-title">
+                                    {{ "Recenzie"|t }}
+                                    {% set setSingleEntry = craft.entries.section('addReview').one() %}
+                                    <a href="{{ setSingleEntry.url() }}">{{  "poslať recenziu"|t }}</a>
+
+                                </div>
+
+
+                                {% for review in reviews %}
+                                    {% include 'referencie/_blocks/_review_panel' with {'review': review} %}
+                                {% endfor %}
+
+
+                            </div>
+
+                        </div>
+                        {% endif %}
+                    </div>
+                <!-- /HOUSE LISTING -->
+
+            </div>
+        <!-- /FILTER + HOUSE LISTING -->
+
+    </div>
+<!-- /CONTENT CONTAINER -->
+
+{% endblock %}

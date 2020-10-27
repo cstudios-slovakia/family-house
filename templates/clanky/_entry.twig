@@ -1,0 +1,152 @@
+{% extends "_layout" %}
+
+{# SEO #}
+{% set custom_seo = true %}
+
+
+{% block customSeo %}
+
+    {% set cover = entry.obrazok.one() %}
+    {% set seoTitle = entry.seoBlogTitle is not empty ? entry.seoBlogTitle : entry.title %}
+    <title>{{ seoTitle }} - {{ siteName }}</title>
+
+    <!-- SEOP Keywords -->
+    <meta name="keywords" content="{{ entry.seoBlogKeywords }}" />
+
+    <!-- SEOP Description -->
+    <meta name="description" content="{{ entry.seoBlogDescription }}" />
+    <meta property="og:description" content="{{ entry.seoBlogDescription }}" />
+    <meta name="twitter:description" content="{{ entry.seoBlogDescription }}" />
+
+    <meta property="fb:app_id" content="">
+    <meta property="og:url" content="{{ siteUrl }}" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="{{ seoTitle }} - {{ siteName }}" />
+    <meta property="og:image" content="{{ cover.url }}" />
+
+    <meta property="og:site_name" content="{{ siteName }}" />
+    <meta property="og:locale" content="sk" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="Familyhouse" />
+    <meta name="twitter:url" content="{{ siteUrl }}" />
+    <meta name="twitter:title" content="{{ seoTitle }} - {{ siteName }}" />
+
+    <meta name="twitter:image" content="{{ cover.url }}" />
+
+{% endblock customSeo %}
+{% set seo = entry.seoUpdated %}
+
+{% import "_components/macros/images_output.html" as imagesMacro %}
+
+{% block content %}
+
+
+    <div class="main grid-2-layout article-page no-filter">
+        <div class="filter-house-listing">
+            {% embed '_components/left' %}{% endembed %}
+
+            <div class="house-listing-2">
+                {% if entry.blogAdsUrl is empty %}
+                    <h1 class="article-title">{{ entry.title }}</h1>
+                {% endif %}
+
+                <!-- CONTENT CONTAINER -->
+                <div class="main article-content">
+
+                    {% for block in entry.blogContent %}
+
+                    {% switch block.type %}
+
+                        {% case "blogTitle" %}
+                        <{{ block.blogTitleLevel.value }}>{{ block.text }}</{{ block.blogTitleLevel.value }}>
+
+                        {% case "blogText" %}
+                            <div class="contentable">{{ block.text }}</div>
+
+                        {% case "image" %}
+                            {% set image = block.image.one() %}
+                            {% if block.position == 'left' %}
+                                <div class="img-container {{ block.position }}" style="float:left; width: {{ block.width }}%;margin: 0 20px 20px 0;">
+            <!--                        <img src="{{ image.url }}" alt="{{ block.alt }}"/>-->
+
+                                    {{ imagesMacro.imageWebp(image) }}
+                                </div>
+                            {% endif %}
+
+                            {% if block.position == 'right' %}
+                                <div class="img-container {{ block.position }}" style="float:right; width: {{ block.width }}%; margin: 0 0 20px 20px;">
+                                    {{ imagesMacro.imageWebp(image) }}
+                                </div>
+                            {% endif %}
+
+                            {% if block.position == 'full' or block.position == 'center' %}
+                                <div class="img-container {{ block.position }}" style="width: 100%">
+                                    {{ imagesMacro.imageWebp(image) }}
+                                </div>
+                            {% endif %}
+
+                        {% case "blogQuote" %}
+                            <blockquote>{{ block.quote }}</blockquote>
+
+                        {% case "matrixButtons" %}
+                            {% if block.matrixButtonUrl is not empty %}
+                                <div class="clearfix"></div>
+                                <a href="{{ block.matrixButtonUrl }}" class="matrix-btn-plain matrix-btn-{{ block.matrixButtonStyle }} {{ block.matrixButtonPosition }}">
+                                    <span>{{ block.matrixButtonText }}</span>
+                                </a>
+                            {% endif %}
+
+                        {% case "matrixRelatedArticles" %}
+                            {% if block.matrixRelatedArticlesList is not empty %}
+                                <div class="matrix-related-container">
+                                    <h3>{{ block.matrixRelatedArticlesTitle }}</h3>
+                                    <div class="matrix-related-list">
+                                        {% for _article in block.matrixRelatedArticlesList %}
+                                            <a href="{{ _article.url }}">
+                                                {% set _imageUrl   = _article.obrazok is not empty ? _article.obrazok.one().url : '' %}
+                                                {% set _imageTitle = _article.obrazok is not empty ? _article.obrazok.one().title : '' %}
+                                                <img src="{{ _imageUrl }}" alt="{{ _imageTitle }}"/>
+                                                <h4>{{ _article.title }}</h4>
+                                            </a>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            {% endif %}
+
+                        {% case "matrixRelatedHouses" %}
+                            {% if block.housesList is not empty %}
+                                <div class="matrix-related-container">
+                                    <h3>{{ block.matrixRelatedHousesTitle }}</h3>
+                                    <div class="matrix-related-list">
+                                        {% for _article in block.housesList %}
+                                        <a href="{{ _article.url }}">
+                                            {% set _imageUrl   = _article.vizualy is not empty ? _article.vizualy.one().url : '' %}
+                                            {% set _imageTitle = _article.vizualy is not empty ? _article.vizualy.one().title : '' %}
+                                            <img src="{{ _imageUrl }}" alt="{{ _imageTitle }}"/>
+                                            <h4>{{ _article.nazov }}</h4>
+                                        </a>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            {% endif %}
+                    {% endswitch %}
+                {% endfor %}
+
+                <div class="matrix-gallery">
+                    {% for galleryMatrix in entry.galleryMatrix.type('gallery').all() %}
+                        {% include '_components/_matrix/matrixGallery' with {galleryMatrix:galleryMatrix} %}
+                    {% endfor %}
+                </div>
+
+
+                <a class="back-url" href="{{ siteUrl }}clanky">
+                    <span>{{ "Naspäť"|t }}</span>
+                </a>
+            </div>
+            <!-- /CONTENT CONTAINER -->
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

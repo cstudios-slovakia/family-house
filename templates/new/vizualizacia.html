@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+    {% set sitebase = 'https://familyhouse.sk/' %}
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projekty Domov - Family House 2020</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="{{ sitebase }}assets/css/vendor/swiper.min.css">
+
+    <link rel="stylesheet" href="{{ sitebase }}assets/new/css/simplebar.css">
+    <link rel="stylesheet" href="{{ sitebase }}assets/new/css/main.css?=ver{{ random(1, 100) }}">
+</head>
+<body>
+    <div class="page-container">
+
+        {% embed "new/header/header.html" %}
+        {% endembed %}
+        
+        <div class="page" id="poradenstvo">
+            
+            {% embed "new/pages/page_sidebar.html" %}
+            {% endembed %}
+
+            <div class="poradenstvo-container">
+
+                
+
+                <form class="vizualizacia-form" style="margin-bottom: 120px;" method="post" action="{{sitebase}}services/vizualizacia.php" accept-charset="UTF-8">
+                    {{ getCsrfInput() }}
+                    <h2>
+                        vizualizácie <br> na mieru
+                    </h2>
+                    <div action="" class="poradenstvo" >
+                        <input type="hidden" name="action" value="contactForm/message/add">
+                        <input type="hidden" name="formId" value="1">
+                        <input type="hidden" name="redirect" value="dakujeme">
+                        
+                        <input type="hidden" class="captcha-input" name="g-recaptcha-response" value="0">
+                        <div class="row">
+                            <input type="text" name="name" id="Name" placeholder="Vaše meno a priezvisko*" required>
+                        </div>
+                        <div class="row">
+                            <input type="text" name="city" id="City" placeholder="Mesto*">
+                        </div>
+                        <div class="row">
+                            <input type="text" name="telephone" id="Telephone" placeholder="Telefónne číslo" required>
+                        </div>
+                        <div class="row">
+                            <input type="text" name="email" id="E-mail" placeholder="E-mailová adresa*" required>
+                        </div>
+                        
+                        <div class="img-row" style="margin-top: 8px;">
+                            
+                            <div class="img-item">
+                                <label for="vonkajsia" class="chb">
+                                    <input type="checkbox" name="vonkajsia" id="vonkajsia">
+                                    <div class="label">Vonkajšia vizualizácia</div>
+                                </label>
+                                
+                            </div>
+                            <div class="img-item">
+                                <label for="vnutorna" class="chb">
+                                    <input type="checkbox" name="vnutorna" id="vnutorna">
+                                    <div class="label">Vnútorná vizualizácia</div>
+                                </label>
+                                
+                            </div>
+                        </div>
+                        <textarea name="message" id="message" cols="30" rows="10" placeholder="Poznámky; napr. kedy Vám môžeme zavolať"></textarea>
+                        <div class="row">
+                            <div class="agree">
+                                <input type="checkbox" name="sales" id="sales" checked>
+                                <label for="sales">Súhlasím s <a href="">obchodnými podmienkami</a></label>
+                            </div>
+                        </div>
+                        <button type="submit" value="odoslať" class="send-btn" disabled>odoslať</button>
+                    </div>
+                </form>
+
+
+            </div>
+
+            <div class="step-sidebar">
+                <div class="inner-wrapper">
+                    <!-- <div class="steps">
+                        <div class="label">
+                            len
+                        </div>
+                        <div class="nums">
+                            <div class="num active">
+                                1
+                            </div>
+                        </div>
+                        <div class="label">
+                            krok
+                        </div>
+                    </div> -->
+                    {% set mem = craft.entries().section('member').slug('stela-kopecsni').one() %}
+                    {% set ss = mem.personalPhoto.first() %}
+                    <div class="member">
+                        <div class="img-wrap">
+                            <img src="{{ ss.getUrl('houseDetailGalleryThumbs320w') }}" width="{{ ss.getWidth('houseDetailGalleryThumbs320w') }}" height="{{ ss.getHeight('houseDetailGalleryThumbs320w') }}" alt="">
+                        </div>
+                        <div class="position">
+                            <div class="bold uppercase row">
+                                {{ mem.function }}
+                            </div>
+                            <div class="bold row">
+                                {{ mem.memberName }}
+                            </div>
+                            <div class="row">
+                                {{ mem.memberPhone }}
+                            </div>
+                            <div class="row">
+                                {{ mem.memberEmail }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        
+        
+        </div>
+
+
+
+
+
+
+
+        {% embed "new/footer-checkout.html" %}
+        {% endembed %}
+    
+    </div>
+    
+    
+        <script src="{{ sitebase }}assets/js/vendor/jquery-3.2.1.min.js"></script>
+        <script src="{{ sitebase }}assets/js/vendor/jquery-waypoints-and-sticky.js"></script>
+        <script src="{{ sitebase }}assets/js/vendor/simplebar.min.js"></script>
+        <script src="{{ sitebase }}assets/js/vendor/vue.js"></script>
+        <script src="{{ sitebase }}assets/js/vendor/vue-router.js"></script>
+        <script src="{{ sitebase }}assets/js/vendor/swiper.min.js"></script>
+        <script src="{{ sitebase }}assets/js/vendor/three.js"></script>
+        <script src="{{ sitebase }}assets/js/vendor/panolens.js"></script>
+        <script src="{{ sitebase }}assets/new/js/main.js?=ver{{ random(1, 100) }}"></script>
+    
+        <script>
+
+            // const panorama = new PANOLENS.ImagePanorama( '' );
+            // const viewer = new PANOLENS.Viewer();
+            // viewer.add( panorama );
+
+            // ref swiper
+            var ref_swiper = new Swiper('.ref-swiper', {
+                spaceBetween: 20,
+                slidesPerView: 5,
+                scrollbar: {
+                    el: '.ref-swiper-scroll'
+                },
+                navigation: {
+                    nextEl: '.ref-swiper-scroll .next',
+                    prevEl: '.ref-swiper-scroll .prev',
+                }
+            });
+    
+            // dom swiper thumbs
+            var dom_swiper_big_thumbs = new Swiper('.dom-swiper-big-thumbs', {
+                spaceBetween: 20,
+                slidesPerView: 6,
+                // freeMode: true,
+                watchSlidesVisibility: true,
+                watchSlidesProgress: true,
+                scrollbar: {
+                    el: '.dom-thumbs-swiper-scroll'
+                },
+                navigation: {
+                    nextEl: '.dom-thumbs-swiper-scroll .next',
+                    prevEl: '.dom-thumbs-swiper-scroll .prev',
+                },
+            });
+    
+            // dom swiper big
+            var dom_swiper_big = new Swiper('.dom-swiper-big', {
+                spaceBetween: 10,
+                navigation: {
+                    nextEl: '.dom-swiper-big-nav .next',
+                    prevEl: '.dom-swiper-big-nav .prev',
+                },
+                thumbs: {
+                    swiper: dom_swiper_big_thumbs,
+                },
+            }); 
+    
+    
+        </script>
+        {% embed '_components/security/reCaptcha' %}{% endembed %}
+        
+        {% embed 'new/cookies-embed.html'%}
+    {% endembed %}
+</body>
+</html>

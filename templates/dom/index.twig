@@ -1,0 +1,111 @@
+{% extends "_layout" %}
+{% set seo = entry.seoUpdated %}
+
+{% block bodyClass %}dom-list-view{% endblock bodyClass %}
+
+{# SEOP Filter #}
+{% set filterSeops = craft.entries.section('seopFilter') %}
+{% set custom_seo = true %}
+{% set filterTitle = 'Filter' %}
+{% set finalKeywords = [] %}
+{% set finalDescription = [] %}
+
+{% if filterSeops|length > 0 %}
+    {% set queryString      = craft.app.request.getQueryStringWithoutPath() %}
+    {% set queryStringFull  = (queryString is not empty) ? '?' ~ queryString : '' %}
+
+    {% for elem in filterSeops %}
+
+        {% if '?' ~ elem.seopFilterQuery == queryStringFull %}
+
+            {% set filterTitle = elem.title %}
+                {% if elem.seopKeys is not empty %}
+                    {% for key in elem.seopKeys %}
+                        {% set currentLoopIndex = loop.index %}
+                        {% set keywordIndex = key.keywordKey - 1 %}
+                        {% set descriptionIndex = key.descriptionKey - 1 %}
+
+                            {% if elem.seopFilterSeopEntry|length %}
+                                {% for seoObject in elem.seopFilterSeopEntry %}
+                                    {% if currentLoopIndex == loop.index %}
+
+                                        {# Entry keywords #}
+                                        {% if seoObject.keywords|length and keywordIndex >= 0 %}
+                                            {% if seoObject.keywords[keywordIndex] is defined %}
+                                                {% set finalKeywords = finalKeywords|merge([seoObject.keywords[keywordIndex].keyword]) %}
+                                            {% endif %}
+                                        {% endif %}
+
+                                        {# Entry descriptions #}
+                                        {% if seoObject.descriptions|length and descriptionIndex >= 0 %}
+                                            {% if seoObject.descriptions[descriptionIndex] is defined %}
+                                                {% set finalDescription = finalDescription|merge([seoObject.descriptions[descriptionIndex].description]) %}
+                                            {% endif %}
+                                        {% endif %}
+
+                                    {% endif %}
+                                {% endfor %}
+                            {% endif %}
+                    {% endfor %}
+                {% endif %}
+            {% endif %}
+    {% endfor %}
+{% endif %}
+
+{% block customSeo %}
+    {% if craft.app.request.getQueryStringWithoutPath() is not empty %}
+        <title>{{ filterTitle }} - {{ siteName }}</title>
+
+        <!-- SEOP Keywords -->
+        <meta name="keywords" content="{{ finalKeywords|join() }}" />
+
+        <!-- SEOP Description -->
+        {% set finalDescription = finalDescription|join(' ') %}
+        <meta name="description" content="{{ finalDescription }}" />
+        <meta property="og:description" content="{{ finalDescription }}" />
+        <meta name="twitter:description" content="{{ finalDescription }}" />
+
+        <meta property="og:site_name" content="{{ siteName }}" />
+        <meta property="og:locale" content="sk" />
+
+    {% else %}
+        {% set seo = entry.seoUpdated %}
+        <title>{{ entry.seoUpdated.title }}</title>
+
+        <meta name="description" content="{{ entry.seoUpdated.description }}" />
+        <meta property="og:description" content="{{ entry.seoUpdated.description }}" />
+        <meta name="twitter:description" content="{{ entry.seoUpdated.description }}" />
+
+        <meta property="og:site_name" content="{{ siteName }}" />
+        <meta property="og:locale" content="sk" />
+    {% endif %}
+
+{% endblock customSeo %}
+
+{% block content %}
+
+    <!-- CONTENT CONTAINER -->
+        <div class="main grid-2-layout">
+
+            <h1 style="display:none" id="page-title-h1"></h1>
+            <script type="application/javascript">
+                document.getElementById("page-title-h1").innerHTML = document.getElementsByTagName("title")[0].innerHTML;
+            </script>
+
+         <!-- FILTER + HOUSE LISTING -->
+             <div class="filter-house-listing">
+                 {% embed '_components/left' %}{% endembed %}
+
+                <!-- HOUSE LISTING -->
+                 <div class="house-listing tmpl-index">
+                     {% embed 'dom/_house_listing_container' %}{% endembed %}
+                  </div>
+                <!-- /HOUSE LISTING -->
+
+             </div>
+         <!-- /FILTER + HOUSE LISTING -->
+
+        </div>
+    <!-- /CONTENT CONTAINER -->
+
+{% endblock %}

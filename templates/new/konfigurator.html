@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="en">
+    {% set sitebase = 'https://familyhouse.sk/' %}
+
+    
+    {% set entry = craft.entries().section('dom').type('dom_v2').slug(craft.app.request.getSegment(2)).one() %}
+
+    
+
+    {% set dom = entry %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Access-Control-Allow-Origin" content="*">
+    <title>Projekty Domov - Family House 2020</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="{{ sitebase }}assets/css/vendor/swiper.min.css">
+
+    <link rel="stylesheet" href="{{ sitebase }}assets/new/css/simplebar.css">
+    <link rel="stylesheet" href="{{ sitebase }}assets/new/css/main.css?=ver{{ random(1, 100) }}">
+</head>
+<body>
+    <div class="page-container">
+
+        {% embed "new/header/header.html" %}
+        {% endembed %}
+
+        <div class="page" id="konfigurator">
+            
+            {% embed "new/dom_sidebar.twig" %}
+            {% endembed %}
+
+
+            <div class="konfigurator-container">
+
+                <div class="konfigurator">
+                    <h1>konfigurátor</h1>
+
+
+                    <div class="vue-old">
+
+                        {% do view.registerAssetBundle("modules\\preparatormodule\\assetbundles\\preparatormodule\\PreparatorModuleAsset") %}
+                        
+                        {% if not entry.calculationFile|length %}
+                        <h2>Konfiguračný súbor nebol nájdený</h2>
+                        {% else %}
+                        {% set calculationFile = entry.calculationFile.one %}
+                        {%endif%}
+
+
+                    </div>
+
+
+                    <div class="vue-container">
+
+                        {% if calculationFile is not null   %}
+                            
+                            <div id="app" class="vue-konfigurator">
+
+                                <div class="konfigurator-grid">
+
+                                    <div class="left">
+                                        <div class="steps">
+                                            <div class="category">
+                                                <h2>Konštrukcie</h2>
+                                                <div class="info-icon">
+                                                    <div class="i">
+                                                        {% embed "new/svg/info-icon.svg" %}
+                                                        {% endembed %}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="step" v-for="({selectLabel,typeIndex,typeKey,options,id},index) in houseTypeSelector">
+                                                <div v-if="typeKey == 8">
+                                                    
+                                                    <div class="step-block--title title-gray">
+                                                        {props.typeTitles[typeKey]}
+                                                    </div>
+                                                    <select :name="index"
+                                                        :key="index" @change="onHouseTypeSelectChanged(typeKey,option,index,$event)" v-model="houseTypeSelectorModels[index]">
+                                                        <option v-for="(option, indexOpt) in options" :value="option.value" :disabled="isDisabled(typeKey,index,option)">{getOptionTitle(typeKey, option)}</option>
+                                                    </select>
+                                                    
+                                                </div>
+                                                <div v-if="typeKey == 9">
+                                                    
+                                                    <div class="step-block--title title-gray">
+                                                        {props.typeTitles[typeKey]}
+                                                    </div>
+                                                    <select :name="index"
+                                                        :key="index" @change="onHouseTypeSelectChanged(typeKey,option,index,$event)" v-model="houseTypeSelectorModels[index]">
+                                                        <option v-for="(option, indexOpt) in options" :value="option.value" :disabled="isDisabled(typeKey,index,option)">{getOptionTitle(typeKey, option)}</option>
+                                                    </select>
+                                                    
+                                                </div>
+                                                <div v-if="typeKey == 7">
+
+                                                    <div class="step-block--title title-gray">
+                                                        {props.typeTitles[typeKey]}
+                                                    </div>
+                                                    <select :name="index"
+                                                        :key="index" @change="onHouseTypeSelectChanged(typeKey,option,index,$event)" v-model="houseTypeSelectorModels[index]">
+                                                        <option v-for="(option, indexOpt) in options" :value="option.value" :disabled="isDisabled(typeKey,index,option)">{getOptionTitle(typeKey, option)}</option>
+                                                    </select>
+                                                    
+                                                    
+                                                    
+                                                </div>
+                                                <div v-if="typeKey == 3">
+
+                                                    <div class="step-block--title title-gray">
+                                                        {props.typeTitles[typeKey]}
+                                                    </div>
+                                                    <select :name="index"
+                                                        :key="index" @change="onHouseTypeSelectChanged(typeKey,option,index,$event)" v-model="houseTypeSelectorModels[index]">
+                                                        <option v-for="(option, indexOpt) in options" :value="option.value" :disabled="isDisabled(typeKey,index,option)">{getOptionTitle(typeKey, option)}</option>
+                                                    </select>
+                                                    
+                                                    
+                                                    
+                                                    
+                                                </div>
+                                                <div v-if="typeKey == 2">
+
+
+                                                    <div class="step-block--title title-gray">
+                                                        {props.typeTitles[typeKey]}
+                                                    </div>
+                                                    <select :name="index"
+                                                        :key="index" @change="onHouseTypeSelectChanged(typeKey,option,index,$event)" v-model="houseTypeSelectorModels[index]">
+                                                        <option v-for="(option, indexOpt) in options" :value="option.value" :disabled="isDisabled(typeKey,index,option)">{getOptionTitle(typeKey, option)}</option>
+                                                    </select>
+                                                    
+                                                    
+                                                    
+                                                </div>
+                                                <div v-if="typeKey == 1">
+                                                    
+                                                    <div class="step-block--title title-gray">
+                                                        {props.typeTitles[typeKey]}
+                                                    </div>
+                                                    <select :name="index"
+                                                        :key="index" @change="onHouseTypeSelectChanged(typeKey,option,index,$event)" v-model="houseTypeSelectorModels[index]">
+                                                        <option v-for="(option, indexOpt) in options" :value="option.value" :disabled="isDisabled(typeKey,index,option)">{getOptionTitle(typeKey, option)}</option>
+                                                    </select>
+
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="steps">
+                                            <div class="category">
+                                                <h2>technológie</h2>
+                                                <div class="info-icon">
+                                                    <div class="i">
+                                                        {% embed "new/svg/info-icon.svg" %}
+                                                        {% endembed %}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="step" v-for="({selectLabel,typeIndex,typeKey,options,id},index) in houseTypeSelector">
+                                                <!-- <div v-if="typeKey == 4">
+                                                    
+
+                                                    <div class="step-block--title title-gray">
+                                                        {props.typeTitles[typeKey]}
+                                                    </div>
+                                                    <select :name="index"
+                                                        :key="index" @change="onHouseTypeSelectChanged(typeKey,option,index,$event)" v-model="houseTypeSelectorModels[index]">
+                                                        <option v-for="(option, indexOpt) in options" :value="option.value" :disabled="isDisabled(typeKey,index,option)" v-bind:class="activeOption(index,typeKey,option)"
+                                                        :ref="identifyOption(typeKey,option)">{getOptionTitle(typeKey, option)}</option>
+                                                    </select>
+                                                    
+                                                </div> -->
+
+                                                <div v-if="typeKey == 4">
+                                                    
+                                                    <div class="step-block--title title-gray">
+                                                        {props.typeTitles[typeKey]}
+                                                    </div>
+
+                                                    
+                                                    
+                                                    <div class="drop-wrapper">
+                                                        
+                                                        <div class="step--item" v-for="(option, indexOpt) in options">
+                                                            <label class="item-label" :for="identifyOption(typeKey,option)"
+                                                                v-bind:class="activeOption(index,typeKey,option)"
+                                                                :ref="identifyOption(typeKey,option)">
+                                
+                                
+                                                                <span class="step-content--wrapper">
+                                                                    <span class="step-content step-content--left">
+                                                                        <input type="radio"
+                                                                            class="pm-radio-group"
+                                                                                
+                                                                            :name="index"
+                                                                            :key="index"
+                                                                            :id="identifyOption(typeKey,option)"
+                                                                            :value="option.value"
+                                                                            :disabled="isDisabled(typeKey,index,option)"
+                                                                            @change="onHouseTypeSelectChanged(typeKey,option,index,$event)"
+                                                                            v-model="houseTypeSelectorModels[index]">
+                                                                        <span class="label"></span>
+                                                                        
+                                                                    </span>
+                                                                    <span class="step-content step-content--right">
+                                                                        <div class="step-content--head">
+                                                                            {getOptionTitle(typeKey, option)}
+                                                                        </div>
+                                                                        
+                                                                    </span>
+                                
+                                                                </span>
+                                
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                </div>
+
+                                                <!-- <div v-if="typeKey == 5">
+                                                    
+                                                    <div class="step-block--title title-gray">
+                                                        {props.typeTitles[typeKey]}
+                                                    </div>
+                                                    <select 
+                                                        :name="index"
+                                                        :key="index" 
+                                                        @change="onHouseTypeSelectChanged(typeKey,option,index,$event)" 
+                                                        v-model="houseTypeSelectorModels[index]"
+                                                        >
+                                                        
+                                                        <option 
+                                                        v-for="(option, indexOpt) in options" 
+                                                        @change="onHouseTypeSelectChanged(typeKey,option,index,$event)"
+                                                        v-model="houseTypeSelectorModels[index]"
+                                                        :value="option.value" 
+                                                        :ref="identifyOption(typeKey,option)"
+                                                        :id="identifyOption(typeKey,option)" 
+                                                        :disabled="isDisabled(typeKey,index,option)">{getOptionTitle(typeKey, option)}</option>
+                                                    </select>
+                                                    
+                                                </div> -->
+
+                                                <div v-if="typeKey == 5">
+                                                    
+                                                    <div class="step-block--title title-gray">
+                                                        {props.typeTitles[typeKey]}
+                                                    </div>
+
+                                                    
+                                                    
+                                                    <div class="drop-wrapper">
+                                                        
+                                                        <div class="step--item" v-for="(option, indexOpt) in options">
+                                                            <label class="item-label" :for="identifyOption(typeKey,option)"
+                                                                v-bind:class="activeOption(index,typeKey,option)"
+                                                                :ref="identifyOption(typeKey,option)">
+                                
+                                
+                                                                <span class="step-content--wrapper">
+                                                                    <span class="step-content step-content--left">
+                                                                        <input type="radio"
+                                                                            class="pm-radio-group"
+                                                                                
+                                                                            :name="index"
+                                                                            :key="index"
+                                                                            :id="identifyOption(typeKey,option)"
+                                                                            :value="option.value"
+                                                                            :disabled="isDisabled(typeKey,index,option)"
+                                                                            @change="onHouseTypeSelectChanged(typeKey,option,index,$event)"
+                                                                            v-model="houseTypeSelectorModels[index]">
+                                                                        <span class="label"></span>
+                                                                        
+                                                                    </span>
+                                                                    <span class="step-content step-content--right">
+                                                                        <div class="step-content--head">
+                                                                            {getOptionTitle(typeKey, option)}
+                                                                        </div>
+                                                                        
+                                                                    </span>
+                                
+                                                                </span>
+                                
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                </div>
+
+                                                <div v-if="typeKey == 6">
+                                                    
+                                                    <div class="step-block--title title-gray">
+                                                        {props.typeTitles[typeKey]}
+                                                    </div>
+
+                                                    
+                                                    
+                                                    <div class="drop-wrapper">
+                                                        
+                                                        <div class="step--item" v-for="(option, indexOpt) in options">
+                                                            <label class="item-label" :for="identifyOption(typeKey,option)"
+                                                                v-bind:class="activeOption(index,typeKey,option)"
+                                                                :ref="identifyOption(typeKey,option)">
+                                
+                                
+                                                                <span class="step-content--wrapper">
+                                                                    <span class="step-content step-content--left">
+                                                                        <input type="radio"
+                                                                            class="pm-radio-group"
+                                                                                
+                                                                            :name="index"
+                                                                            :key="index"
+                                                                            :id="identifyOption(typeKey,option)"
+                                                                            :value="option.value"
+                                                                            :disabled="isDisabled(typeKey,index,option)"
+                                                                            @change="onHouseTypeSelectChanged(typeKey,option,index,$event)"
+                                                                            v-model="houseTypeSelectorModels[index]">
+                                                                        <span class="label"></span>
+                                                                        
+                                                                    </span>
+                                                                    <span class="step-content step-content--right">
+                                                                        <div class="step-content--head">
+                                                                            {getOptionTitle(typeKey, option)}
+                                                                        </div>
+                                                                        
+                                                                    </span>
+                                
+                                                                </span>
+                                
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                </div>
+
+                                                <!-- <div v-if="typeKey == 6">
+                                                    
+                                                    <div class="step-block--title title-gray">
+                                                        {props.typeTitles[typeKey]}
+                                                    </div>
+                                                    <select :name="index"
+                                                        :key="index" @change="onHouseTypeSelectChanged(typeKey,option,index,$event)" v-model="houseTypeSelectorModels[index]">
+                                                        <option v-for="(option, indexOpt) in options" :value="option.value" :disabled="isDisabled(typeKey,index,option)">{getOptionTitle(typeKey, option)}</option>
+                                                    </select>
+                                                
+                                                   
+                                                    
+                                                </div> -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mid">
+                                        <div class="konfig-house-container">
+                                            <img src="{{ sitebase }}assets/new/img/house-big.png" alt="">
+                                        </div>
+                                    </div>
+                                    <div class="right">
+            
+                                        <div class="container">
+                                            <div class="title-row">
+                                                <h2>
+                                                    vyberte si váš balík
+                                                </h2>
+                                                <div class="info-icon">
+                                                    <div class="i">
+                                                        {% embed "new/svg/info-icon.svg" %}
+                                                        {% endembed %}
+                                                    </div>
+
+                                                    
+                                                </div>
+                                            </div>
+                
+                                            <div class="options-col">
+                                                
+                                                <ul>
+                                                    <li v-for="number in possibilities"
+                                                        :data-active_house_version_number="number"
+                                                        @click="onHouseTypeNumberSelected"
+                                                        v-bind:class="{ 'is-active': activeHouseVersionNumber == number }"><span></span>{props.versionTitles[number]}</li>
+                                                </ul>
+
+                                            </div>
+                                        </div>
+            
+                                        <div class="container">
+                                            <div class="title-row">
+                                                <h2>
+                                                    vyberte si prevedenie
+                                                </h2>
+                                                <div class="info-icon">
+                                                    <div class="i">
+                                                        {% embed "new/svg/info-icon.svg" %}
+                                                        {% endembed %}
+                                                    </div>
+                                                </div>
+                                            </div>
+                
+                                            <div class="options-col">
+                                                <div class="item">
+                                                    <input type="radio" name="completisation" id="completisation_a" class="pm-radio-group"
+                                                               v-model="completisation" value="A" @change="completisationChange('a')">
+                                                               <span class="label"></span>
+
+                                                    <label for="completisation_a" class="q">
+                                                        Hrubá stavba
+                                                    </label>
+
+                                                    <!-- <label for="completisation_a">
+                                                        <input type="radio" name="completisation" id="completisation_a" class="pm-radio-group"
+                                                               v-model="completisation" value="A" @change="completisationChange('a')">Hrubá stavba
+                                                        <span class="label"></span>
+                                                    </label> -->
+                                                </div>
+                        
+                                                <div class="item">
+                                                    <input type="radio" name="completisation" id="completisation_b" class="pm-radio-group"
+                                                               v-model="completisation" value="B" @change="completisationChange('b')">
+                                                               <span class="label"></span>
+                                                    <label for="completisation_b" class="q">
+                                                        Holodom
+                                                    </label>
+
+                                                    <!-- <label for="completisation_b">
+                                                        <input type="radio" name="completisation" id="completisation_b" class="pm-radio-group"
+                                                               v-model="completisation" value="B" @change="completisationChange('b')">Holodom
+                                                        <span class="label"></span>
+                                                    </label> -->
+                                                    
+                                                </div>
+                        
+                                                <div class="item">
+                                                    <input type="radio" name="completisation" id="completisation_c" class="pm-radio-group"
+                                                               v-model="completisation" value="C" @change="completisationChange('c')">
+                                                               <span class="label"></span>
+                                                    <label for="completisation_c" class="q" @click="completisationChange('c')">
+                                                        Komplet
+                                                    </label>
+
+                                                    <!-- <label for="completisation_c">
+                                                        <input type="radio" name="completisation" id="completisation_c" class="pm-radio-group"
+                                                               v-model="completisation" value="C" @change="completisationChange('c')">Komplet
+                                                        <span class="label"></span>
+                                                    </label> -->
+                                                </div>
+                        
+                                                <div class="item">
+                                                    <input type="radio" name="completisation" id="completisation_d" class="pm-radio-group"
+                                                               v-model="completisation" value="D" @change="completisationChange('d')">
+                                                               <span class="label"></span>
+                                                    <label for="completisation_d" class="q" @click="completisationChange('d')">
+                                                        Na klúč
+                                                    </label>
+
+                                                    <!-- <label for="completisation_d">
+                                                        <input type="radio" name="completisation" id="completisation_d" class="pm-radio-group"
+                                                               v-model="completisation" value="D" @change="completisationChange('d')">Na klúč
+                                                        <span class="label"></span>
+                                                    </label> -->
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="technologie">
+                                            <div class="title-row" style="margin-bottom:0px;">
+                                                <h2>
+                                                    interiérový dizajn domu
+                                                </h2>
+                                                <div class="info-icon">
+                                                    <div class="i">
+                                                        {% embed "new/svg/info-icon.svg" %}
+                                                        {% endembed %}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="category">
+                                                <div class="step" v-for="({selectLabel,typeIndex,typeKey,options,id},index) in houseTypeSelector">
+                                                    <div v-if="typeKey == 10">
+                                                        
+                                                        <select :name="index"
+                                                            :key="index" @change="onHouseTypeSelectChanged(typeKey,1,index,$event)" v-model="houseTypeSelectorModels[index]">
+                                                            <option v-for="(option, indexOpt) in options" :value="option.value" :disabled="isDisabled(typeKey,index,option)">{getOptionTitle(typeKey, option)}</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+            
+                                        <div class="cena">
+                                            <div class="top">
+                                                <div class="row">
+                                                    cena / energetika
+                                                </div>
+                                                <div class="row">
+                                                    konfigurovaného Domu
+                                                    <div class="info-icon">
+                                                        <div class="i">
+                                                            {% embed "new/svg/info-icon.svg" %}
+                                                            {% endembed %}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="cena-big">
+                                                        {completisationPrice}&euro;
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    chcete zľavy / darčeky ?
+                                                </div>
+                                                <div class="row">
+                                                    riešením je členstvo<span style="color:#920033;">&nbsp;family klub</span>
+                                                    <div class="info-icon">
+                                                        <div class="i">
+                                                            {% embed "new/svg/info-icon.svg" %}
+                                                            {% endembed %}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="bottom">
+                                                <div class="energy">
+                                                    <div class="label">
+                                                        energetická trieda
+                                                    </div>
+                                                    <div class="category" v-html="formattedEnergyClassPosition()">
+                                                        
+                                                    </div>
+                                                </div>
+                                                <div class="cost">
+                                                    <div class="row">
+                                                        Náklady na mesačnú réžiu: 
+                                                        <div class="bold">
+                                                            {fixedNumberFormatting(totalMonthlyEnergyPrice, 2)} &euro;
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        Celková ročná spotreba energie:
+                                                        <div class="bold-small">
+                                                            {fixedNumberFormatting(totalYearlyEnergy,0)} kWh/rok
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        Primárna energia:
+                                                        <div class="bold-small">
+                                                            {fixedNumberFormatting(primaryEnergy, 2)} kWh/rok*m2
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                
+                                
+                                </div>
+
+
+                            </div>
+
+
+                        {% else %}
+                            <div class="notice">Neobsahuje kalkuláciu!</div>
+                        {% endif %}
+
+                    </div>
+                </div>
+                
+
+                {% embed "new/embed_interest.html" %}
+                {% endembed %}
+
+            </div>
+        
+        
+        </div>
+
+
+
+
+
+
+
+        {% embed "new/footer.twig" %}
+        {% endembed %}
+    
+    </div>
+    
+    
+        <script src="{{ sitebase }}assets/js/vendor/jquery-3.2.1.min.js"></script>
+        <script src="{{ sitebase }}assets/js/vendor/jquery-waypoints-and-sticky.js"></script>
+        <script src="{{ sitebase }}assets/js/vendor/simplebar.min.js"></script>
+        
+        <script src="{{ sitebase }}assets/js/vendor/swiper.min.js"></script>
+        <script src="{{ sitebase }}assets/new/js/main.js?=ver{{ random(1, 100) }}"></script>
+
+
+
+        
+
+        <script>
+            window.currentSiteBaseUrl = '{{ currentSite.baseUrl }}';
+            window.currentHouseId = {{ entry.id }};
+        </script>
+    
+        <script>
+
+
+           
+           $(window).click(function(){
+                setTimeout(function(){
+                    console.log($('.vue-konfigurator .cena-big').html());
+                    
+                    //succ selected option keys
+                    $('.vue-konfigurator select').each(function(){
+                        console.log($(this).val());
+                    });
+                }, 500);
+           });
+
+
+           
+    
+    
+        </script>
+
+        
+        {% embed 'new/cookies-embed.html'%}
+        {% endembed %}
+</body>
+</html>

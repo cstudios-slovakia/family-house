@@ -1,0 +1,324 @@
+{#{% set filterEntry = craft.entries.section('nastavenia').one() %}#}
+
+{#<!-- FILTER volitelne -->#}
+{# Filter volitelne #}
+
+{#<!-- VARIABLE FOR STORING [] OF ACTIVE FILTER LABELS -->#}
+{#{% set activeLabels = [] %}#}
+
+{# volitelne #}
+{#    {% set volitelneArray = [] %}#}
+{#        {% for option in filterEntry.volitelne.options %}#}
+{#            {% set filterVolitelne = craft.app.request.getParam('volitelne_' ~ loop.index) %}#}
+{#            {% if filterVolitelne is not empty %}#}
+{#                {% set volitelneArray = volitelneArray|merge([filterVolitelne]) %}#}
+{#            {% endif %}#}
+{#        {% endfor %}#}
+
+{#    {% set finalFilteredHousesListAll = [] %}#}
+{#    {% set finalFilteredHousesList = [] %}#}
+{#    {% set finalFilteredHousesList2 = [] %}#}
+
+{#    {% if volitelneArray is not empty %}#}
+{#        {% for house in craft.entries.section('dom') %}#}
+{#            {% set _added = false %}#}
+{#            {% for volitelneParam in volitelneArray %}#}
+{#                {% if house.volitelne.contains(volitelneParam) %}#}
+{#                    {% if _added == false %}#}
+{#                        {% set finalFilteredHousesList2 = finalFilteredHousesList2|merge([house.id]) %}#}
+{#                        {% set _added = true %}#}
+{#                    {% endif %}#}
+{#                {% else %}#}
+{#                    {% if house.id in finalFilteredHousesList2 %}#}
+{#                        {% set _tmpIDList = [] %}#}
+{#                        {% for _unsetID in finalFilteredHousesList2 %}#}
+{#                            {% if _unsetID != house.id %}#}
+{#                                {% set _tmpIDList = _tmpIDList|merge([_unsetID]) %}#}
+{#                            {% endif %}#}
+{#                        {% endfor %}#}
+{#                        {% set finalFilteredHousesList2 = _tmpIDList %}#}
+{#                    {% endif %}#}
+{#                {% endif %}#}
+{#            {% endfor %}#}
+{#        {% endfor %}#}
+{#    {% endif %}#}
+{#<!-- FILTER volitelne -->#}
+
+{#<!-- TOOLBAR -->#}
+{#{% set _sorting = '' %}#}
+{#    {% set searchQuery = craft.app.request.getParam('q') %}#}
+{#    {% if craft.app.request.getParam('sort') is not empty %}#}
+{#        {% set _sortGet = craft.app.request.getParam('sort') %}#}
+{#        {% if _sortGet == 'nazov asc' or (_sortGet == 'kompletSDph asc' or _sortGet == 'kompletSDph desc') or (_sortGet == 'uzhitkovaPlocha asc' or _sortGet == 'uzhitkovaPlocha desc') %}#}
+{#            {% set _sorting = _sortGet %}#}
+{#        {% endif %}#}
+{#    {% endif %}#}
+{#<!-- TOOLBAR -->#}
+
+{# defaults #}
+{#{% if finalFilteredHousesList2 is empty %}#}
+{#    {% set queryParams = {#}
+{#        section: 'dom',#}
+{#        limit: settings.houseListCountListView,#}
+{#        orderBy: _sorting,#}
+{#        search: searchQuery#}
+{#    } %}#}
+{#{% else %}#}
+{#    {% set queryParams = {#}
+{#        section: 'dom',#}
+{#        orderBy: _sorting,#}
+{#        search: searchQuery#}
+{#    } %}#}
+{#{% endif %}#}
+
+{#{% set filterTitle %}Rodinné <i>domy</i>{% endset %}#}
+{#{% set comingSoon = false %}#}
+{#{% set filterIsEmpty = false %}#}
+
+{# typ #}
+{#    {% set typArray = [] %}#}
+{#    {% for option in filterEntry.typ.options %}#}
+{#        {% set filterTyp = craft.app.request.getParam('typ_' ~ loop.index) %}#}
+{#        {% if filterTyp is not empty %}#}
+{#            {% set typArray = typArray|merge([filterTyp]) %}#}
+
+{#            {% if loop.index == 2 %}#}
+{#                {% set filterTitle %}Klasické <i>domy</i>{% endset %}#}
+{#                {% set activeLabels = activeLabels|merge(['Klasické domy']) %}#}
+{#            {% endif %}#}
+
+{#            {% if loop.index == 3 %}#}
+{#                {% set filterTitle %}Pasívne <i>domy</i>{% endset %}#}
+{#                {% set comingSoon = false %}#}
+{#                {% set activeLabels = activeLabels|merge(['Pasívne domy']) %}#}
+{#            {% endif %}#}
+
+{#            {% if loop.index == 4 %}#}
+{#                {% set filterTitle %}Exkluzívne <i>domy</i>{% endset %}#}
+{#                {% set comingSoon = false %}#}
+{#                {% set activeLabels = activeLabels|merge(['Exkluzívne domy']) %}#}
+{#            {% endif %}#}
+
+{#            {% if loop.index == 5 %}#}
+{#                {% set filterTitle %}Moderné <i>domy</i>{% endset %}#}
+{#                {% set comingSoon = false %}#}
+{#                {% set activeLabels = activeLabels|merge(['Moderné domy']) %}#}
+{#            {% endif %}#}
+
+{#        {% endif %}#}
+{#    {% endfor %}#}
+
+{#    {% if typArray|length > 1 %}#}
+{#        {% set queryParams = queryParams|merge({#}
+{#            typ: typArray,#}
+{#        }) %}#}
+{#    {% else %}#}
+{#        {% set queryParams = queryParams|merge({#}
+{#            typ: typArray,#}
+{#        }) %}#}
+{#    {% endif %}#}
+
+{# podlaznost #}
+{#    {% set podlaznostArray = [] %}#}
+{#    {% for option in filterEntry.podlaznost.options %}#}
+{#        {% set filterPodlaznost = craft.app.request.getParam('podlaznost_' ~ loop.index) %}#}
+{#        {% if filterPodlaznost is not empty %}#}
+{#            {% set podlaznostArray = podlaznostArray|merge([filterPodlaznost]) %}#}
+{#        {% endif %}#}
+{#    {% endfor %}#}
+
+{#    {% if podlaznostArray|length > 1 %}#}
+{#        {% set queryParams = queryParams|merge({#}
+{#            podlaznost: podlaznostArray,#}
+{#        }) %}#}
+{#    {% else %}#}
+{#        {% set queryParams = queryParams|merge({#}
+{#            podlaznost: podlaznostArray,#}
+{#        }) %}#}
+{#    {% endif %}#}
+
+{# strecha #}
+{#    {% set strechaArray = [] %}#}
+{#    {% for option in filterEntry.strecha.options %}#}
+{#        {% set filterStrecha = craft.app.request.getParam('strecha_' ~ loop.index) %}#}
+{#        {% if filterStrecha is not empty %}#}
+{#            {% set strechaArray = strechaArray|merge([filterStrecha]) %}#}
+{#        {% endif %}#}
+{#    {% endfor %}#}
+
+{#    {% if strechaArray|length > 1 %}#}
+{#        {% set queryParams = queryParams|merge({#}
+{#            strecha: strechaArray,#}
+{#        }) %}#}
+{#    {% else %}#}
+{#        {% set queryParams = queryParams|merge({#}
+{#            strecha: strechaArray,#}
+{#        }) %}#}
+{#    {% endif %}#}
+
+{# Konštrukcia #}
+{#    {% set konstrukciaArray = [] %}#}
+{#    {% for option in filterEntry.konstrukcia.options %}#}
+{#        {% set filterKonstrukcia = craft.app.request.getParam('konstrukcia_' ~ loop.index) %}#}
+{#        {% if filterKonstrukcia is not empty %}#}
+{#            {% set konstrukciaArray = konstrukciaArray|merge(['*"' ~ filterKonstrukcia ~ '"*']) %}#}
+{#        {% endif %}#}
+{#    {% endfor %}#}
+
+{#    {% if konstrukciaArray|length > 1 %}#}
+{#        {% set queryParams = queryParams|merge({#}
+{#            konstrukcia: konstrukciaArray,#}
+{#        }) %}#}
+{#    {% else %}#}
+{#        {% set queryParams = queryParams|merge({#}
+{#            konstrukcia: konstrukciaArray,#}
+{#        }) %}#}
+{#    {% endif %}#}
+
+{# metraz #}
+{#    {% set metrazArray = [] %}#}
+{#    {% for option in filterEntry.metraz.options %}#}
+{#        {% set filterMetraz = craft.app.request.getParam('metraz_' ~ loop.index) %}#}
+{#        {% if filterMetraz is not empty %}#}
+{#            {% set metrazArray = metrazArray|merge([filterMetraz]) %}#}
+{#        {% endif %}#}
+{#    {% endfor %}#}
+
+{#    {% if metrazArray|length > 1 %}#}
+{#        {% set queryParams = queryParams|merge({#}
+{#            metraz: metrazArray,#}
+{#        }) %}#}
+{#    {% else %}#}
+{#        {% set queryParams = queryParams|merge({#}
+{#            metraz: metrazArray,#}
+{#        }) %}#}
+{#    {% endif %}#}
+
+{# izby #}
+{#    {% set izbyArray = [] %}#}
+{#    {% for option in filterEntry.izby.options %}#}
+{#        {% set filterIzby = craft.app.request.getParam('izby_' ~ loop.index) %}#}
+{#        {% if filterIzby is not empty %}#}
+{#            {% set izbyArray = izbyArray|merge([filterIzby]) %}#}
+{#        {% endif %}#}
+{#    {% endfor %}#}
+
+{#    {% if izbyArray|length > 1 %}#}
+{#        {% set queryParams = queryParams|merge({#}
+{#            izby: izbyArray,#}
+{#        }) %}#}
+{#    {% else %}#}
+{#        {% set queryParams = queryParams|merge({#}
+{#            izby: izbyArray,#}
+{#        }) %}#}
+{#    {% endif %}#}
+
+{# garaz #}
+{#    {% set garazArray = [] %}#}
+{#    {% for option in filterEntry.garaz.options %}#}
+{#        {% set filterGaraz = craft.app.request.getParam('garaz_' ~ loop.index) %}#}
+{#        {% if filterGaraz is not empty %}#}
+{#            {% set garazArray = garazArray|merge([filterGaraz]) %}#}
+{#        {% endif %}#}
+{#    {% endfor %}#}
+
+{#    {% set garageTmp = garazArray|join(' and ') %}#}
+
+{#    {% if garazArray|length > 1 %}#}
+{#        {% set queryParams = queryParams|merge({#}
+{#            garaz: garazArray,#}
+{#        }) %}#}
+{#    {% else %}#}
+{#        {% set queryParams = queryParams|merge({#}
+{#            garaz: garazArray,#}
+{#        }) %}#}
+{#    {% endif %}#}
+
+{#{% set filterQueryString = craft.app.request.getQueryStringWithoutPath() %}#}
+{#{% set filteredHousesList = craft.entries(queryParams) %}#}
+
+{#<!-- FILTER volitelne part2 --->#}
+{#{% if typArray|length > 0 or podlaznostArray|length > 0 or strechaArray|length > 0 or metrazArray|length > 0 or izbyArray|length > 0 or garazArray|length > 0 %}#}
+{#    {% set filterIsEmpty = true %}#}
+{#{% endif %}#}
+
+{#{% set _finalFilteredHousesByVolitelne = [] %}#}
+
+{#{% if finalFilteredHousesList2 is not empty %}#}
+{#    {% if filteredHousesList is not empty %}#}
+{#        {% for mergeHouse in filteredHousesList %}#}
+
+{#            {% if mergeHouse.id in finalFilteredHousesList2 %}#}
+{#                {% set _finalFilteredHousesByVolitelne = _finalFilteredHousesByVolitelne|merge([mergeHouse.id]) %}#}
+{#            {% endif %}#}
+
+{#            #}{# if mergeHouse.id in finalFilteredHousesList2 == false  and filterIsEmpty == true #}
+{#            #}{# set finalFilteredHousesList2 = finalFilteredHousesList2|merge([mergeHouse.id]) #}
+{#            #}{# endif #}
+
+{#        {% endfor %}#}
+
+{#        {% set queryParams = {#}
+{#            section: 'dom',#}
+{#            limit: settings.houseListCountListView,#}
+{#            id: _finalFilteredHousesByVolitelne#}
+{#        } %}#}
+{#        {% set filteredHousesList = craft.entries(queryParams) %}#}
+{#    {% endif %}#}
+{#{% else %}#}
+{#    {% set queryParams = {#}
+{#        section: 'dom',#}
+{#        limit: settings.houseListCountListView,#}
+{#        id: finalFilteredHousesList2#}
+{#    } %}#}
+{#{% endif %}#}
+<!-- /FILTER volitelne part2 --->
+
+{#{% paginate filteredHousesList as paginateInfo, houses %}#}
+
+
+{#<div class="listings--header">#}
+{#    {% include 'dom/partials/_filter_result_properties' %}#}
+{#</div>#}
+
+
+{#{% if craft.filterResultModule.getResult > 0 %}#}
+{#    {% set filterResult = filteredHousesList.count() %}#}
+{#{% endif %}#}
+
+
+{#    {% embed '_components/left/toolbar/_sorting' %}{% endembed %}#}
+
+{#<!-- LISTING -->#}
+{#{% embed 'dom/partials/_houses_list' %}{% endembed %}#}
+{#<!-- /LISTING -->#}
+
+{#{% if filteredHousesList|length > 0 %}#}
+{#    {% set queryString      = craft.app.request.getQueryStringWithoutPath() %}#}
+{#    {% set queryStringFull  = (queryString is not empty) ? '?' ~ queryString : '' %}#}
+
+{#    <div class="paginate-info filterFns">#}
+{#        {% for page, url in paginateInfo.getPrevUrls(5) %}#}
+{#            <!--            {% set prevUrl = url|replace({'_filter2': 'projekty-domov' }) %}-->#}
+{#            <!--            {% set prevUrl = url|replace({'_filter': 'projekty-domov' }) %}-->#}
+{#            <!--            {% set filterPrevUrl = url|replace({'filter': 'projekty-domov' }) %}-->#}
+{#            <!--            {% set prevUrl = url|replace({'projekty-domov2': 'projekty-domov' }) %}-->#}
+{#            {% set prevUrl = url|replace({'projekty-domov2': 'projekty-domov','_filter2':'projekty-domov','_filter':'projekty-domov','filter':'projekty-domov' }) %}#}
+
+{#            <a href="{{ prevUrl ~ queryStringFull }}">{{ page }}</a>#}
+{#        {% endfor %}#}
+
+{#        <span class="current">{{ paginateInfo.currentPage }}</span>#}
+
+{#        {% for page, url in paginateInfo.getNextUrls(5) %}#}
+{#            <!--            {% set nextUrl = url|replace({'_filter2': 'projekty-domov' }) %}-->#}
+{#            <!--            {% set nextUrl = url|replace({'_filter': 'projekty-domov' }) %}-->#}
+{#            <!--            {% set filterNextUrl = url|replace({'filter': 'projekty-domov' }) %}-->#}
+{#            <!--            {% set nextUrl = url|replace({'projekty-domov2': 'projekty-domov' }) %}-->#}
+{#            {% set nextUrl = url|replace({'projekty-domov2': 'projekty-domov','_filter2':'projekty-domov','_filter':'projekty-domov','filter':'projekty-domov' }) %}#}
+
+{#            <a href="{{ nextUrl ~ queryStringFull }}">{{ page }}</a>#}
+{#        {% endfor %}#}
+{#    </div>#}
+
+{#{% endif %}#}

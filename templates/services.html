@@ -1,0 +1,229 @@
+
+{% extends "_layout" %}
+{% set seo = entry.seoUpdated %}
+
+{% block bodyClass %}dom-list-view{% endblock bodyClass %}
+
+{% block content %}
+
+<h1 class="_hidden">{{ "Služby"|t }}</h1>
+
+<!-- CONTENT CONTAINER -->
+    <div class="main grid-2-layout no-filter">
+
+        <!-- FILTER + HOUSE LISTING -->
+            <div class="filter-house-listing">
+                {% embed '_components/left' %}{% endembed %}
+
+                <!-- HOUSE LISTING -->
+                    <div class="house-listing">
+                        <div>
+
+                            <!-- CONTACT CONTENT -->
+                                <div class="house-details contact-container">
+
+                                    <div class="house-header">
+                                        <div>
+                                            <div class="name">
+                                                <div class="counter"></div>
+                                                <div class="no-padding">{{ "Služby"|t }}</div>
+                                            </div>
+                                        </div>
+                                        <div class="beadcrumbs">
+                                            <a href="{{ siteUrl }}" class="elem">{{ "Hlavná stránka"|t }}</a>
+                                            <div>{{ "Služby"|t }}</div>
+                                        </div>
+                                    </div>
+
+                                    <!-- SERVICES -->
+                                        <div class="services contentable">
+
+                                            <!--{% set sluzbySlider = craft.entries.section('sluzbySlider') %}-->
+
+                                            <div class="grid-view border-bottom">
+                                                <div>
+                                                    <div class="sub">{{ "Hlavnou činnosťou našej spoločnosti je výstavba rodinného domu."|t }}</div>
+                                                    <p>{{ "Okrem toho zabezpečujeme aj:"|t }}</p>
+
+                                                    <ul class="swiper-nav">
+                                                        <!--{% if sluzbySlider|length %}-->
+                                                            <!--{% for services in sluzbySlider %}-->
+                                                                <!--<li data-sw-id="{{ loop.index }}" class="{% if loop.index == 0 %}active{% endif %}">{{ services.title }}</li>-->
+                                                            <!--{% endfor %}-->
+                                                        <!--{% endif %}-->
+                                                        <li data-sw-id="0" class="active">{{ "Poradenstvo"|t }}</li>
+                                                        <li data-sw-id="1">{{ "Projektovanie"|t }}</li>
+                                                        <li data-sw-id="2">{{ "Inžinierska činnosť"|t }}</li>
+                                                        <li data-sw-id="3">{{ "Poskytnutie špeciálneho hypotekárneho úveru"|t }}</li>
+                                                        <li data-sw-id="4">{{ "Kompletnú realizáciu stavieb (dom na kľúč)"|t }}</li>
+                                                        <li data-sw-id="5">{{ "Predaj hotových projektov"|t }}</li>
+                                                    </ul>
+                                                </div>
+                                                <div>
+
+                                                    <div id="services-slider">
+                                                        <div class="swiper-container">
+                                                            <div class="swiper-wrapper">
+                                                                <!--{% if sluzbySlider|length %}-->
+                                                                    <!--{% for services in sluzbySlider %}-->
+
+                                                                        <!--<div class="swiper-slide" data-hash="poradenstvo">-->
+                                                                            <!--<div class="sub">{{ services.title }}</div>-->
+                                                                            <!--<p>{{ services.sluzbySliderContent }}</p>-->
+                                                                        <!--</div>-->
+
+                                                                    <!--{% endfor %}-->
+                                                                <!--{% endif %}-->
+                                                                <div class="swiper-slide" data-hash="poradenstvo">
+                                                                    <div class="sub">{{ "Poradenstvo"|t }}</div>
+                                                                    <p>{{ "Výber vhodného rodinného domu je veľmi dôležitý. Musí sa zohľadniť tvar pozemku, štýl rodinného domu, harmónia s okolitými stavbami, najvhodnejšie miesto na pozemku, kde osadiť dom, počet miestností, počet podlaží, zastavaná plocha, úžitková plocha, počet kúpeľní, vhodná veľkosť obývačky, atď. Preto je tak dôležité všetko premyslieť do posledného detailu. Radi Vám poradíme a uľahčíme tým výber vhodného domu."|t }}</p>
+                                                                </div>
+                                                                <div class="swiper-slide" data-hash="projektovanie">
+                                                                    <div class="sub">{{ "Projektovanie"|t }}</div>
+                                                                    <p>{{ "Keď sa už zrodila myšlienka, aký rodinný dom spĺňa všetky Vaše očakávania, príde na rad projektovanie. Je veľmi dôležité venovať veľkú pozornosť projektovaniu, musí sa prerokovať každý detail z dôvodu predchádzania chýb pri výstavbe domu. V prípade potreby naša spoločnosť ponúka aj hotové projekty rodinných domov, ktoré si môžete pozrieť"|t }} <a href="{{ siteUrl }}projekty-domov">{{ "tu"|t }}</a>.</p>
+                                                                </div>
+                                                                <div class="swiper-slide" data-hash="ininierska-cinnost">
+                                                                    <div class="sub">{{ "Inžinierska činnosť"|t }}</div>
+                                                                    <p>{{ "Pod inžinierskou činnosťou v stavebníctve rozumieme všetky činnosti, ktoré s investičnou činnosťou súvisia. Na bývanie potrebujete kopu povolení, ktoré treba jednoducho vybehať po úradoch /sú to napr. územné rozhodnutia, stavebné povolenia, technický dozor počas výstavby, rozhodnutia o pridelení súpisného čísla, zápis stavby do katastra nehnuteľností/. Nakoľko tieto povolenia sú nevyhnutné z hľadiska dotiahnutia stavby do úspešného konca, ako je aj časovo náročné ich získať, naša spoločnosť ponúka službu navyše: vybavíme Vám všetky povolania, príp. pomôžeme Vám s nimi - podľa dohody."|t }}</p>
+                                                                </div>
+                                                                <div class="swiper-slide" data-hash="poskytnutie-specialneho-hypotekarneho-uveru">
+                                                                    <div class="sub">{{ "Poskytnutie špeciálneho hypotekárneho úveru"|t }}</div>
+                                                                    <p>...</p>
+                                                                </div>
+                                                                <div class="swiper-slide" data-hash="realizacia-stavieb">
+                                                                    <div class="sub">{{ "Realizácia stavieb"|t }}</div>
+                                                                    <p>{{ "Jedným z hlavných činností spoločnosti FamilyHouse, s.r.o. je realizácia stavieb, podľa požiadavky zákazníka, od holodomu až po dom na kľúč. Rôzne nápady, sny a požiadavky klienta sa prerokujú pri projektovaní, tým docielime to, že postavený dom bude spĺňať všetky Vaše očakávania."|t }}</p>
+                                                                    <p>{{ "Výstavba domov je rýchla a presná, realizácia diela spĺňa požiadavky patričných noriem, predpisov a moderných technológií. Všetky úkony sú vopred premyslené týmom tvorcov s praxou od projektanta, výrobcu, stavebného manažera až po remeselníka."|t }}</p>
+                                                                    <div class="sw-title">{{ "Realizácia na kľúč obsahuje:"|t }}</div>
+                                                                    <ol>
+                                                                        <li>{{ "výber vhodného projektu podľa požiadaviek zákazníkavýber vhodného projektu podľa požiadaviek zákazníka"|t }}</li>
+                                                                        <li>{{ "zameranie stavby"|t }}</li>
+                                                                        <li>{{ "výkop a vyliatie základových pásov"|t }}</li>
+                                                                        <li>{{ "základová doska – platňa"|t }}</li>
+                                                                        <li>{{ "napojenie na inžinierske siete"|t }}</li>
+                                                                        <li>{{ "výstavba rodinného domu z kvalitných materiálov"|t }}</li>
+                                                                        <li>{{ "komplet kúrenie na plyn, elektro- a vodoinštalácie"|t }}</li>
+                                                                        <li>{{ "obklady, dlažby, podlahy, sanita, okná a dvere"|t }}</li>
+                                                                    </ol>
+                                                                </div>
+                                                                <div class="swiper-slide" data-hash="predaj-hotovych-projektov">
+                                                                    <div class="sub">{{ "Predaj hotových projektov"|t }}</div>
+                                                                    <p>{{ "Pre zákazníkov, ktorí si našli ten svoj vysnívaný dom v našej ponuke projektov rodinných domov a potrebujú už len navrhnúť domové prípojky, riešiť osadenie stavby na svojom pozemku, alebo by potrebovali zmeniť niečo v typovom projekte, ponúkame naše služby. Zabezpečíme Vám všetky projekčné podklady, vrátane samotného predaja"|t }} <a href="{{ siteUrl }}projekty-domov">{{ "hotového projektu"|t }}</a>. {{ "Pre viac informácií kontaktuje nášho projektového manažéra,"|t }} <a href="{{ siteUrl }}kontakt">{{ "Ing. Dávida Lovasa"|t }}</a></p>
+                                                                </div>
+                                                                <div class="swiper-slide" data-hash="predaj-bytov">
+                                                                    <div class="sub">{{ "Predaj bytov"|t }}</div>
+                                                                    <p>{{ "Byty na predaj"|t }}</p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+
+                                            <div class="grid-view">
+                                                <div>
+                                                    <div class="title">{{ "Cenník"|t }}</div>
+                                                    <div class="sub">{{ "Katalógové projekty:"|t }}</div>
+                                                    <p class="limit-w">{{ "Pri každom katalógovom projekte pre stavebné povolenie nájdete základnú cenu vrátane DPH. Katalógový projekt je štandardne dodávaný v piatich kópiách, ktoré postačia na vybavenie stavebného povolenia."|t }}</p>
+                                                    <p class="limit-w">{{ "Dve kópie slúžia pre stavebný úrad a z tretej kópie sa pošlú jednotlivé profesie k príslušným úradom a orgánom na schválenie. Tieto kópie Vám budú vrátené."|t }}</p>
+                                                </div>
+                                                <div>
+                                                    <div>
+                                                        <div class="price-row">{{ "FAMILY HOUSE projekty bez zmien - JEDNOPODLAŽNÝ:"|t }} <div class="price"><span>799,- €</span></div></div>
+                                                        <div class="price-row">{{ "FAMILY HOUSE projekty bez zmien - DVOJPODLAŽNÝ:"|t }}  <div class="price"><span>999,- €</span></div></div>
+                                                        <div class="price-row">{{ "FAMILY HOUSE projekty so zmenami - naviac:"|t }}
+                                                            <div class="price multi">
+                                                                <div>{{ "od"|t }} <span>+100,- €</span></div>
+                                                                <div>{{ "do"|t }} <span>+500,- €</span></div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="sub">{{ "Katalógový projekt zahŕňa:"|t }}</div>
+
+                                                    <ul>
+                                                        <li>{{ "Štúdia na katalógový projekt"|t }}</li>
+                                                        <li>{{ "Projekt architektúry (technická správa, pôdorysy jednotlivých podlaží a strechy, rezy, pohlady)"|t }}</li>
+                                                        <li>{{ "Projekt statiky (technická správa, statický posudok)"|t }}</li>
+                                                        <li>{{ "Projekt zdravotechniky (technická správa, pôdorysy jednotlivých podlaží)"|t }}</li>
+                                                        <li>{{ "Projekt ústredného vykurovania (technická správa, tepelnotechnické posúdenie, pôdorysy jednotlivých podlaží, schéma zapojenia kotla)"|t }}</li>
+                                                        <li>{{ "Projekt elektroinštalácie (technická správa, výkresy vnútornej elektroinštalácie, rozvádzača, bleskozvodu a uzemnenia)"|t }}</li>
+                                                        <li>{{ "Tepelná ochrana budov - projektové hodnotenie"|t }}</li>
+                                                        <li>{{ "Katalógový Projekt nezahŕňa osadenie domu na pozemok, projekty prípojok a požiarnu ochranu."|t }}</li>
+                                                    </ul>
+
+                                                </div>
+                                            </div>
+
+                                            <div class="grid-view">
+                                                <div>
+                                                    <div class="title">{{ "Individuálne projekty:"|t }}</div>
+                                                    <div class="sub">{{ "Dáme Vám výhodnú cenovú ponuku po konzultácii vašich predstáv."|t }}</div>
+                                                </div>
+                                                <div>
+                                                    <div>
+                                                        <div class="price-row">{{ "Štúdia na individuálny projekt:"|t }}              <div class="price"><span>200,- €</span></div></div>
+                                                        <div class="price-row">{{ "INDIVIDUÁLNÝ PROJEKT - vo výmere do"|t }} 150 m2:  <div class="price"><span>1699,- €</span></div></div>
+                                                        <div class="price-row">{{ "INDIVIDUÁLNÝ PROJEKT - vo výmere do"|t }} 200 m2:  <div class="price"><span>1999,- €</span></div></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="grid-view">
+                                                <div>
+                                                    <div class="title">{{ "Osadenie/pripojenia:"|t }}</div>
+                                                </div>
+                                                <div>
+                                                    <div>
+                                                        <div class="price-row">{{ "Projekt osadenia domu (sprievodná a súhrnná správa, koordinačná situácia):"|t }}  <div class="price"><span>150,- €</span></div></div>
+                                                        <div class="price-row">{{ "Projekt elektrickej prípojky:"|t }}  <div class="price"><span>80,- €</span></div></div>
+                                                        <div class="price-row">{{ "Projekt plynovej prípojky:"|t }}  <div class="price"><span>80,- €</span></div></div>
+                                                        <div class="price-row">{{ "Projekt vodovodnej a kanalizačnej prípojky (alternatíva projekt studne a projekt žumpy):"|t }}  <div class="price"><span>80,- €</span></div></div>
+                                                        <div class="price-row">{{ "Projekt vsakovacej šachty a napojenia daždovej kanalizácie na vsakovaciu šachtu:"|t }}  <div class="price"><span>60,- €</span></div></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="grid-view">
+                                                <div>
+                                                    <div class="title">{{ "Projekty na požiadanie:"|t }}</div>
+                                                </div>
+                                                <div>
+                                                    <div>
+                                                        <div class="price-row">{{ "Plynofikácia:"|t }}  <div class="price"><span>40,- €</span></div></div>
+                                                        <div class="price-row">{{ "Projekt vzduchotechniky - rekuperácia:"|t }}  <div class="price"><span>100,- €</span></div></div>
+                                                        <div class="price-row">{{ "Projekt požiarnej ochrany:"|t }}  <div class="price"><span>80,- €</span></div></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="grid-view">
+                                                <div>
+                                                    <div class="title">{{ "Ostatné služby"|t }}</div>
+                                                </div>
+                                                <div>
+                                                    <div>
+                                                        <div class="price-row">{{ "Inžinierska činnosť (vrátane správnych poplatkov):"|t }}  <div class="price"><span>650 {{ "eur s DPH"|t }}</span></div></div>
+                                                        <div class="price-row">{{ "Kópia projektovej dokumentácie navyše:"|t }}  <div class="price"><span>20 {{ "eur s DPH"|t }}</span></div></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    <!-- /SERVICES -->
+
+                                </div>
+                            <!-- /CONTACT CONTENT-->
+
+                        </div>
+                    </div>
+                <!-- /HOUSE LISTING -->
+
+            </div>
+        <!-- /FILTER + HOUSE LISTING -->
+
+    </div>
+<!-- /CONTENT CONTAINER -->
+
+{% endblock %}

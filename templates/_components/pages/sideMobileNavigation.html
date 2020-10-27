@@ -1,0 +1,45 @@
+{% import "_components/macros/navigation_helper" as navigationHelper %}
+<!-- MOBILE OVERLAY -->
+<div class="mobile-navigation--overlay"></div>
+<!-- /MOBILE OVERLAY -->
+
+<!-- MOBILE NAVIGATION -->
+<div class="mobile-navigation">
+    <!-- CLOSE NAV -->
+    <div class="close-navigation">
+        <svg viewBox="0 0 24 24">
+            <path d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z"
+                  fill="#000000"/>
+        </svg>
+    </div>
+    <!-- /CLOSE NAV -->
+
+    <!-- CONTENT -->
+    <div class="body">
+        <div>
+            {% set footerNavHandles = ['onas','sluzby','stavbaDomu','cenovaPonuka','financovanie','referencie','precoSiVybratNas','editor','faq','blog','contact'] %}
+
+            {% for navHandle in footerNavHandles %}
+            {% set sectionModel = craft.app.sections.getSectionByHandle(navHandle) %}
+            {% set sectionSettings = sectionModel.getSiteSettings()[currentSite.id] %}
+
+            {% if sectionModel.type == 'single' %}
+            {% set setSingleEntry = craft.entries.section(navHandle).one() %}
+            <a class="{{  navigationHelper.isActive(setSingleEntry.url()) }}" href="{{ setSingleEntry.url() }}">{{ setSingleEntry.title }}</a>
+            {% else %}
+            {% set uri = sectionSettings.uriFormat | split('/') %}
+            <a class="{{  navigationHelper.isActive(siteUrl ~ uri[0]) }}" href="{{ siteUrl }}{{ uri[0] }}">{{sectionModel.name }}</a>
+            {% endif %}
+
+            {% endfor %}
+
+        </div>
+    </div>
+    <div class="footer-info">
+        <a href="tel:00421948141840">+421 948 141 840</a>
+        <a href="mailto:david@familyhouse.sk">david@familyhouse.sk</a>
+        <a rel="noreferrer" href="www.facebook.com/familyhouseds" target="_blank">www.facebook.com/familyhouseds</a>
+    </div>
+    <!-- /CONTENT -->
+</div>
+<!-- /MOBILE NAVIGATION -->

@@ -1,0 +1,86 @@
+{% extends '_layouts/cp' %}
+
+{% set title = "Answers Analytic" |t %}
+
+
+{% if crumbs is not defined %}
+    {% set crumbs = [
+        { label: craft.reviewerModule.name, url: url('reviewer') }
+    ] %}
+{% endif %}
+
+{% block actionButton %}
+    <a class="btn" href="{{ url('reviewer/analytic/export') }}">Export data</a>
+{% endblock %}
+
+{% block content %}
+
+
+
+    <script>
+        window.chartConfigs = [];
+    </script>
+    <div class="chart-container">
+        {% for key, answer in mapped %}
+
+            <div class="chart-detail">
+                <div class="canvas-holder" style=" ">
+                    <canvas id="chart-area_{{ key }}"></canvas>
+                </div>
+
+                <script>
+
+                    var config  = {
+                        type: 'doughnut',
+                        data: {
+                            datasets: [{
+                                data: {{ answer.chart.data|raw }},
+                                backgroundColor: {{ answer.chart.colors|raw }},
+                                label: '{{ answer.title }}'
+                            }],
+                            labels: {{ answer.chart.label|raw }}
+                        },
+                        options: {
+                            responsive: true,
+                            legend: {
+                                position: 'top',
+                            },
+                            title: {
+                                display: true,
+                                text: '{{ answer.title }}'
+                            },
+                            animation: {
+                                animateScale: true,
+                                animateRotate: true
+                            }
+                        },
+                        qKey : '{{ key }}'
+                    };
+
+                    window.chartConfigs.push( config);
+
+
+
+
+
+
+
+                </script>
+            </div>
+
+        {% endfor %}
+    </div>
+
+
+    <script>
+        window.onload = function() {
+            window.chartConfigs.forEach(function (k,v) {
+                console.log( k.qKey);
+                var ctx = document.getElementById('chart-area_' + k.qKey).getContext('2d');
+                new Chart(ctx, k);
+            });
+            console.log(window.chartConfigs);
+          ;
+        };
+    </script>
+{% endblock %}

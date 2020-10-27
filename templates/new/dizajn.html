@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+    {% set sitebase = 'https://familyhouse.sk/' %}
+
+    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projekty Domov - Family House 2020</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,700;1,800&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="{{ sitebase }}assets/css/vendor/swiper.min.css">
+
+    <link rel="stylesheet" href="{{ sitebase }}assets/new/css/simplebar.css">
+    <link rel="stylesheet" href="{{ sitebase }}assets/new/css/main.css?=ver{{ random(1, 100) }}">
+</head>
+<body>
+    <div class="page-container">
+        
+        {% embed "new/header/header.html" %}
+        {% endembed %}
+
+        <div class="page" id="dizajn">
+            
+            {% embed "new/pages/page_sidebar.html" %}
+            {% endembed %}
+
+
+            <div class="dizajn">
+                <div class="nav-row">
+                    {% set topnav = craft.entries().section('dizajn').level('1').all() %}
+                    {% for i in topnav %}
+                        <a href="{{ i.url }}" class="nav-item {% if craft.request.segments|last =='dizajn' and loop.index == 1 %}active{% endif %}{% if craft.request.segments|last == i.slug %}active{%endif%}">
+                            <div class="mark">
+                                <div class="circle">
+                                </div>
+                            </div>
+                            <div class="line">
+                            </div>
+                            <div class="title">
+                                {{ i.title }}
+                            </div>
+                        </a>
+                    {% endfor %}
+                </div>
+
+                {% if entry.type == 'exterierKategoria' %}
+                    {% set cards = craft.entries().section('dizajn').level('3').descendantOf(entry).all() %}
+                    {% set neigh = entry.getParent().getDescendants(1) %}
+                        <div class="subnav">
+                            {% for i in neigh %}
+                            <a href="{{ i.url }}" class="nav-item {% if craft.request.segments|last =='dizajn' and loop.index == 1 %}active{% endif %}{% if craft.request.segments|last == i.slug %}active{%endif%}">
+                                <div class="mark">
+                                    <div class="circle">
+                                    </div>
+                                </div>
+                                <div class="title">
+                                    {{ i.title }}
+                                </div>
+                            </a>
+                            {% endfor %}
+                        </div>
+                        <div class="cards">
+                            {% for e in cards %}
+                                <div class="exterier">
+                                    {% set icon = entry.dizajnKarta.first().icon.one() %}
+                                    <div class="top">
+                                        <img src="{{icon.url}}" alt="">
+                                        <h2>
+                                            {{e.title}}
+                                        </h2>
+                                    </div>
+                                    <div class="big">
+                                        {% set s = e.zoomObrazok.one() %}
+                                        <div class="img-markers">
+                                            {% for block in e.zoomAreas.all() %}
+                                                {% switch block.type %}
+                                                    {% case 'area' %}
+                                                        <div class="mark" label="{{loop.index}}" style="{% for row in block.coords %}left: {{row.x}}%;top: {{row.y}}%;{% endfor %}">
+                                                            <div class="label">
+                                                                {{block.label}}
+                                                            </div>
+                                                        </div>
+                                                {% endswitch %}
+                                                
+                                            {% endfor %}
+                                            <img src="{{ s.getUrl('housedetailgallerythumbs1600w') }}" width="{{ s.getWidth('housedetailgallerythumbs1600w') }}" height="{{ s.getHeight('housedetailgallerythumbs1600w') }}" alt="">
+                                        </div>
+                                        
+                                        <div class="zoom-segments">
+                                            {% for block in e.zoomAreas.all() %}
+                                                {% switch block.type %}
+                                                    {% case 'area' %}
+                                                        <div class="segment">
+                                                            <div class="corner" label="{{loop.index}}" {% for row in block.coords %}cx="{{row.x}}" cy="{{row.y}}"{% endfor %}></div>
+                                                            <div class="wrapper">
+                                                                <img src="{{ s.getUrl('housedetailgallerythumbs1600w') }}" width="{{ s.getWidth('housedetailgallerythumbs1600w') }}" height="{{ s.getHeight('housedetailgallerythumbs1600w') }}" alt="" style="{% for row in block.coords %}object-position: {{row.x}}% {{row.y}}%;{% endfor %}">
+                                                            </div>
+                                                        </div>
+                                                {% endswitch %}
+                                                
+                                            {% endfor %}
+                                        </div>
+
+                                    </div>
+                                    <div class="text">
+                                        {% for block in e.zoomAreas.all() %}
+                                                {% switch block.type %}
+                                                    {% case 'area' %}
+                                                        <div class="segment-text" label="{{loop.index}}">
+                                                            {{block.zoomedExplain}}
+                                                        </div>
+                                                {% endswitch %}
+                                                
+                                            {% endfor %}
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    
+                {% endif %}
+                
+
+                <div class="cards">
+
+                    <!-- first 2 entries -->
+                    {% set cards = craft.entries().section('dizajn').level('2').descendantOf(craft.entries().section('dizajn').level('1').slug(craft.request.segments|last).one()).all() %}
+                    
+                    {% if craft.request.segments|last != 'vizualizácie-na-mieru' %}
+                        {% if entry.type == 'dizajnHlavnaKategoria' %}
+                            {% for e in cards %}
+                                {% for block in e.dizajnKarta.all() %}
+                                    {% switch block.type %}
+                                        {% case 'karta' %}
+                                            <div class="card">
+                                                <div class="left">
+                                                    <a href="{% if block.target|length %}{{ block.target.one().url }}{% endif %}" class="img">
+                                                    {% set s = block.bigPicture.one() %}
+                                                    <img src="{{ s.getUrl('housedetailgallerythumbs1600w') }}" width="{{ s.getWidth('housedetailgallerythumbs1600w') }}" height="{{ s.getHeight('housedetailgallerythumbs1600w') }}" alt="">
+                                                    </a>
+                                                </div>
+                                                <div class="right">
+                                                    <img src="{{ block.icon.one().url }}" alt="">
+                                                    <div class="text">
+                                                        {{ block.text }}
+                                                    </div>
+                                                    <a href="{% if block.target|length %}{{ block.target.one().url }}{% endif %}" class="link">{{ block.button }}</a>
+                                                </div>
+                                                
+                                            </div>
+                                    {% endswitch %}
+                                    
+                                {% endfor %}
+                            {% endfor %}
+                        {% endif %}
+                    {% endif %}
+
+                    <!-- vizualizácie-na-mieru entry-->
+                    {% if craft.request.segments|last == 'vizualizácie-na-mieru' %}
+
+                        {% for e in cards %}
+                            <div class="videos">
+                                {% for block in e.dizajnKarta.all() %}
+                                    {% switch block.type %}
+                                        {% case 'karta' %}
+                                        <div class="wrap">
+                                            <div class="video">
+                                                <iframe width="100%" height="380px" src="{{block.button}}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                                            </div>
+                                            <div class="desc">
+                                                {{block.text}}
+                                            </div>
+                                        </div>
+                                    {% endswitch %}
+                                {% endfor %}
+                            </div>
+
+                            {% for block in e.universalEntry.all() %}
+                                {% switch block.type %}
+                                    {% case 'galeria' %}
+                                    <div class="gallery">
+                                        <div class="swiper-container">
+                                            <div class="swiper-wrapper">
+                                                {% set i = block.obrazky.all() %}
+                                                {% for ss in i %}
+                                                <div class="swiper-slide">
+                                                    
+                                                    <img src="{{ ss.getUrl('houseDetailGalleryThumbs320w') }}" width="{{ ss.getWidth('houseDetailGalleryThumbs320w') }}" height="{{ ss.getHeight('houseDetailGalleryThumbs320w') }}" alt="">
+                                                    
+                                                </div>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endswitch %}
+                            {% endfor %}
+                        
+                        {% endfor %}
+                        <a href="{{ siteUrl }}vizualizacia" class="btn">
+                            Mám záujem
+                        </a>
+                    {% endif %}
+
+                    
+                        
+                </div>
+                
+
+                
+                
+
+
+            </div>
+            
+            
+        </div>
+    
+    
+    
+    
+    
+    
+    
+        {% embed "new/footer.twig" %}
+        {% endembed %}
+        
+    </div>
+        
+        
+            <script src="{{ sitebase }}assets/js/vendor/jquery-3.2.1.min.js"></script>
+            <script src="{{ sitebase }}assets/js/vendor/jquery-waypoints-and-sticky.js"></script>
+            <script src="{{ sitebase }}assets/js/vendor/simplebar.min.js"></script>
+            <script src="{{ sitebase }}assets/js/vendor/vue.js"></script>
+            <script src="{{ sitebase }}assets/js/vendor/vue-router.js"></script>
+            <script src="{{ sitebase }}assets/js/vendor/swiper.min.js"></script>
+            <script src="{{ sitebase }}assets/new/js/main.js?=ver{{ random(1, 100) }}"></script>
+        
+            <script>
+
+
+            var z = 2;
+
+            $('.text .segment-text[label='+1+']').addClass('ontop');
+
+            $('.img-markers .mark').click(function(){
+                var i = $(this).attr('label');
+                z = z + 1;
+
+                $('.corner').parent().removeClass('border');
+                $('.corner[label='+i+']').parent().addClass('border');
+
+                $('.text .segment-text').removeClass('ontop');
+                $('.text .segment-text[label='+i+']').addClass('ontop');
+            });
+
+                
+                
+        
+            </script>
+</body>
+</html>

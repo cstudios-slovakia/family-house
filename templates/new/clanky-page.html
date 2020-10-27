@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+    {% set sitebase = 'https://familyhouse.sk/' %}
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Články - Family House 2020</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="{{ sitebase }}assets/css/vendor/swiper.min.css">
+
+    <link rel="stylesheet" href="{{ sitebase }}assets/new/css/simplebar.css">
+    <link rel="stylesheet" href="{{ sitebase }}assets/new/css/main.css?=ver{{ random(1, 100) }}">
+</head>
+<body>
+    <div class="page-container">
+        
+        {% embed "new/header/header.html" %}
+        {% endembed %}
+
+        <div class="page" id="multipage">
+            
+            {% embed "new/pages/page_sidebar.html" %}
+            {% endembed %}
+
+
+                <div class="multipage-container">
+                
+                    <div class="clanky-page">
+                        <h1>
+                            Články
+                        </h1>
+                        {% set clanky = craft.entries().section('blog').limit(12) %}
+                        {% paginate clanky as pageInfo, pageEntries %}
+                        
+                        {% for entry in pageEntries %}
+
+                        <div class="article-content article-elem exported">
+                            {% set cover = entry.obrazok.one() %}
+                            <a href="{{ entry.url }}">
+                                {% set ss = entry.obrazok.one() %}
+                                <img src="{{ ss.getUrl('houseDetailGalleryThumbs320w') }}" width="{{ ss.getWidth('houseDetailGalleryThumbs320w') }}" height="{{ ss.getHeight('houseDetailGalleryThumbs320w') }}" alt="">
+                            </a>
+                            <div class="title">
+                                <a href="{{ entry.url }}">{{ entry.blog_title }}</a>
+                            </div>
+                            <div class="short-description">{{ entry.shortText|striptags|slice(0,150) }}...</div>
+                            <div class="continue-reading">
+                                <a href="{{ entry.url }}">{{ "Prečítať článok"|t }}</a>
+                            </div>
+                        </div>
+
+                        {% endfor %}
+
+                        <div class="paginate-info">
+                            {% for page, prevUrl in pageInfo.getPrevUrls(4) %}
+                                <a href="{{ prevUrl }}">{{ page }}</a>
+                            {% endfor %}
+                            <span class="current">{{ pageInfo.currentPage }}</span>
+                            {% for page, nextUrl in pageInfo.getNextUrls(4) %}
+                                <a href="{{ nextUrl }}">{{ page }}</a>
+                            {% endfor %}
+                        </div>
+
+                    </div>
+                
+                   {# {% embed "new/embed_interest.html" %}
+                    {% endembed %} 
+                    #}
+    
+    
+    
+                </div>
+            
+            
+            </div>
+    
+    
+    
+    
+    
+    
+    
+            {% embed "new/footer.twig" %}
+            {% endembed %}
+        
+        </div>
+        
+        
+            <script src="{{ sitebase }}assets/js/vendor/jquery-3.2.1.min.js"></script>
+            <script src="{{ sitebase }}assets/js/vendor/jquery-waypoints-and-sticky.js"></script>
+            <script src="{{ sitebase }}assets/js/vendor/simplebar.min.js"></script>
+            <script src="{{ sitebase }}assets/js/vendor/vue.js"></script>
+            <script src="{{ sitebase }}assets/js/vendor/vue-router.js"></script>
+            <script src="{{ sitebase }}assets/js/vendor/swiper.min.js"></script>
+            <script src="{{ sitebase }}assets/new/js/main.js?=ver{{ random(1, 100) }}"></script>
+        
+            <script>
+                
+        
+            </script>
+</body>
+</html>

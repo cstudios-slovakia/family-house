@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="sk-SK" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+
+    {% if craft.app.request.getParam('disable-analytics') is not empty %}
+        {% set _disabledAnalytics = craft.app.request.getParam('disable-analytics') %}
+        {% do craft.cookies.setSecure('disable-analytics', _disabledAnalytics, '', '' ) %}
+    {% endif %}
+
+    {% if getSecureCookie('disable-analytics') %}
+        {% set _disabledAnalytics = getSecureCookie('disable-analytics') %}
+    {% else %}
+        {% if craft.app.request.getParam('disable-analytics') is not empty %}
+            {% set _disabledAnalytics = craft.app.request.getParam('disable-analytics') %}
+            {% do craft.cookies.setSecure('disable-analytics', _disabledAnalytics, '', '' ) %}
+        {% else %}
+            {% set _disabledAnalytics = 0 %}
+            {% do craft.cookies.setSecure('disable-analytics', 0, '', '' ) %}
+        {% endif %}
+    {% endif %}
+
+    {% if _disabledAnalytics != 1 %}
+        {% if craft.app.getConfig.general.disableTrackingCodes == 'false' %}
+        <!-- Google Tag Manager -->
+        <script>(function (w, d, s, l, i) {
+            w[l] = w[l] || [];
+            w[l].push({'gtm.start': new Date().getTime(), event: 'gtm.js'});
+            var f = d.getElementsByTagName(s)[0], j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : '';
+            j.async = true;
+            j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
+            f.parentNode.insertBefore(j, f);
+        })(window, document, 'script', 'dataLayer', 'GTM-MZ4JX39');</script>
+        <!-- End Google Tag Manager -->
+
+
+
+        <!-- Begin Inspectlet Asynchronous Code -->
+        <script type="text/javascript">
+            (function() {
+                window.__insp = window.__insp || [];
+                __insp.push(['wid', 512294152]);
+                var ldinsp = function(){
+                    if(typeof window.__inspld != "undefined") return; window.__inspld = 1; var insp = document.createElement('script'); insp.type = 'text/javascript'; insp.async = true; insp.id = "inspsync"; insp.src = ('https:' == document.location.protocol ? 'https' : 'http') + '://cdn.inspectlet.com/inspectlet.js?wid=512294152&r=' + Math.floor(new Date().getTime()/3600000); var x = document.getElementsByTagName('script')[0]; x.parentNode.insertBefore(insp, x); };
+                setTimeout(ldinsp, 0);
+            })();
+        </script>
+        <!-- End Inspectlet Asynchronous Code -->
+        {% endif %}
+    {% endif %}
+
+    <meta charset="utf-8"/>
+    <link href="{{ settings.baseUrl }}" rel="home"/>
+
+    <meta charset="utf-8">
+    <meta content="ie=edge" http-equiv="x-ua-compatible">
+    <meta content="shrink-to-fit=no, minimum-scale=1.0, maximum-scale=1.0, initial-scale=1.0" name="viewport">
+
+    <meta name="author" content="Cstudios s.r.o.">
+    <meta name="robots" content="index, follow" />
+
+    <meta content="no-cache, no-store, must-revalidate" http-equiv="Cache-Control"/>
+    <meta content="no-cache" http-equiv="Pragma"/>
+    <meta content="0" http-equiv="Expires"/>
+
+    <meta name="p:domain_verify" content="4556406f3f05c2b8e3f7fbf4ffb0e5b4"/>
+
+    {% if custom_seo is defined %}
+        {% block customSeo %}{% endblock customSeo %}
+        {% hook "seo" %}
+    {% else %}
+        {% hook 'seomaticRender' %}
+        {% hook "seo" %}
+    {% endif %}
+
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,700&amp;subset=latin-ext" rel="stylesheet">
+
+    <link href="{{ settings.baseUrl }}assets/img/favicons/apple-icon-57x57.png" rel="apple-touch-icon" sizes="57x57">
+    <link href="{{ settings.baseUrl }}assets/img/favicons/apple-icon-60x60.png" rel="apple-touch-icon" sizes="60x60">
+    <link href="{{ settings.baseUrl }}assets/img/favicons/apple-icon-72x72.png" rel="apple-touch-icon" sizes="72x72">
+    <link href="{{ settings.baseUrl }}assets/img/favicons/apple-icon-76x76.png" rel="apple-touch-icon" sizes="76x76">
+    <link href="{{ settings.baseUrl }}assets/img/favicons/apple-icon-114x114.png" rel="apple-touch-icon" sizes="114x114">
+    <link href="{{ settings.baseUrl }}assets/img/favicons/apple-icon-120x120.png" rel="apple-touch-icon" sizes="120x120">
+    <link href="{{ settings.baseUrl }}assets/img/favicons/apple-icon-144x144.png" rel="apple-touch-icon" sizes="144x144">
+    <link href="{{ settings.baseUrl }}assets/img/favicons/apple-icon-152x152.png" rel="apple-touch-icon" sizes="152x152">
+    <link href="{{ settings.baseUrl }}assets/img/favicons/apple-icon-180x180.png" rel="apple-touch-icon" sizes="180x180">
+    <link href="{{ settings.baseUrl }}assets/img/favicons/android-icon-192x192.png" rel="icon" sizes="192x192" type="image/png">
+    <link href="{{ settings.baseUrl }}assets/img/favicons/favicon-32x32.png" rel="icon" sizes="32x32" type="image/png">
+    <link href="{{ settings.baseUrl }}assets/img/favicons/favicon-96x96.png" rel="icon" sizes="96x96" type="image/png">
+    <link href="{{ settings.baseUrl }}assets/img/favicons/favicon-16x16.png" rel="icon" sizes="16x16" type="image/png">
+    <meta content="#ffffff" name="msapplication-TileColor">
+    <meta content="/ms-icon-144x144.png" name="msapplication-TileImage">
+    <meta content="#ffffff" name="theme-color">
+
+    <link href="{{ settings.baseUrl }}manifest.json" rel="manifest">
+    <link href="{{ settings.baseUrl }}icon.png" rel="apple-touch-icon">
+    <!-- Place favicon.ico in the root directory -->
+
+    <link href="{{ settings.baseUrl }}assets/css/style.css?v=1.26" rel="stylesheet">
+    <link href="{{ settings.baseUrl }}assets/css/update.css?v=5" rel="stylesheet">
+
+
+    <script src="{{ settings.baseUrl }}assets/js/vendor/modernizr-3.5.0.min.js"></script>
+    <script crossorigin="anonymous"
+            integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" src="{{ settings.baseUrl }}assets/js/vendor/jquery-3.2.1.min.js"></script>
+    <script>window.jQuery || document.write('<script src="{{ settings.baseUrl }}assets/js/vendor/jquery-3.2.1.min.js"><\/script>')</script>
+    {% block headerScripts %}{% endblock headerScripts %}
+
+    {% if _disabledAnalytics != 1 %}
+        {% if craft.app.getConfig.general.disableTrackingCodes == 'false' %}
+        <!-- Facebook Pixel Code -->
+        <script>
+            !function(f,b,e,v,n,t,s)
+            {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+            n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+            if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+            n.queue=[];t=b.createElement(e);t.async=!0;
+            t.src=v;s=b.getElementsByTagName(e)[0];
+            s.parentNode.insertBefore(t,s)}(window,document,'script',
+            'https://connect.facebook.net/en_US/fbevents.js');
+            fbq('init', '1269994709775137');
+            fbq('track', 'PageView');
+        </script>
+        <noscript><img height="1" width="1" src="https://www.facebook.com/tr?id=1269994709775137&ev=PageView&noscript=1"/></noscript>
+        <!-- End Facebook Pixel Code -->
+
+
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-5409872-41"></script>
+        <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'UA-5409872-41', { 'optimize_id': 'GTM-5MZVV3T'});
+        </script>
+        {% endif %}
+    {% endif %}
+
+
+    <!-- Smartsupp Live Chat script -->
+    <script type="text/javascript">
+    var _smartsupp = _smartsupp || {};
+    _smartsupp.key = '8a9feb61c56c3227798f60cc1a7a4815e5b34778';
+    window.smartsupp||(function(d) {
+            var s,c,o=smartsupp=function(){ o._.push(arguments)};o._=[];
+            s=d.getElementsByTagName('script')[0];c=d.createElement('script');
+            c.type='text/javascript';c.charset='utf-8';c.async=true;
+            c.src='https://www.smartsuppchat.com/loader.js?';s.parentNode.insertBefore(c,s);
+    })(document);
+    </script>
+
+</head>
+<body class="{% block bodyClass %}dom-list-view{% endblock bodyClass %}">
+{% import "_components/macros/images_output.html" as imagesMacro %}
+{% import "_components/macros/navigation_helper" as navigationHelper %}
+{% if craft.app.getConfig.general.disableTrackingCodes == 'false' %}
+    <!-- Google Tag Manager (noscript) -->
+    <noscript>
+        <iframe height="0" src="https://www.googletagmanager.com/ns.html?id=GTM-MZ4JX39" style="display:none;visibility:hidden"
+                width="0"></iframe>
+    </noscript> <!-- End Google Tag Manager (noscript) -->
+{% endif %}
+    <div class="cookies">
+        <div class="c-container">
+            <div class="description">
+                <p>{{ settings.cookieMessage }} </p>
+            </div>
+            <div class="actions">
+                <button class="accept-cookies">
+                    <span>{{ "Súhlasím"|t }}</span>
+                </button>
+                <a href="https://familyhouse.sk/zasady-pouzivania-cookies">
+                    <span>{{ "Viac info"|t }}</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="scroll-up">
+        <svg style="width:44px;height:44px" viewBox="0 0 24 24">
+            <path fill="#fff" d="M7.41,15.41L12,10.83L16.59,15.41L18,14L12,8L6,14L7.41,15.41Z" />
+        </svg>
+    </div>
+    {% if craft.app.getConfig.general.disableTrackingCodes == 'false' %}
+    <!-- Load Facebook SDK for JavaScript -->
+<!--    <div id="fb-root"></div>-->
+{#
+    <script>
+        window.fbAsyncInit = function() {
+            FB.init({
+                xfbml            : true,
+                version          : 'v3.2'
+            });
+        };
+
+        (function(d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) return;
+            js = d.createElement(s); js.id = id;
+            js.src = 'https://connect.facebook.net/sk_SK/sdk/xfbml.customerchat.js';
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));</script>
+    <!-- Your customer chat code -->
+    <div class="fb-customerchat"
+         attribution=setup_tool
+         page_id="314020832126569"
+         theme_color="#adc53a"
+         logged_in_greeting="Dobrý deň. Ako Vám môžeme pomôcť?"
+         logged_out_greeting="Dobrý deň. Ako Vám môžeme pomôcť?">
+    </div>
+    #}
+
+    {% embed '_components/security/reCaptcha' %}{% endembed %}
+
+    {% endif %}
+
+<!--[if lte IE 9]>
+<p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade
+    your browser</a> to improve your experience and security.</p>
+<![endif]-->
+
+{% include  '_components/pages/sideMobileNavigation' %}
+
+<!-- FLOATING CONTACT -->
+<div class="floating-contact">
+    <a href="mailto:{{ contact.email }}">
+        <img alt="Mail icon" src="{{ settings.baseUrl }}assets/img/svg/mail.svg"/>
+    </a>
+    <a href="tel:{{ contact.phone }}">
+        <img alt="Telephone icon" src="{{ settings.baseUrl }}assets/img/svg/telephone.svg"/>
+    </a>
+    <a href="{{ contact.facebookUrl }}" target="_blank">
+        <img alt="Facebook icon" class="facebook" src="{{ settings.baseUrl }}assets/img/svg/facebook_small.svg"/>
+    </a>
+
+    <a href="{{ contact.pinterestUrl }}" target="_blank" class="social-icon">
+        <img alt="Pinterest" src="{{ settings.baseUrl }}assets/img/svg/pinterest.svg?v=1.0"/>
+    </a>
+
+    <a href="{{ contact.videoUrl }}" target="_blank" class="social-icon"  data-fancybox >
+<!--    <a href="{{ contact.videoUrl }}" target="_blank" class="social-icon"  data-fancybox >-->
+        <img alt="Play video" src="{{ settings.baseUrl }}assets/img/svg/play.svg?v=1.0"/>
+    </a>
+</div>
+<!-- /FLOATING CONTACT -->
+
+<div id="content" class="content">
+    <!-- HEADER -->
+    <header>
+        <div>
+            <a class="logo" href="{{ siteUrl }}">
+                {% set logoImg = settings.pageLogo.one() %}
+
+                {% set options = { format: 'webp' } %}
+                {% set altContent = 'Familyhouse' %}
+                {% set imageSizes = [{ width:480}] %}
+
+                {% if craft.imager.serverSupportsWebp() and craft.imager.clientSupportsWebp() %}
+                {% set transformedImages = craft.imager.transformImage(logoImg, imageSizes, options) %}
+                {% else %}
+                {% set transformedImages = craft.imager.transformImage(logoImg, imageSizes) %}
+                {% endif %}
+
+                <img alt="Familyhouse" src="{{ transformedImages[0].url }}"/>
+
+            </a>
+            <a href="tel:+421 948 141 840">Tel: +421 948 141 840</a>
+        </div>
+        <!-- LOGO -->
+
+        <!-- /LOGO -->
+
+        <!-- NAVIGATION -->
+        <nav>
+            {% set slugs = craft.app.request.segments %}
+
+            <a class="{{ navigationHelper.isActive(craft.entries.section('katalogDomov').one().url()) }}" href="{{ craft.entries.section('katalogDomov').one().url() }}">{{ craft.entries.section('katalogDomov').one().title |lower }}</a>
+            <div class="divider"></div>
+            <a class="{{ navigationHelper.isActive(craft.entries.section('stavbaDomu').one().url()) }}" href="{{ craft.entries.section('stavbaDomu').one().url() }}">{{ craft.entries.section('stavbaDomu').one().title |lower }}</a>
+            <div class="divider"></div>
+
+            <a class="{{ navigationHelper.isActive(craft.entries.section('projektovanie').one().url()) }}" href="{{ craft.entries.section('projektovanie').one().url() }}">{{ craft.entries.section('projektovanie').one().title |lower }}</a>
+            <div class="divider"></div>
+            <a class="{{ navigationHelper.isActive(craft.entries.section('realizacia').one().url()) }}" href="{{ craft.entries.section('realizacia').one().url() }}">{{ craft.entries.section('realizacia').one().title |lower }}</a>
+
+            <div class="mobile-navigation--trigger">
+                <div class="trigger-overlay"></div> <!-- FIX HAMBURGER -->
+                <span>{{ "menu"|t }}</span>
+                <div class="hamburger"></div>
+            </div>
+        </nav>
+        <!-- /NAVIGATION -->
+
+        <!-- MOBILE TRIGGER OUTTER -->
+        <div class="mobile-navigation-trigger--outter">
+            <div></div>
+        </div>
+        <!-- /MOBILE TRIGGER OUTTER -->
+
+    </header>
+    <!-- /HEADER -->
+
+    {% block content %} {% endblock %}
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="links">
+            <div class="box">
+                <div class="title">www.familyhouse.sk</div>
+                {% set footerNavHandles = ['sluzby','stavbaDomu','cenovaPonuka','financovanie','referencie','precoSiVybratNas','editor'] %}
+
+                {% for navHandle in footerNavHandles %}
+                    {% set sectionModel = craft.app.sections.getSectionByHandle(navHandle) %}
+                    {% set sectionSettings = sectionModel.getSiteSettings()[currentSite.id] %}
+
+                    {% if sectionModel.type == 'single' %}
+                        {% set setSingleEntry = craft.entries.section(navHandle).one() %}
+                        <a href="{{ setSingleEntry.url() }}">{{ setSingleEntry.title }}</a>
+                    {% else %}
+                        {% set uri = sectionSettings.uriFormat | split('/') %}
+                        <a href="{{ siteUrl }}{{ uri[0] }}">{{sectionModel.name }}</a>
+                    {% endif %}
+
+                {% endfor %}
+
+            </div>
+            <div class="box">
+                <div class="title"></div>
+                {% set footerNavHandles = ['faq','blog','contact' ] %}
+
+                {% for navHandle in footerNavHandles %}
+                {% set sectionModel = craft.app.sections.getSectionByHandle(navHandle) %}
+                {% set sectionSettings = sectionModel.getSiteSettings()[currentSite.id] %}
+
+                {% if sectionModel.type == 'single' %}
+                {% set setSingleEntry = craft.entries.section(navHandle).one() %}
+                <a href="{{ setSingleEntry.url() }}">{{ setSingleEntry.title }}</a>
+                {% else %}
+                {% set uri = sectionSettings.uriFormat | split('/') %}
+                <a href="{{ siteUrl }}{{ uri[0] }}">{{sectionModel.name }}</a>
+                {% endif %}
+
+                {% endfor %}
+
+            </div>
+            <div class="box">
+                <div class="title">{{ "Kontakt"|t }}</div>
+
+                <div>{{ "Ing. Dávid Lovas"|t }}</div>
+                <a href="tel:{{ contact.phone }}">{{ contact.phone }}</a>
+                <a href="mailto:{{ contact.email }}">{{ contact.email }}</a>
+
+                <br>
+
+                <address>
+                    {{ contact.address }}
+                </address>
+            </div>
+
+            <div class="box socials">
+                <a href="{{ contact.facebookUrl }}" target="_blank" class="social-icon">
+                    <img alt="Facebook" src="{{ settings.baseUrl }}assets/img/svg/facebook.svg?v=2.3"/>
+                </a>
+                <a href="https://www.instagram.com/familyhouseds/" target="_blank" class="social-icon">
+                    <img alt="Facebook" src="{{ settings.baseUrl }}assets/img/svg/insta.svg"/>
+                </a>
+                <a href="https://www.linkedin.com/company/family-house-s-r-o/" target="_blank" class="linkedin social-icon">
+                    <img alt="Facebook" src="{{ settings.baseUrl }}assets/img/svg/linkedin.svg"/>
+                </a>
+                <a href="{{ contact.pinterestUrl }}" target="_blank" class="social-icon">
+                    <img alt="Pinterest" src="{{ settings.baseUrl }}assets/img/svg/pinterest.svg?v=1.0"/>
+                </a>
+
+                <a href="{{ contact.videoUrl }}" target="_blank" class="social-icon" data-fancybox>
+                    <img alt="Play video" src="{{ settings.baseUrl }}assets/img/svg/play.svg?v=1.0"/>
+                </a>
+            </div>
+        </div>
+        <div class="bottom">
+            <div>{{ "now"|date("Y") }} &copy; FAMILY HOUSE s.r.o.</div>
+            <a href="http://cstudios.sk/?ref=familyhouse">{{ "web developed by Cstudios s.r.o."|t }}</a>
+        </div>
+    </footer>
+    <!-- /FOOTER -->
+
+</div>
+
+
+<script src="{{ settings.baseUrl }}assets/js/vendor/plugins.js"></script>
+<script src="{{ settings.baseUrl }}assets/js/vendor/swiper.min.js"></script>
+<script src="{{ settings.baseUrl }}assets/js/vendor/jquery.fancybox.min.js"></script>
+<script src="{{ settings.baseUrl }}assets/js/vendor/imageMapResizer.min.js"></script>
+<script src="{{ settings.baseUrl }}assets/js/vendor/jquery-cookie.js"></script>
+<script src="{{ settings.baseUrl }}assets/js/main.js?v=1.0.139"></script>
+
+{% block footerScripts %}{% endblock footerScripts %}
+
+{#
+{% if craft.app.getConfig.general.disableTrackingCodes == 'false' %}
+<div id="fb-root"></div>
+<script>(function (d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s);
+    js.id = id;
+    js.src = "//connect.facebook.net/sk_SK/sdk.js#xfbml=1&version=v2.7&appId=1208675415861081";
+    fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+{% endif %}
+#}
+
+<script type="application/ld+json">
+{
+  "@context": "http://schema.org/",
+  "@type": "WebSite",
+  "name": "Familyhouse",
+  "alternateName": "Familyhouse",
+  "url": "https://familyhouse.sk/"
+}
+
+</script>
+
+
+</body>
+</html>
+

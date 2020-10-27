@@ -1,0 +1,49 @@
+{% set chained = '' %}
+{% set toChain = '' %}
+{% if radioData.logic.chained is defined  %}
+    {% set chained = 'chainable' %}
+    {% set toChain = radioData.logic.chained.chain %}
+{% endif %}
+
+{% set hidden = false %}
+{% if radioData.logic.hidden is defined  %}
+{#    {% if model.hasErrors(key) %}#}
+{#        {% set hidden = false %}#}
+{#    {% else %}#}
+{#        {% set hidden = radioData.logic.hidden %}#}
+{#    {% endif %}#}
+    {% set hidden = radioData.logic.hidden %}
+
+{% endif %}
+
+
+<div class="question__block question-type__radio" data-question="{{ key }}" {% if hidden %}style="display: none;" {% endif %}>
+    <p>
+        {{ radioData.title }}  {{ requiredMark|raw }}
+    </p>
+    {% if model.hasErrors(key) %}
+    <small class="field-error">
+            {{ model.getFirstError(key) }}
+    </small>
+    {% endif %}
+
+    <fieldset >
+        {% for key, option in radioData.q_options %}
+            {% set chainParent = 0 %}
+            {% if chained and key ==  radioData.logic.chained.check %}
+                {% set chainParent = 1 %}
+            {% endif %}
+            <div>
+                <label for="{{ radioData.q_name }}_{{ key }}" class="radio">
+                    <input type="radio" name="questions[{{ radioData.q_name }}]" id="{{ radioData.q_name }}_{{ key }}" value="{{ key }}" class="hidden {{ chained }}" data-chain="{{ toChain }}" data-chainparent="{{ chainParent }}"/>
+                    <span class="label"></span>{{ option }}
+                </label>
+            </div>
+            {% if key == 'other' %}
+                <div>
+                    <textarea name="questions[other][{{ radioData.q_name }}]"  rows="5"></textarea>
+                </div>
+            {% endif %}
+        {% endfor %}
+    </fieldset>
+</div>

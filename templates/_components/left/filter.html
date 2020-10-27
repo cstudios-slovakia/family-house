@@ -1,0 +1,18 @@
+<form name="filterForm" class="filter-content" action="{{ url('projekty-domov') }}" method="get">
+
+    {% set filterEntry = craft.entries.section('nastavenia').one() %}
+
+    <h3 class="updated-filter-title">{{ "Filtrovať projekty"|t }}</h3>
+
+    <div class="title">
+        <strong>{{ "Filtrovať projekty"|t }}</strong>
+    </div>
+
+    {% embed '_components/filter/_filter_inputs' %}{% endembed %}
+
+    <!-- FILTER BUTTON -->
+        <button type="submit">
+            <span>{{ "Filtrovať"|t }}</span>
+        </button>
+    <!-- /FILTER BUTTON -->
+</form>

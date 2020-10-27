@@ -1,0 +1,104 @@
+<!-- FILTER GROUP WITH TITLE -->
+<div class="filter-group">
+    <div class="title">{{ 'Konštrukcia' | t }}</div>
+
+    {% for option in craft.housefilterModule.getFilterInputData('construction') %}
+        <div>
+            <input id="option-{{ option.value }}" type="checkbox" value="{{ option.value }}" {{ option.selected | checked }} name="konstrukcia[]" />
+            <label for="option-{{ option.value }}">{{ option.label }}</label>
+        </div>
+    {% endfor %}
+</div>
+<!-- /FILTER GROUP WITH TITLE -->
+
+<!-- FILTER GROUP WITHOUT TITLE -->
+<div class="filter-group">
+    <div class="title">{{ 'Typ domu' | t }}</div>
+
+    {% for option in craft.housefilterModule.getFilterInputData('type') %}
+        <div>
+            <input id="option-{{ option.value }}" type="checkbox" value="{{ option.value }}" {{ option.selected | checked }} name="typ[]" />
+            <label for="option-{{ option.value }}">{{ option.label }}</label>
+        </div>
+    {% endfor %}
+</div>
+<!-- /FILTER GROUP WITHOUT TITLE -->
+
+<!-- FILTER GROUP WITH TITLE -->
+<div class="filter-group">
+    <div class="title">{{ 'Podlažnosť' | t }}</div>
+
+    {% for option in craft.housefilterModule.getFilterInputData('floor') %}
+        <div>
+            <input id="option-{{ option.value }}" type="checkbox" value="{{ option.value }}" {{ option.selected | checked }} name="podlaznost[]" />
+            <label for="option-{{ option.value }}">{{ option.label }}</label>
+        </div>
+    {% endfor %}
+</div>
+<!-- /FILTER GROUP WITH TITLE -->
+
+<!-- FILTER GROUP WITH TITLE -->
+<div class="filter-group">
+    <div class="title">{{ 'Strecha'|t }}</div>
+
+    {% for option in craft.housefilterModule.getFilterInputData('roof') %}
+        <div>
+            <input id="option-{{ option.value }}" type="checkbox" value="{{ option.value }}" {{ option.selected | checked }} name="strecha[]" />
+            <label for="option-{{ option.value }}">{{ option.label }}</label>
+        </div>
+    {% endfor %}
+</div>
+<!-- /FILTER GROUP WITH TITLE -->
+
+<!-- FILTER GROUP WITH TITLE -->
+<div class="filter-group">
+    <div class="title">{{ 'Metráž' | t }}</div>
+
+    {% for option in craft.housefilterModule.getFilterInputData('square') %}
+        <div>
+            <input id="option-{{ option.value }}" type="checkbox" value="{{ option.value }}" {{ option.selected | checked }} name="metraz[]" />
+            <label for="option-{{ option.value }}">{{ option.label }}</label>
+        </div>
+    {% endfor %}
+</div>
+<!-- /FILTER GROUP WITH TITLE -->
+
+<!-- FILTER GROUP WITH TITLE -->
+<div class="filter-group">
+    <div class="title">{{ 'Izby' | t }}</div>
+
+    {% for option in craft.housefilterModule.getFilterInputData('room') %}
+        <div>
+            <input id="option-{{ option.value }}" type="checkbox" value="{{ option.value }}" {{ option.selected | checked }} name="izby[]" />
+            <label for="option-{{ option.value }}">{{ option.label }}</label>
+        </div>
+    {% endfor %}
+</div>
+<!-- /FILTER GROUP WITH TITLE -->
+
+<!-- FILTER GROUP WITH TITLE -->
+<div class="filter-group">
+    <div class="title">{{ 'Garáž' |t }}</div>
+
+    {% for option in craft.housefilterModule.getFilterInputData('garage') %}
+        <div>
+            <input id="option-{{ option.value }}" type="checkbox" value="{{ option.value }}" {{ option.selected | checked }} name="garaz[]" />
+            <label for="option-{{ option.value }}">{{ option.label }}</label>
+        </div>
+    {% endfor %}
+</div>
+<!-- /FILTER GROUP WITH TITLE -->
+
+
+
+<!-- FILTER GROUP WITHOUT TITLE -->
+<div class="filter-group">
+
+    {% for option in craft.housefilterModule.getFilterInputData('eligible') %}
+        <div>
+            <input id="option-{{ option.value }}" type="checkbox" value="{{ option.value }}" {{ option.selected | checked }} name="volitelne[]" />
+            <label for="option-{{ option.value }}">{{ option.label }}</label>
+        </div>
+    {% endfor %}
+</div>
+<!-- /FILTER GROUP WITHOUT TITLE -->

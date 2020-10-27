@@ -1,0 +1,109 @@
+{% extends '_layouts/cp' %}
+
+{% set title = "Question Answers" |t %}
+
+
+{% if crumbs is not defined %}
+    {% set crumbs = [
+    { label: craft.reviewerModule.name, url: url('reviewer') }
+    ] %}
+{% endif %}
+
+
+
+
+{% block content %}
+
+    <h3>{{ question.review.person.first_name }} {{ question.review.person.last_name }}</h3>
+    <small>{{ question.dateCreated|date('d.m.Y H:i') }}</small>
+    <table class="data fullwidth collapsible">
+        <tbody>
+        <tr>
+            <th class="light">{{ craft.reviewerModule.answer('q_10').title }}</th>
+            {% set q_10 = question.q_10 %}
+            {% if q_10 != 'other'  and q_10 is not null %}
+                <td>{{ craft.reviewerModule.answer('q_10').q_options[q_10] }}</td>
+            {% else %}
+                <td>
+                    {{ question.q_10_other }}
+                </td>
+            {% endif %}
+        </tr>
+        <tr>
+            <th class="light">{{ craft.reviewerModule.answer('q_20').title }}</th>
+            {% if question.q_20 < 7 and question.q_20_comment is not null  %}
+                <td>
+                    {{ question.q_20 ~ ': ' ~  question.q_20_comment }}
+                </td>
+            {% else %}
+                <td>{{ question.q_20 }}</td>
+            {% endif %}
+        </tr>
+        <tr>
+            <th class="light">{{ craft.reviewerModule.answer('q_30').title }}</th>
+
+            {% if question.q_30 < 7 and question.q_30_comment is not null  %}
+                <td>
+                    {{ question.q_30 ~ ': ' ~  question.q_30_comment }}
+                </td>
+            {% else %}
+                <td>{{ question.q_30 }}</td>
+            {% endif %}
+        </tr>
+        <tr>
+            <th class="light">{{ craft.reviewerModule.answer('q_40').title }}</th>
+
+            {% if question.q_40 < 7 and question.q_40_comment is not null  %}
+                <td>
+                    {{ question.q_40 ~ ': ' ~  question.q_40_comment }}
+                </td>
+            {% else %}
+                <td>{{ question.q_40 }}</td>
+            {% endif %}
+        </tr>
+        <tr>
+            <th class="light">{{ craft.reviewerModule.answer('q_50').title }}</th>
+            {% set q_50 = question.q_50 %}
+            <td>{{ craft.reviewerModule.answer('q_50').q_options[q_50] }}</td>
+        </tr>
+        <tr>
+            <th class="light">{{ craft.reviewerModule.answer('q_60').title }}</th>
+            {% set q_60 = question.q_60 %}
+
+
+            {% if q_60 != 'other' and q_60 is not null %}
+            <td>{{ craft.reviewerModule.answer('q_60').q_options[q_60] }}</td>
+            {% else %}
+                <td>
+                    {{ question.q_60_other }}
+                </td>
+            {% endif %}
+        </tr>
+        <tr>
+            <th class="light">{{ craft.reviewerModule.answer('q_70').title }}</th>
+            {% set q_70 = question.q_70 %}
+            <td>{{ craft.reviewerModule.answer('q_70').q_options[q_70] }}</td>
+        </tr>
+        <tr>
+            <th class="light">{{ craft.reviewerModule.answer('q_80').title }}</th>
+            {% set q_80 = question.q_80 %}
+            {% if q_80 != 'other'  and q_80 is not null %}
+                <td>{{ craft.reviewerModule.answer('q_80').q_options[q_80] }}</td>
+            {% else %}
+                <td>
+                    {{ question.q_80_other }}
+                </td>
+            {% endif %}
+        </tr>
+        <tr>
+            <th class="light">{{ craft.reviewerModule.answer('q_90').title }}</th>
+            {% set q_90 = question.q_90 %}
+
+            <td>
+                {{ q_90 }}
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+{% endblock %}

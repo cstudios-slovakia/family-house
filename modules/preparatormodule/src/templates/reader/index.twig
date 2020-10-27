@@ -1,0 +1,39 @@
+{% extends "preparator-module-site/_layout" %}
+{% block footerScripts %}
+
+    <script>
+        window.currentSiteBaseUrl = '{{ currentSite.baseUrl }}';
+        window.currentHouseId = {{ currentHouseId }};
+    </script>
+
+{% endblock footerScripts %}
+
+{% block content %}
+    {% do view.registerAssetBundle("modules\\preparatormodule\\assetbundles\\PreparatorModule\\PreparatorModuleAsset") %}
+
+
+    <div class="main grid-2-layout">
+
+        <!-- FILTER + HOUSE LISTING -->
+        <div class="filter-house-listing" data-entry-id="{{ currentHouseId }}" style="background: #f7f7f7;">
+
+
+            <!-- HOUSE LISTING -->
+{#            <div class="house-listing">#}
+{#                <div class="tabbed-details">#}
+
+
+                    <div class="" style="margin-top: 120px;">
+                        {% include 'preparator-module/reader/calculator' %}
+                    </div>
+
+{#                </div>#}
+{#            </div>#}
+            <!-- /HOUSE LISTING -->
+        </div>
+        <!-- /FILTER + HOUSE LISTING -->
+
+    </div>
+
+
+{% endblock content %}

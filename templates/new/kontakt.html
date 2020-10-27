@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+    {% set sitebase = 'https://familyhouse.sk/' %}
+
+    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projekty Domov - Family House 2020</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,700;1,800&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="{{ sitebase }}assets/css/vendor/swiper.min.css">
+
+    <link rel="stylesheet" href="{{ sitebase }}assets/new/css/simplebar.css">
+    <link rel="stylesheet" href="{{ sitebase }}assets/new/css/main.css?=ver{{ random(1, 100) }}">
+</head>
+<body>
+    <div class="page-container">
+        
+        {% embed "new/header/header.html" %}
+        {% endembed %}
+
+        <div class="page" id="kontakt">
+            
+            {% embed "new/pages/page_sidebar.html" %}
+            {% endembed %}
+
+
+            <div class="kontakt">
+                
+                <h1>
+                    kontakt
+                </h1>
+                <div class="grid">
+                    <div class="left padding">
+                        
+                        <div class="col">
+                            <div class="icon">
+                                <img id="logo" src="{{ sitebase }}assets/new/img/logo-blue.svg" alt="">
+                            </div>
+                            <div class="line">
+                                Adresa:
+                            </div>
+                            <div class="line">
+                                Radničné Námestie 19
+                            </div>
+                            <div class="line margin">
+                                929 01 Dunajská Streda
+                            </div>
+                            <div class="line">
+                                Tel / e-mail:
+                            </div>
+                            <a class="line" href="tel:{{ contact.email }}">
+                                {{ contact.phone }}
+                            </a>
+                            <a class="line margin" href="mailto:{{ contact.email }}">
+                                {{ contact.email }}
+                            </a>
+                            <div class="line">
+                                Údaje:
+                            </div>
+                            <div class="line">
+                                IČO: 51 970 139
+                            </div>
+                            <div class="line">
+                                IČ DPH: SK 5100000970139
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="icon">
+                                
+                            </div>
+                            <table>
+                                <tr>
+                                    <div class="line">
+                                        Otváracia doba:
+                                    </div>
+                                </tr>
+                                <tr>
+                                    <td>Pondelok:</td>
+                                    <td>8:00 - 16:00</td>
+                                </tr>
+                                <tr>
+                                    <td>Utorok:</td>
+                                    <td>8:00 - 16:00</td>
+                                </tr>
+                                <tr>
+                                    <td>Streda:</td>
+                                    <td>8:00 - 16:00</td>
+                                </tr>
+                                <tr>
+                                    <td>Štvrtok:</td>
+                                    <td>8:00 - 16:00</td>
+                                </tr>
+                                <tr>
+                                    <td>Piatok:</td>
+                                    <td>8:00 - 16:00</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="right">
+                        {% for block in entry.universalEntry.all() %}
+                            {% switch block.type %}
+                    
+                                {% case 'fullWidthImage' %}
+
+                                    {% set s = block.obrazok.one() %}
+                                    <img src="{{ s.getUrl('housedetailgallerythumbs1600w') }}" width="{{ s.getWidth('housedetailgallerythumbs1600w') }}" height="{{ s.getHeight('housedetailgallerythumbs1600w') }}" alt="" style="{% if block.sirka|length %}width: {{block.sirka}}%"{%else%}width: 100%;"{%endif%}>
+                            {% endswitch %}
+                        {% endfor %}
+                        
+                    </div>
+                </div>
+                <div class="grid">
+                    <div class="left">
+                        <div class="map">
+                            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d793.8050193109112!2d17.618606918970567!3d47.993784558492344!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x476b9d6698e20d79%3A0xcf1d2947c410d104!2sFAMILY+HOUSE%2C+s.r.o.!5e0!3m2!1shu!2ssk!4v1533208413675" width="600" height="450" frameborder="0" style="border:0" allowfullscreen></iframe>
+                        </div>
+                    </div>
+                    <div class="right">
+                        <form class="poradenstvo-form"  method="post" action="{{sitebase}}services/kontakt.php" accept-charset="UTF-8">
+                            {{ getCsrfInput() }}
+                            <h2>
+                                kontaktný formulár
+                            </h2>
+                            <div action="" class="poradenstvo">
+                            <input type="hidden" name="action" value="contactForm/message/add">
+                            <input type="hidden" name="formId" value="1">
+                            <input type="hidden" name="redirect" value="dakujeme">
+                            <input type="hidden" class="captcha-input" name="g-recaptcha-response" value="0">
+                                <div class="row">
+                                    <input type="text" name="name" id="Name" placeholder="Vaše meno a priezvisko*" required>
+                                </div>
+                                <div class="row">
+                                    <input type="text" name="telephone" id="Telephone" placeholder="Telefónne číslo alebo e-mail" required>
+                                </div>
+                                <textarea name="Message" id="message" cols="30" rows="10" placeholder="Vaša otázka?"></textarea>
+                                <div class="row">
+                                    <h3>S čím potrebujete poradiť?</h3>
+                                </div>
+                                <div class="img-row">
+                                    <div class="img-item">
+                                        <label class="chb" for="projekt">
+                                            <input type="checkbox" name="projekt" id="projekt">
+                                            <div class="label">Projekt</div>
+                                        </label>
+                                        
+                                    </div>
+                                    <div class="img-item">
+                                        <label class="chb" for="stavba">
+                                            <input type="checkbox" name="stavba" id="stavba">
+                                            <div class="label">Stavba domu</div>
+                                        </label>
+                                        
+                                    </div>
+                                    <div class="img-item">
+                                        <label class="chb" for="vizualizacia">
+                                            <input type="checkbox" name="vizualizacia" id="vizualizacia">
+                                            <div class="label">Vizualizácia</div>
+                                        </label>
+                                    </div>
+                                </div>
+                                
+                                <div class="row">
+                                    <div class="agree">
+                                        <input type="checkbox" name="sales" id="sales">
+                                        <label for="sales">Súhlasím s <a href="">obchodnými podmienkami</a></label>
+                                    </div>
+                                </div>
+                                <button type="submit" value="poslať otázku" class="send-btn" disabled>odoslať</button>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+
+
+                {% for block in entry.universalEntry.all() %}
+
+                        {% switch block.type %}
+                
+                        {% case 'kontaktnaKarta' %}
+                            <div class="kontaktnaKarta">
+                                <h2>
+                                    Náš team
+                                </h2>
+                                {% for i in block.clen.all() %}
+                                <div class="item">
+                                    <div class="left">
+                                        {% set ss = i.personalPhoto.one() %}
+                                        <img src="{{ ss.getUrl('houseDetailGalleryThumbs320w') }}" width="{{ ss.getWidth('houseDetailGalleryThumbs320w') }}" height="{{ ss.getHeight('houseDetailGalleryThumbs320w') }}" alt="">
+                                    </div>
+                                    <div class="right">
+                                        <div class="name-row">
+                                            {{ i.memberName }}, <br>{{ i.function }}
+                                        </div>
+                                        <div class="rows">
+                                            {% if i.memberPhone|length %}
+                                            <div class="row">
+                                                <div class="col">
+                                                    Telefón:
+                                                </div>
+                                                <div class="col">
+                                                    <a href="tel:{{ i.memberPhone }}">
+                                                        {{ i.memberPhone }}
+                                                    </a>
+                                                </div>
+                                            </div>
+                                            {% endif %}
+                                            <div class="row">
+                                                <div class="col">
+                                                    E-mail:
+                                                </div>
+                                                <div class="col">
+                                                    <a href="mailto:{{ i.memberEmail }}">
+                                                        {{ i.memberEmail }}
+                                                    </a>
+                                                </div>
+                                            </div>
+                                            
+                                        </div>
+
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                            {% endswitch %}
+                {% endfor %}
+                
+
+
+            </div>
+            
+            
+        </div>
+    
+    
+    
+    
+    
+    
+    
+        {% embed "new/footer.twig" %}
+        {% endembed %}
+        
+    </div>
+        
+        
+            <script src="{{ sitebase }}assets/js/vendor/jquery-3.2.1.min.js"></script>
+            <script src="{{ sitebase }}assets/js/vendor/jquery-waypoints-and-sticky.js"></script>
+            <script src="{{ sitebase }}assets/js/vendor/simplebar.min.js"></script>
+            <script src="{{ sitebase }}assets/js/vendor/vue.js"></script>
+            <script src="{{ sitebase }}assets/js/vendor/vue-router.js"></script>
+            <script src="{{ sitebase }}assets/js/vendor/swiper.min.js"></script>
+            <script src="{{ sitebase }}assets/new/js/main.js?=ver{{ random(1, 100) }}"></script>
+        
+            <script>
+
+
+                // custom hover
+            $('.items .item').hover(function(){
+                var idx = $(this).index() + 1;
+                $('.items .item:nth-child('+idx+')').addClass('gray-hover');
+            },function(){
+                var idx = $(this).index() + 1;
+                $('.items .item:nth-child('+idx+')').removeClass('gray-hover');
+            });
+            // click
+            $('.items .item').click(function(){
+                var idx = $(this).index() + 1;
+                $('.items .item').removeClass('gray-click');
+                $('.items .item:nth-child('+idx+')').addClass('gray-click');
+            });
+
+                
+                
+        
+            </script>
+            {% embed '_components/security/reCaptcha' %}{% endembed %}
+            {% embed 'new/cookies-embed.html'%}
+            {% endembed %}
+</body>
+</html>

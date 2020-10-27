@@ -1,0 +1,445 @@
+<!--<div>-->
+
+<!--    <div class="listings&#45;&#45;header">-->
+<!--        <div class="filter&#45;&#45;result">-->
+<!--            <div class="get-values" data-id="_legend" data-fsrc="_filter2"></div>-->
+<!--        </div>-->
+<!--        <h2>-->
+<!--            <a class="h2-container" href="{{ siteUrl }}projekty-domov">-->
+<!--                Projekty domov - Nízkoenergetické rodinné domy-->
+<!--            </a>-->
+<!--        </h2>-->
+
+<!--    </div>-->
+
+<!--    {% set filterEntry = craft.entries.section('nastavenia').one() %}-->
+<!--    {% set activeLabels = [] %}-->
+
+<!--&lt;!&ndash;    &lt;!&ndash; FILTER volitelne &ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;    {# Filter volitelne #}&ndash;&gt;-->
+<!--&lt;!&ndash;    {# volitelne #}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% set volitelneArray = [] %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% for option in filterEntry.volitelne.options %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% set filterVolitelne = craft.app.request.getParam('volitelne_' ~ loop.index) %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% if filterVolitelne is not empty %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% set volitelneArray = volitelneArray|merge([filterVolitelne]) %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% set activeLabels = activeLabels|merge([option.label]) %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% endif %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% endfor %}&ndash;&gt;-->
+
+<!--&lt;!&ndash;    {% set finalFilteredHousesListAll = [] %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% set finalFilteredHousesList = [] %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% set finalFilteredHousesList2 = [] %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% set finalFilteredHousesListX = [] %}&ndash;&gt;-->
+
+<!--&lt;!&ndash;    {% if volitelneArray is not empty %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% for house in craft.entries.section('dom') %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% set _added = false %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% for volitelneParam in volitelneArray %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% if house.volitelne.contains(volitelneParam) %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% if _added == false %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% set finalFilteredHousesList2 = finalFilteredHousesList2|merge([house.id]) %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% set _added = true %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% endif %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% else %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% if house.id in finalFilteredHousesList2 %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% set _tmpIDList = [] %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% for _unsetID in finalFilteredHousesList2 %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% if _unsetID != house.id %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% set _tmpIDList = _tmpIDList|merge([_unsetID]) %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% endif %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% endfor %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% set finalFilteredHousesList2 = _tmpIDList %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% endif %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% endif %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% endfor %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% endfor %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% endif %}&ndash;&gt;-->
+<!--&lt;!&ndash;    &lt;!&ndash; FILTER volitelne &ndash;&gt;&ndash;&gt;-->
+
+<!--&lt;!&ndash;    {# defaults #}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% if finalFilteredHousesList2 is empty %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% set queryParams = {&ndash;&gt;-->
+<!--&lt;!&ndash;    section: 'dom',&ndash;&gt;-->
+<!--&lt;!&ndash;    limit: settings.houseListCountListView&ndash;&gt;-->
+<!--&lt;!&ndash;    }&ndash;&gt;-->
+<!--&lt;!&ndash;    %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% else %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% set queryParams = {&ndash;&gt;-->
+<!--&lt;!&ndash;    section: 'dom'&ndash;&gt;-->
+<!--&lt;!&ndash;    }&ndash;&gt;-->
+<!--&lt;!&ndash;    %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% endif %}&ndash;&gt;-->
+
+<!--&lt;!&ndash;    {% set filterTitle %}Rodinné <i>domy</i>{% endset %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% set comingSoon    = false %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% set filterIsEmpty = false %}&ndash;&gt;-->
+
+<!--&lt;!&ndash;    {# typ #}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% set typArray = [] %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% for option in filterEntry.typ.options %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% set filterTyp = craft.app.request.getParam('typ_' ~ loop.index) %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% if filterTyp is not empty %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% set typArray = typArray|merge([filterTyp]) %}&ndash;&gt;-->
+
+<!--&lt;!&ndash;    {% if loop.index == 2 %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% set filterTitle %}Klasické <i>domy</i>{% endset %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% set activeLabels = activeLabels|merge(["Klasické domy"]) %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% endif %}&ndash;&gt;-->
+
+<!--&lt;!&ndash;    {% if loop.index == 3 %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% set filterTitle %}Pasívne <i>domy</i>{% endset %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% set activeLabels = activeLabels|merge(["Pasívne domy"]) %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% set comingSoon = false %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% endif %}&ndash;&gt;-->
+
+<!--&lt;!&ndash;    {% if loop.index == 4 %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% set filterTitle %}Exkluzívne <i>domy</i>{% endset %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% set activeLabels = activeLabels|merge(["Exkluzívne domy"]) %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% set comingSoon = false %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% endif %}&ndash;&gt;-->
+
+<!--&lt;!&ndash;    {% if loop.index == 5 %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% set filterTitle %}Moderné <i>domy</i>{% endset %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% set activeLabels = activeLabels|merge(["Moderné domy"]) %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% set comingSoon = false %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% endif %}&ndash;&gt;-->
+
+<!--&lt;!&ndash;    {% endif %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% endfor %}&ndash;&gt;-->
+
+<!--&lt;!&ndash;    {% if typArray|length > 1 %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% set queryParams = queryParams|merge({&ndash;&gt;-->
+<!--&lt;!&ndash;    typ: typArray,&ndash;&gt;-->
+<!--&lt;!&ndash;    }) %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% else %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% set queryParams = queryParams|merge({&ndash;&gt;-->
+<!--&lt;!&ndash;    typ: typArray,&ndash;&gt;-->
+<!--&lt;!&ndash;    }) %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% endif %}&ndash;&gt;-->
+
+<!--&lt;!&ndash;    {# podlaznost #}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% set podlaznostArray = [] %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% for option in filterEntry.podlaznost.options %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% set filterPodlaznost = craft.app.request.getParam('podlaznost_' ~ loop.index) %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% if filterPodlaznost is not empty %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% set podlaznostArray = podlaznostArray|merge([filterPodlaznost]) %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% set activeLabels = activeLabels|merge([option.label]) %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% endif %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% endfor %}&ndash;&gt;-->
+
+<!--&lt;!&ndash;    {% if podlaznostArray|length > 1 %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% set queryParams = queryParams|merge({&ndash;&gt;-->
+<!--&lt;!&ndash;    podlaznost: podlaznostArray,&ndash;&gt;-->
+<!--&lt;!&ndash;    }) %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% else %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% set queryParams = queryParams|merge({&ndash;&gt;-->
+<!--&lt;!&ndash;    podlaznost: podlaznostArray,&ndash;&gt;-->
+<!--&lt;!&ndash;    }) %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% endif %}&ndash;&gt;-->
+
+<!--&lt;!&ndash;    {# strecha #}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% set strechaArray = [] %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% for option in filterEntry.strecha.options %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% set filterStrecha = craft.app.request.getParam('strecha_' ~ loop.index) %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% if filterStrecha is not empty %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% set strechaArray = strechaArray|merge([filterStrecha]) %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% set activeLabels = activeLabels|merge([option.label]) %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% endif %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% endfor %}&ndash;&gt;-->
+
+<!--&lt;!&ndash;    {% if strechaArray|length > 1 %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% set queryParams = queryParams|merge({&ndash;&gt;-->
+<!--&lt;!&ndash;    strecha: strechaArray,&ndash;&gt;-->
+<!--&lt;!&ndash;    }) %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% else %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% set queryParams = queryParams|merge({&ndash;&gt;-->
+<!--&lt;!&ndash;    strecha: strechaArray,&ndash;&gt;-->
+<!--&lt;!&ndash;    }) %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% endif %}&ndash;&gt;-->
+
+<!--&lt;!&ndash;    {# Konštrukcia #}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% set konstrukciaArray = [] %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% for option in filterEntry.konstrukcia.options %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% set filterKonstrukcia = craft.app.request.getParam('konstrukcia_' ~ loop.index) %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% if filterKonstrukcia is not empty %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% set konstrukciaArray = konstrukciaArray|merge(['*"' ~ filterKonstrukcia ~ '"*']) %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% set activeLabels = activeLabels|merge([option.label]) %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% endif %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% endfor %}&ndash;&gt;-->
+
+<!--&lt;!&ndash;    {% if konstrukciaArray|length > 1 %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% set queryParams = queryParams|merge({&ndash;&gt;-->
+<!--&lt;!&ndash;    konstrukcia: konstrukciaArray,&ndash;&gt;-->
+<!--&lt;!&ndash;    }) %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% else %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% set queryParams = queryParams|merge({&ndash;&gt;-->
+<!--&lt;!&ndash;    konstrukcia: konstrukciaArray,&ndash;&gt;-->
+<!--&lt;!&ndash;    }) %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% endif %}&ndash;&gt;-->
+
+<!--&lt;!&ndash;    {# metraz #}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% set metrazArray = [] %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% for option in filterEntry.metraz.options %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% set filterMetraz = craft.app.request.getParam('metraz_' ~ loop.index) %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% if filterMetraz is not empty %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% set metrazArray = metrazArray|merge([filterMetraz]) %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% set activeLabels = activeLabels|merge([option.label]) %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% endif %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% endfor %}&ndash;&gt;-->
+
+<!--&lt;!&ndash;    {% if metrazArray|length > 1 %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% set queryParams = queryParams|merge({&ndash;&gt;-->
+<!--&lt;!&ndash;    metraz: metrazArray,&ndash;&gt;-->
+<!--&lt;!&ndash;    }) %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% else %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% set queryParams = queryParams|merge({&ndash;&gt;-->
+<!--&lt;!&ndash;    metraz: metrazArray,&ndash;&gt;-->
+<!--&lt;!&ndash;    }) %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% endif %}&ndash;&gt;-->
+
+<!--&lt;!&ndash;    {# izby #}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% set izbyArray = [] %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% for option in filterEntry.izby.options %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% set filterIzby = craft.app.request.getParam('izby_' ~ loop.index) %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% if filterIzby is not empty %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% set izbyArray = izbyArray|merge([filterIzby]) %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% set activeLabels = activeLabels|merge([option.label]) %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% endif %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% endfor %}&ndash;&gt;-->
+
+<!--&lt;!&ndash;    {% if izbyArray|length > 1 %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% set queryParams = queryParams|merge({&ndash;&gt;-->
+<!--&lt;!&ndash;    izby: izbyArray,&ndash;&gt;-->
+<!--&lt;!&ndash;    }) %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% else %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% set queryParams = queryParams|merge({&ndash;&gt;-->
+<!--&lt;!&ndash;    izby: izbyArray,&ndash;&gt;-->
+<!--&lt;!&ndash;    }) %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% endif %}&ndash;&gt;-->
+
+<!--&lt;!&ndash;    {# garaz #}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% set garazArray = [] %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% for option in filterEntry.garaz.options %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% set filterGaraz = craft.app.request.getParam('garaz_' ~ loop.index) %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% if filterGaraz is not empty %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% set garazArray = garazArray|merge([filterGaraz]) %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% set activeLabels = activeLabels|merge([option.label]) %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% endif %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% endfor %}&ndash;&gt;-->
+
+<!--&lt;!&ndash;    {% set garageTmp = garazArray|join(' and ') %}&ndash;&gt;-->
+
+<!--&lt;!&ndash;    {% if garazArray|length > 1 %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% set queryParams = queryParams|merge({&ndash;&gt;-->
+<!--&lt;!&ndash;    garaz: garazArray,&ndash;&gt;-->
+<!--&lt;!&ndash;    }) %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% else %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% set queryParams = queryParams|merge({&ndash;&gt;-->
+<!--&lt;!&ndash;    garaz: garazArray,&ndash;&gt;-->
+<!--&lt;!&ndash;    }) %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% endif %}&ndash;&gt;-->
+
+<!--&lt;!&ndash;    {% set filterQueryString = craft.app.request.getQueryStringWithoutPath() %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% set filteredHousesList = craft.entries(queryParams) %}&ndash;&gt;-->
+
+<!--&lt;!&ndash;    &lt;!&ndash; FILTER volitelne part2 -&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;    {% if typArray|length > 0 or podlaznostArray|length > 0 or strechaArray|length > 0 or metrazArray|length > 0 or izbyArray|length > 0 or garazArray|length > 0 %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% set filterIsEmpty = true %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% endif %}&ndash;&gt;-->
+
+<!--&lt;!&ndash;    {% set _finalFilteredHousesByVolitelne = [] %}&ndash;&gt;-->
+
+<!--&lt;!&ndash;    {% if finalFilteredHousesList2 is not empty %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% if filteredHousesList is not empty %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% for mergeHouse in filteredHousesList %}&ndash;&gt;-->
+
+<!--&lt;!&ndash;    {% if mergeHouse.id in finalFilteredHousesList2 %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% set _finalFilteredHousesByVolitelne = _finalFilteredHousesByVolitelne|merge([mergeHouse.id]) %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% endif %}&ndash;&gt;-->
+
+<!--&lt;!&ndash;    {% endfor %}&ndash;&gt;-->
+
+<!--&lt;!&ndash;    {% set queryParams = {&ndash;&gt;-->
+<!--&lt;!&ndash;    section: 'dom',&ndash;&gt;-->
+<!--&lt;!&ndash;    limit: settings.houseListCountListView,&ndash;&gt;-->
+<!--&lt;!&ndash;    id: _finalFilteredHousesByVolitelne&ndash;&gt;-->
+<!--&lt;!&ndash;    }&ndash;&gt;-->
+<!--&lt;!&ndash;    %}&ndash;&gt;-->
+
+<!--&lt;!&ndash;    {% set filteredHousesList = craft.entries(queryParams) %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% endif %}&ndash;&gt;-->
+
+<!--&lt;!&ndash;    {% else %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% set queryParams = {&ndash;&gt;-->
+<!--&lt;!&ndash;    section: 'dom',&ndash;&gt;-->
+<!--&lt;!&ndash;    limit: settings.houseListCountListView,&ndash;&gt;-->
+<!--&lt;!&ndash;    id: finalFilteredHousesList2&ndash;&gt;-->
+<!--&lt;!&ndash;    }&ndash;&gt;-->
+<!--&lt;!&ndash;    %}&ndash;&gt;-->
+<!--&lt;!&ndash;    {% endif %}&ndash;&gt;-->
+<!--&lt;!&ndash;    &lt;!&ndash; /FILTER volitelne part2 -&ndash;&gt;&ndash;&gt;-->
+
+
+<!--    {% paginate filteredHousesList as paginateInfo, houses %}-->
+<!--    {% set filterResult = filteredHousesList.count() %}-->
+
+<!--    {% embed '_components/left/toolbar/_sorting' %}{% endembed %}-->
+
+<!--    &lt;!&ndash; LISTING &ndash;&gt;-->
+<!--    <div class="list">-->
+
+
+<!--        {% if houses|length == 0 %}-->
+<!--        <div></div>-->
+<!--        <div class="empty" style="font-size: 18px;text-align: center;">-->
+<!--            <p>Nenašli ste Váš vysnívaný dom? My Vám to naprojektujeme podľa Vašich predstáv.</p>-->
+<!--            <a href="{{ siteUrl }}kontakt">-->
+<!--                <span style="padding: 5px 10px;">Kontaktujte nás</span>-->
+<!--            </a>-->
+<!--        </div>-->
+<!--        {% endif %}-->
+
+<!--        {% set filterQueryString = craft.app.request.getQueryStringWithoutPath() %}-->
+<!--        {% for entry in houses %}-->
+
+<!--            &lt;!&ndash; HOUSE ELEM &ndash;&gt;-->
+<!--                <a href="{{ entry.url }}{% if filterQueryString is not empty%}?{{ filterQueryString }}{% endif %}" class="house-elem" data-volitelne="{{ volitelneArray|json_encode() }}" data-ids="{{ finalFilteredHousesList2 | json_encode() }}" data-ids-x="{{ _finalFilteredHousesByVolitelne|json_encode() }}">-->
+<!--                    {% set cover = entry.vizualy.one() %}-->
+
+<!--                    <img srcset="{{ cover.url('houseDetailGalleryThumbs320w') }} 320w,-->
+<!--                                                             {{ cover.url('houseDetailGalleryThumbs480w') }} 480w,-->
+<!--                                                             {{ cover.url('houseDetailGalleryThumbs800w') }} 800w"-->
+<!--                         sizes="(max-width: 320px) 280px,-->
+<!--                                                            (max-width: 480px) 440px,-->
+<!--                                                            800px"-->
+<!--                         src="{{ cover.url('houseDetailGalleryThumbs') }}" alt="{{ cover }}"/>-->
+
+<!--                    <div class="details">-->
+<!--                        <div class="top">-->
+<!--                            <div class="name">-->
+<!--                                <div class="counter">#{% if entry.cisloDomu is not empty %}{{ entry.cisloDomu }}{% else %}{{ entry.id }}{% endif %}</div>-->
+<!--                                <div>{{ entry.nazov }}</div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                        <div class="bottom">-->
+
+<!--                            {% if entry.stitok != '' %}-->
+<!--                            <div class="label" style="background: {{ entry.stitokFarba.value }} ">-->
+<!--                                <div>{{ entry.stitok }}</div>-->
+<!--                            </div>-->
+<!--                            {% endif %}-->
+
+<!--                            <div class="box"></div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+
+<!--                    {% set finalContent = [] %}-->
+<!--                    {% if entry.seopKeys is not empty %}-->
+
+<!--                        {% for elem in entry.seopKeys %}-->
+<!--                            {% set currentLoopIndex = loop.index %}-->
+<!--                            {% set contentIndex = elem.contentKey - 1 %}-->
+
+<!--                            {% set seoEntries = entry.seo.all()  %}-->
+<!--                            {% if seoEntries|length %}-->
+<!--                                {% for seoObject in seoEntries %}-->
+<!--                                    {% if currentLoopIndex == loop.index %}-->
+<!--                                        {# Entry content #}-->
+<!--                                        {% if seoObject.contents|length and contentIndex >= 0 %}-->
+<!--                                            {% if seoObject.contents[contentIndex] is defined %}-->
+<!--                                                {% set finalContent = finalContent|merge([seoObject.contents[contentIndex].content]) %}-->
+<!--                                            {% endif %}-->
+<!--                                        {% endif %}-->
+
+<!--                                    {% endif %}-->
+<!--                                {% endfor %}-->
+<!--                            {% endif %}-->
+
+<!--                        {% endfor %}-->
+
+<!--                    {% endif %}-->
+
+<!--                    &lt;!&ndash; DETAILS BOTTOM &ndash;&gt;-->
+<!--                    <div class="details-bottom">-->
+<!--                        <div class="short-description">-->
+<!--                            {% if finalContent|length %}-->
+<!--                            <p>{{ finalContent|join(' ') }}</p>-->
+<!--                            {% endif %}-->
+<!--                        </div>-->
+<!--                        <div class="info-grid">-->
+<!--                            <div>-->
+<!--                                <div class="row">-->
+<!--                                    <div class="label">Úžitková plocha</div>-->
+<!--                                    <div>{{ entry.uzhitkovaPlocha }} m<sup>2</sup></div>-->
+<!--                                </div>-->
+<!--                                <div class="row">-->
+<!--                                    <div class="label">Cena projektu</div>-->
+<!--                                    <div>{{ entry.projekt }} &euro;</div>-->
+<!--                                </div>-->
+<!--                                <div class="row">-->
+<!--                                    <div class="label">Cena holodomu</div>-->
+<!--                                    <div>{{ entry.holodomSDph }} &euro;</div>-->
+<!--                                </div>-->
+<!--                                <div class="row">-->
+<!--                                    <div class="label">Cena komplet</div>-->
+<!--                                    <div>-->
+<!--                                        <strong class="red">{{ entry.kompletSDph }} &euro;</strong>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                                <div class="row cena-mesacna" data-redirect="https://familyhouse.sk/financovanie">-->
+<!--                                    <div class="label">Cena mesačne</div>-->
+<!--                                    <div>-->
+<!--                                        {% if entry.mesacne is empty %}-->
+<!--                                            <strong class="red">-</strong>-->
+<!--                                        {% else %}-->
+<!--                                            <strong class="red">{{ entry.mesacne }} &euro;</strong>-->
+<!--                                        {% endif %}-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                            <div class="interest">-->
+<!--                                <div>Mám <br>záujem</div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    &lt;!&ndash; /DETAILS BOTTOM &ndash;&gt;-->
+<!--                </a>-->
+<!--            &lt;!&ndash; /HOUSE ELEM &ndash;&gt;-->
+
+<!--        {% endfor %}-->
+
+<!--    </div>-->
+<!--    &lt;!&ndash; /LISTING &ndash;&gt;-->
+
+<!--    {% if filteredHousesList|length > 0 %}-->
+<!--    {% set queryString      = craft.app.request.getQueryStringWithoutPath() %}-->
+<!--    {% set queryStringFull  = (queryString is not empty) ? '?' ~ queryString : '' %}-->
+
+<!--        <div class="paginate-info filter2">-->
+<!--            {% for page, url in paginateInfo.getPrevUrls(5) %}-->
+<!--&lt;!&ndash;                {% set prevUrl = url|replace({'_filter2': 'projekty-domov' }) %}&ndash;&gt;-->
+<!--&lt;!&ndash;                {% set filterPrevUrl = url|replace({'_filter': 'projekty-domov' }) %}&ndash;&gt;-->
+<!--                {% set prevUrl = url|replace({'projekty-domov2': 'projekty-domov','_filter2':'projekty-domov','_filter':'projekty-domov','filter':'projekty-domov' }) %}-->
+<!--                <a href="{{ prevUrl ~ queryStringFull }}">{{ page }}</a>-->
+<!--            {% endfor %}-->
+
+<!--            <span class="current">{{ paginateInfo.currentPage }}</span>-->
+
+<!--            {% for page, url in paginateInfo.getNextUrls(5) %}-->
+
+<!--&lt;!&ndash;                {% set _filter2Url = url|replace({'_filter2': 'projekty-domov' }) %}&ndash;&gt;-->
+<!--&lt;!&ndash;                {% set _filterUrl = url|replace({'_filter2Url': 'projekty-domov' }) %}&ndash;&gt;-->
+<!--                {% set nextUrl = url|replace({'projekty-domov2': 'projekty-domov','_filter2':'projekty-domov','_filter':'projekty-domov','filter':'projekty-domov' }) %}-->
+<!--                <a href="{{ nextUrl ~ queryStringFull }}"  >{{ page }}</a>-->
+<!--            {% endfor %}-->
+<!--        </div>-->
+
+<!--    {% endif %}-->
+<!--</div>-->
+
+
+<!--{% set filterVars = {'activeLabels': activeLabels } %}-->
+<!--{% include '_components/filter/hidden_filtered_tags' with filterVars %}-->
+
+

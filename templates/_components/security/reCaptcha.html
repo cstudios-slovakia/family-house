@@ -1,0 +1,24 @@
+<script src="https://www.google.com/recaptcha/api.js?render=6LdxOHsUAAAAAMbOh1DOroERH0ryYm1wsrgq2Zqp"></script>
+<script type="application/javascript">grecaptcha.ready(function () {
+    grecaptcha.execute('6LdxOHsUAAAAAMbOh1DOroERH0ryYm1wsrgq2Zqp', {action: "homepage"}).then(function (a) {
+        $.ajax({
+            type: "POST",
+            url: "{{ settings.baseUrl }}services/recaptcha.php",
+            data: {token: a},
+            dataType: "json",
+            headers: {"Content-Type": "application/x-www-form-urlencoded"},
+            success: function (b) {
+                var $score = b.score;
+                if (b.score > 0.6) {
+                    if ($(document).find('.captcha-input').length > 0) {
+                        $(document).find('.captcha-input').val($score);
+                    }
+                    $(document).find('*[type="submit"]').attr('disabled', false);
+				} else {
+                    $('form').submit(false);
+				}
+                console.info('Your score is: ' + $score);
+            }
+        })
+    })
+});</script>

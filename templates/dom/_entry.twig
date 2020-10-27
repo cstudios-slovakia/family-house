@@ -1,0 +1,104 @@
+
+{% extends "_layout" %}
+{% import "_components/macros/images_output.html" as imagesMacro %}
+{% block bodyClass %}dom-list-view dom-view{% endblock bodyClass %}
+{% block footerScripts %}
+    <script src="{{ settings.baseUrl }}assets/js/vendor/angular.min.js"></script>
+    <script src="{{ settings.baseUrl }}assets/js/vendor/calculator.min.js?v=1.0.7"></script>
+    <script>
+        window.currentSiteBaseUrl = '{{ currentSite.baseUrl }}';
+        window.currentHouseId = {{ entry.id }};
+    </script>
+{% endblock footerScripts %}
+
+{% set entryLayoutVersion = entry.type.handle == 'dom' ? 'v01' : 'v02' %}
+{% set entryLayout = 'dom/_entry_content_' ~ entryLayoutVersion %}
+
+ {# SEOP #}
+{% set custom_seo = true %}
+{% set finalKeywords = [] %}
+{% set finalDescription = [] %}
+{% set finalContent = [] %}
+
+{% if entry.seopKeys is not empty %}
+
+    {% for elem in entry.seopKeys %}
+        {% set currentLoopIndex = loop.index %}
+        {% set keywordIndex = elem.keywordKey - 1 %}
+        {% set descriptionIndex = elem.descriptionKey - 1 %}
+        {% set contentIndex = elem.contentKey - 1 %}
+
+        {% if entry.seo|length %}
+            {% for seoObject in entry.seo %}
+                {% if currentLoopIndex == loop.index %}
+                    {# Entry keywords #}
+                    {% if seoObject.keywords|length and keywordIndex >= 0 %}
+                        {% if seoObject.keywords[keywordIndex] is defined %}
+                            {% set finalKeywords = finalKeywords|merge([seoObject.keywords[keywordIndex].keyword]) %}
+                        {% endif %}
+                    {% endif %}
+
+                    {# Entry descriptions #}
+                    {% if seoObject.descriptions|length and descriptionIndex >= 0 %}
+                        {% if seoObject.descriptions[descriptionIndex] is defined %}
+                            {% set finalDescription = finalDescription|merge([seoObject.descriptions[descriptionIndex].description]) %}
+                        {% endif %}
+                    {% endif %}
+
+                    {# Entry content #}
+                    {% if seoObject.contents|length and contentIndex >= 0 %}
+                        {% if seoObject.contents[contentIndex] is defined %}
+                            {% set finalContent = finalContent|merge([seoObject.contents[contentIndex].content]) %}
+                        {% endif %}
+                    {% endif %}
+
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+
+    {% endfor %}
+
+    {# define some final metas #}
+    {% set finalKeywordsContent         = finalKeywords|join()  %}
+    {% set finalDescriptionContent      = finalDescription|join(' ') %}
+    {% set siteTitle                    = entry.nazov ~ ' ' ~ siteName%}
+    {% set metaImage                    = entry.vizualy.one() %}
+    {% set seoUpdated                   = getSeoField('seoUpdated') %}
+
+    {# prepare for filling from plugin #}
+    {% set seo = entry.seoUpdated %}
+
+{% endif %}
+
+{% if entryLayoutVersion == 'v01' %}
+    {% set seo = craft.seo.custom(siteTitle,finalDescriptionContent,null,
+        {
+            twitter: { image: metaImage },
+            facebook: { image: metaImage },
+        }
+        )%}
+{% endif %}
+
+
+
+
+
+{% block customSeo %}
+
+    {% if entryLayoutVersion == 'v02' %}
+        {% set seo = entry.seoUpdated %}
+    {% else %}
+        {% if entry.seopKeys is not empty %}
+            <!-- SEOP Keywords -->
+            <meta name="keywords" content="{{ finalKeywordsContent }}" />
+        {% else %}
+            {% set seo = entry.seoUpdated %}
+        {% endif %}
+    {% endif %}
+
+{% endblock customSeo %}
+
+{% block content %}
+    {% embed entryLayout %}{% endembed %}
+{% endblock %}
+

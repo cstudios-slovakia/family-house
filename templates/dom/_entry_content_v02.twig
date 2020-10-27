@@ -1,0 +1,808 @@
+{% if not currentUser %}
+    {% exit 403 %}
+{% endif %}
+
+{% import "_components/macros/images_output.html" as imagesMacro %}
+
+    {% do view.registerAssetBundle("modules\\preparatormodule\\assetbundles\\preparatormodule\\PreparatorModuleAsset") %}
+    {% set calculationFile = entry.calculationFile.one %}
+
+    {% set house = entry %}
+
+    {# Calculator #}
+    {% set calculatorIsDisabled = false %}
+    {% set calculatorData = [] %}
+    {% set colA = [] %}
+    {% set colC = [] %}
+    {% set colD = [] %}
+    {% set colHolodom = [] %}
+    {% set colNakluc = [] %}
+
+    {% if entry.energClass|length %}
+        {% for tableRow in entry.energClass %}
+            {% if tableRow.primEnergClass > 0 and tableRow.totalEnergCons > 0 and tableRow.monthlyCost > 0 and tableRow.holodomPrice > 0 and tableRow.kompletPrice > 0 %}
+                {% set colA = colA|merge({(tableRow.type): tableRow.primEnergClass}) %}
+                {% set colC = colC|merge({(tableRow.type): tableRow.totalEnergCons}) %}
+                {% set colD = colD|merge({(tableRow.type): tableRow.monthlyCost}) %}
+                {% set colHolodom = colHolodom|merge({(tableRow.type): tableRow.holodomPrice}) %}
+                {% set colNakluc = colNakluc|merge({(tableRow.type): tableRow.kompletPrice}) %}
+            {% endif %}
+        {% endfor %}
+
+        {% set calculatorData = calculatorData|merge({'a': colA, 'c': colC, 'd': colD, 'holodom': colHolodom, 'nakluc': colNakluc}) %}
+
+    {% else %}
+        {% set calculatorIsDisabled = true %}
+    {% endif %}
+
+<!-- CONTENT CONTAINER -->
+<div class="main grid-2-layout">
+
+    <!-- FILTER + HOUSE LISTING -->
+    <div class="filter-house-listing" data-entry-id="{{ entry.id }}">
+        {% embed '_components/_left' %}{% endembed %}
+
+        <!-- HOUSE LISTING -->
+        <div class="house-listing">
+            <div>
+                {% set filterEntry = craft.entries.section('nastavenia').one() %}
+
+                {# typ #}
+                {% set filterUrl = '' %}
+                {% set filterValue = '' %}
+                {% for option in filterEntry.typ.options %}
+                    {% if entry.typ == option.value %}
+                        {% set filterUrl = 'typ_' ~ loop.index %}
+                        {% set filterValue = option.value %}
+                    {% endif %}
+                {% endfor %}
+
+                <!-- HOUSE DETAILS-->
+                <div class="house-details _outter">
+
+                    <div class="house-header">
+                        <div>
+                            <div class="name">
+                                <div class="counter">#{% if entry.cisloDomu is not empty %}{{ entry.cisloDomu }}{% else %}{{ entry.id }}{% endif %}</div>
+                                <div>{{ entry.nazov }}</div>
+                            </div>
+                            {% if entry.textNadChiarouDetailView is not empty %}
+                                <div>
+                                    <div>{{ entry.textNadChiarouDetailView }}</div>
+                                </div>
+                            {% endif %}
+
+                            <a href="https://familyhouse.sk/referencie?house-id={{ entry.id }}" class="find-on-map">
+                                <span>Realizované projekty</span>
+                                <svg style="width:34px;height:34px" viewBox="0 0 24 24">
+                                    <path fill="red" d="M15.5,12C18,12 20,14 20,16.5C20,17.38 19.75,18.21 19.31,18.9L22.39,22L21,23.39L17.88,20.32C17.19,20.75 16.37,21 15.5,21C13,21 11,19 11,16.5C11,14 13,12 15.5,12M15.5,14A2.5,2.5 0 0,0 13,16.5A2.5,2.5 0 0,0 15.5,19A2.5,2.5 0 0,0 18,16.5A2.5,2.5 0 0,0 15.5,14M14,6.11L8,4V15.89L9,16.24V16.5C9,17.14 9.09,17.76 9.26,18.34L8,17.9L2.66,19.97L2.5,20A0.5,0.5 0 0,1 2,19.5V4.38C2,4.15 2.15,3.97 2.36,3.9L8,2L14,4.1L19.34,2H19.5A0.5,0.5 0 0,1 20,2.5V11.81C18.83,10.69 17.25,10 15.5,10C15,10 14.5,10.06 14,10.17V6.11Z" />
+                                </svg>
+                            </a>
+                        </div>
+                        <div class="beadcrumbs">
+                            <a href="{{ siteUrl }}projekty-domov" class="elem">projekty domov</a>
+                            <a href="{{ siteUrl }}filter?{{ filterUrl }}={{ filterValue }}" class="elem">{{ entry.typ.label }}</a>
+                            <div>{{ entry.nazov }}</div>
+                        </div>
+                    </div>
+
+                    <!-- HEADER DETAILS -->
+                    {% set coverImage = entry.vizualy.first() %}
+
+                    {% set imageSizes = [{ width: 320 }, { width: 450 }, { width: 780 }, { width: 1200 }, { width: 1920 }] %}
+                    {% if craft.imager.serverSupportsWebp() and craft.imager.clientSupportsWebp() %}
+                        {% set transformedHeaderDetail = craft.imager.transformImage(coverImage, imageSizes, { format: 'webp' }) %}
+                    {% else %}
+                        {% set transformedHeaderDetail = craft.imager.transformImage(coverImage, imageSizes) %}
+                    {% endif %}
+
+                    {% set dataCover = '' %}
+                    {% if transformedHeaderDetail is not null %}
+                        {% if transformedHeaderDetail.4 is defined %}
+                            {% set dataCover = transformedHeaderDetail[4].url %}
+                        {% endif %}
+                    {% endif %}
+                    <div class="details-header" data-cover="{{ dataCover }}" style="background: url({{ dataCover }}) no-repeat;background-position: center; background-size: cover">
+                        {% if coverImage is not null %}
+                            {{ imagesMacro.imageWebp(coverImage) }}
+                        {% endif %}
+
+                        <div class="details _entry">
+
+                            <!-- NAME -->
+                            <div class="name">
+                                Volám sa
+                                <strong>{{ entry.nazov }}</strong>
+                            </div>
+                            <!-- /NAME -->
+
+                            <!-- SIZE -->
+                            <div class="size">
+                                Úžitková<br>plocha
+                                <strong>{{ entry.uzhitkovaPlocha }} m²</strong>
+                            </div>
+                            <!-- /SIZE -->
+
+                            <!-- PRICE -->
+                            <div class="price">
+                                Komplet<br>s DPH
+                                <strong>{{ entry.kompletSDph }} €</strong>
+                            </div>
+                            <!-- /PRICE -->
+
+                            <!-- PROJECT -->
+                            <div class="project">
+                                Projekt:
+                                <strong>{{ entry.projekt }} €</strong>
+                                {% if entry.mesacne > 0 %}
+                                    Mesačne <br>len za
+                                    <strong class="monthly">{{ entry.mesacne }} €</strong>
+                                {% endif %}
+                            </div>
+                            <!-- /PROJECT -->
+
+                            <!-- DETAILS LEFT -->
+                            <div class="details-left">
+                                <a href="{{ siteUrl }}kontakt" class="contact-redirect">
+                                    <div>Chcem <br>rodinný<br>dom</div>
+                                </a>
+                            </div>
+                            <!-- /DETAILS LEFT -->
+
+                        </div>
+
+                        <!-- MOBILE CONTENT -->
+                        <div class="mobile-details">
+                            <!-- NAME -->
+                            <div class="name">
+                                Volám sa
+                                <strong>{{ entry.nazov }}</strong>
+                            </div>
+                            <!-- /NAME -->
+
+                            <!-- SIZE -->
+                            <div class="size">
+                                Úžitková plocha
+                                <strong>{{ entry.uzhitkovaPlocha }} m²</strong>
+                            </div>
+                            <!-- /SIZE -->
+                        </div>
+                        <!-- /MOBILE CONTENT -->
+                    </div>
+                    <!-- /HEADER DETAILS -->
+
+                    <!-- DETAILS -->
+                    <div class="outside-details">
+                        <div class="details _entry">
+
+                            <!-- NAME -->
+                            <div class="name">
+                                Volám sa
+                                <strong>{{ entry.nazov }}</strong>
+                            </div>
+                            <!-- /NAME -->
+
+                            <!-- SIZE -->
+                            <div class="size">
+                                Úžitková<br>plocha
+                                <strong>{{ entry.uzhitkovaPlocha }} m²</strong>
+                            </div>
+                            <!-- /SIZE -->
+
+                            <!-- PRICE -->
+                            <div class="price">
+                                Komplet<br>s DPH
+                                <strong>{{ entry.kompletSDph }} €</strong>
+                            </div>
+                            <!-- /PRICE -->
+
+                            <!-- PROJECT -->
+                            <div class="project">
+                                Projekt:
+                                <strong>{{ entry.projekt }} €</strong>
+                                {% if entry.mesacne > 0 %}
+                                    Mesačne <br>len za
+                                    <strong class="monthly">{{ entry.mesacne }} €</strong>
+                                {% endif %}
+                            </div>
+                            <!-- /PROJECT -->
+
+                            <!-- DETAILS LEFT -->
+                            <div class="details-left">
+                                <a href="{{ siteUrl }}kontakt" class="contact-redirect">
+                                    <div>Chcem <br>rodinný<br>dom</div>
+                                </a>
+                            </div>
+                            <!-- /DETAILS LEFT -->
+
+                            <!-- PRICE -->
+                            <div class="price small">
+                                Holodom<br>s DPH
+                                <strong>{{ entry.holodomSDph }} €</strong>
+                            </div>
+                            <!-- /PRICE -->
+
+                            {% if entry.mesacne is not empty %}
+                                <!-- PRICE -->
+                                <div class="price small">
+                                    Mesačne<br>
+                                    <strong>{{ entry.mesacne }} €</strong>
+                                </div>
+                                <!-- /PRICE -->
+                            {% endif %}
+
+                        </div>
+                    </div>
+                    <!-- /DETAILS -->
+
+                    <!-- MOBILE CONTENT OUTTER -->
+                    <div class="mobile-content-outter">
+                        <div class="left-side">
+                            <div class="grid-list {% if house.mesacne > 0 %} items-3 {% endif %}">
+                                <!-- SIZE -->
+                                <div class="size">
+                                    Komplet<br>s dph:
+                                    <strong>{{ entry.kompletSDph }} €</strong>
+                                </div>
+                                <!-- /SIZE -->
+
+                                <!-- PRICE -->
+                                <div class="price">
+                                    Holodom<br>s DPH
+                                    <strong>{{ entry.holodomSDph }} €</strong>
+                                </div>
+                                <!-- /PRICE -->
+
+                                <!-- PROJECT -->
+                                <div class="project">
+                                    Projekt:
+                                    <strong>{{ entry.projekt }} €</strong>
+                                </div>
+                                <!-- /PROJECT -->
+
+                                <!-- MONTHLY -->
+                                {% if entry.mesacne > 0 %}
+                                    <div class="monthly">
+                                        Mesačne <br>len za
+                                        <strong class="monthly">{{ entry.mesacne }} €</strong>
+                                    </div>
+                                {% endif %}
+                                <!-- /MONTHLY -->
+                            </div>
+                            <div>
+                                <div>{{ entry.upperText }}</div>
+                                <div>{{ entry.bottomText }}</div>
+                            </div>
+                        </div>
+                        <div class="right-side">
+                            <a href="{{ siteUrl }}kontakt">
+                                <div>Mám <br>záujem</div>
+                                <div></div>
+                            </a>
+                        </div>
+                    </div>
+                    <!-- /MOBILE CONTENT OUTTER -->
+
+                    <!-- IMAGE GALLERY -->
+                    <div class="image-gallery">
+                        {% set galleries = entry.vizualy.all() %}
+                        {% for gallery in galleries %}
+                            <div class="{% if loop.index > 3 %}visually-hidden{% endif %}" data-fancybox="gallery" href="{{ gallery.url('housedetailgallerythumbs1600w') }}">
+                                {{ imagesMacro.imageWebp(gallery) }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <!-- /IMAGE GALLERY -->
+
+                    <!-- CONTENT -->
+                    <div class="entry-content">
+                        <div>
+                            <p>{{ finalContent|join(' ') }}</p>
+                        </div>
+                    </div>
+                    <!-- /CONTENT -->
+
+                    <!-- GLOBAL -->
+                    {% if akoPostupovat.akoPostupovatMatrix is not empty %}
+                        <div class="global-content">
+                            {% for _matrixNode in akoPostupovat.akoPostupovatMatrix %}
+                                <div class="node-block">
+                                    <div class="icon">
+                                        <svg style="width:24px;height:24px" viewBox="0 0 24 24"><path fill="#000000" d="M7.41,15.41L12,10.83L16.59,15.41L18,14L12,8L6,14L7.41,15.41Z" /></svg>
+                                    </div>
+                                    <div class="title">{{ _matrixNode.akoPostupovatMatrixTitleTitle }}</div>
+                                    <div class="description-node">
+                                        {{ _matrixNode.akoPostupovatMatrixTextText }}
+
+                                        <a href="{{ siteUrl }}ako-postupovat" class="more-node">
+                                            <span>Viac info</span>
+                                        </a>
+                                    </div>
+                                </div>
+
+
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                    <!-- GLOBAL -->
+
+                    <!-- TABBED DETAILS -->
+                    <div class="tabbed-details">
+                        <div class="tab-header" id="tabbed-swiper--header">
+                            <!-- TAB BOX -->
+                            <div class="tab-box" data-id="0">
+                                <div>
+                                    <img class="tab-1-img" src="{{ settings.baseUrl }}assets/img/svg/project-description.svg" alt="Hlavná strana rozpis prác">
+                                    <div class="title">Hlavná strana<br>rozpis prác</div>
+                                </div>
+                            </div>
+                            <!-- /TAB BOX -->
+
+                            <!-- TAB BOX -->
+                            <div class="tab-box " data-id="1">
+                                <div>
+                                    <img src="{{ settings.baseUrl }}assets/img/svg/house-map.svg" alt="Pôdorys výkres">
+                                    <div class="title">Pôdorys<br>výkres</div>
+                                </div>
+                            </div>
+                            <!-- /TAB BOX -->
+
+                            <!-- TAB BOX -->
+                            <div class="tab-box {% if calculatorIsDisabled %} disabled {% endif %}" data-id="2">
+                                <div>
+                                    <img class="tab-3-img" src="{{ settings.baseUrl }}assets/img/svg/energy-level.svg" alt="Energetický kalkulátor">
+                                    <div class="title">Energetický<br>kalkulátor</div>
+                                </div>
+                            </div>
+                            <!-- /TAB BOX -->
+
+                            <!-- TAB BOX -->
+                            <div class="tab-box {% if calculationFile is null %}  disabled {% endif %}" data-id="3" title="Táto funkcia bude čoskoro dostupná">
+                                <div>
+                                    <img src="{{ settings.baseUrl }}assets/img/svg/materials.svg" alt="Vyberte si materiály vášho domu">
+                                    <div class="title">Vyberte si<br>materiály<br>vášho domu</div>
+                                </div>
+                            </div>
+                            <!-- /TAB BOX -->
+
+                            <!-- TAB BOX -->
+                            <div class="tab-box editor-show-tab" data-id="4" title="Táto funkcia bude čoskoro dostupná">
+                                <div>
+                                    <img class="tab-5-img" src="{{ settings.baseUrl }}assets/img/svg/house-editor.svg" alt="Pôdorys editor">
+                                    <div class="title">Osadenie<br>domu</div>
+                                </div>
+                            </div>
+                            <!-- /TAB BOX -->
+                        </div>
+
+                        <div class="tabbed-body" id="tabbed-swiper--body">
+                            <div class="swiper-container">
+                                <div class="swiper-wrapper">
+                                    <div class="swiper-slide" data-hash="rozpis-prac">
+
+                                        <!-- TAB 1 -->
+                                        <div class="tabbed-swiper-content">
+                                            <div class="tabbed-layout-2-grid">
+                                                <div>{{ entry.rozpisPracHolodom }}</div>
+                                                <div>{{ entry.rozpisPracKomplet }}</div>
+                                            </div>
+                                        </div>
+                                        <!-- /TAB 1 -->
+
+                                    </div>
+                                    <div class="swiper-slide" data-hash="podorys-vykres">
+
+                                        <!-- TAB 4 -->
+                                        <div class="tabbed-swiper-content">
+
+                                            <!-- MAP AREA -->
+                                            <div class="map-area-grid">
+                                                <div>
+                                                    <div id="map-area-swiper-container">
+                                                        <div class="swiper-container">
+                                                            <div class="swiper-wrapper">
+                                                                {% for gallery in entry.podorysVykres %}
+                                                                    <div class="swiper-slide">
+                                                                        <div data-fancybox="gallery" href="{{ gallery.url('houseDetailsPodorys') }}">
+                                                                            {#                                                                                                    <img src="{{ gallery.url('houseDetailsPodorys') }}" alt="{{ gallery.title }} - {{ entry.nazov }} | {{ siteName }}">#}
+                                                                            {{ imagesMacro.imageWebp(gallery, gallery.title ~ '-' ~ entry.nazov ~ '|' ~ siteName,[{ width: 320 }, { width: 450 }, { width: 780 }, { width: 1024 }, { width: 1920 }]) }}
+                                                                        </div>
+                                                                    </div>
+                                                                {% endfor %}
+                                                            </div>
+                                                        </div>
+                                                        <!--<div class="swiper-pagination"></div>-->
+                                                    </div>
+                                                </div>
+                                                <div class="table-details">
+
+                                                    <div class="table">
+                                                        <div class="title">Legenda miestnosti</div>
+                                                    </div>
+
+                                                    <!-- DETAILS TABLE -->
+                                                    {% if entry.legendaMiestnosti1Poschodie|length %}
+                                                        <div class="table">
+                                                            {% for table in entry.legendaMiestnosti1Poschodie %}
+                                                                <div class="{% if table.kiemelt %}bordered{% endif %}">
+                                                                    <div>{{ table.subject }}</div>
+                                                                    <div>{{ table.value }}</div>
+                                                                </div>
+                                                            {% endfor %}
+
+                                                            {% if entry.legendaMiestnosti2Poschodie|length %}
+                                                                {% for table in entry.legendaMiestnosti2Poschodie %}
+                                                                    <div class="{% if table.kiemelt %}bordered{% endif %}">
+                                                                        <div>{{ table.subject }}</div>
+                                                                        <div>{{ table.value }}</div>
+                                                                    </div>
+                                                                {% endfor %}
+                                                            {% endif %}
+
+                                                            {% if entry.legendaMiestnostiUzitkovaPlocha|length %}
+                                                                {% for table in entry.legendaMiestnostiUzitkovaPlocha %}
+                                                                    <div class="{% if table.kiemelt %}bordered{% endif %}">
+                                                                        <div>{{ table.subject }}</div>
+                                                                        <div>{{ table.value }}</div>
+                                                                    </div>
+                                                                {% endfor %}
+                                                            {% endif %}
+                                                        </div>
+                                                    {% endif %}
+                                                    <!-- /DETAILS TABLE -->
+
+                                                </div>
+                                            </div>
+                                            <!-- /MAP AREA -->
+
+                                        </div>
+                                        <!-- /TAB 4 -->
+
+                                    </div>
+                                    <div class="swiper-slide" data-hash="energeticky-kalkulator">
+
+                                        <!-- TAB 3 -->
+                                        <div class="tabbed-swiper-content">
+
+                                            <!-- CALCULATOR DESCRIPTION -->
+                                            <p>Pri každej kalkulácií treba zohľadniť dve zásadné položky: 1. ročná potreba tepla na vykurovanie, 2. ročná potreba energie na vykurovanie a prípravu teplej úžitkovej vody.</p>
+                                            <p>Z týchto dvoch položiek sa potom vypočíta hodnota celkovej potreby energie a primámej energie, podľa ktorej sa určí energetická trieda rodinného domu. Ročná potreba tepla na vykurovanie závisí od tepelných strát domu. Obaľové konštrukcie sú navrhnuté tak aby spľňali požiadavku normy STN 73 0540-2 (Tepelná ochrana budov) z hľadiska hodnoty tepelného odporu. Nastaviť tieto hodnoty v kalkulátore nie sú možné, lebo počet variantov je nekonečný. V pripade zmeny hrúbiek tepelných izolácií, hodnotu celkovej potreby energie vypočítame na daný dom individuálne.</p>
+                                            <!-- /CALCULATOR DESCRIPTION -->
+
+                                            <!-- MAIN CALCULATOR -->
+                                            <div class="calculator-body" ng-app="calculator" ng-controller="calcCtrl" ng-init="setHouseType('{{ entry.nazov }}')" data-calculator-data="{{ calculatorData|json_encode() }}">
+                                                <h3>Energetický kalkulátor</h3>
+                                                <div>
+
+                                                    <!-- RIGHT 2 COL -->
+                                                    <div class="result-col col-first">
+                                                        <div class="title">Rodinný dom s vybaveným:</div>
+
+                                                        <!-- CALCULATOR CONTROLS INSIDE -->
+                                                        <div class="control-panel">
+
+                                                            <!-- CONTROL BLOCK -->
+                                                            <div class="control-block">
+                                                                <div class="title">Zdroj tepla</div>
+                                                                <div class="field-group">
+                                                                    <input name="a_1" type="radio" id="a1_1" ng-checked="calcVals[0].part1=='1'" ng-click="changePart1('1','plynový kondenzačný kotoľ', 1)" checked="checked">
+                                                                    <label for="a1_1"><span></span>plynový kondenzačný kotoľ</label>
+                                                                </div>
+                                                                <div class="show-more">
+                                                                    <img src="{{ settings.baseUrl }}assets/img/arrow-left.png" alt="Arrow left" />
+                                                                </div>
+                                                                <div class="hidden-fields">
+                                                                    <div class="field-group">
+                                                                        <input name="a_1" type="radio" id="a2_1" ng-checked="calcVals[0].part1=='2'" ng-click="changePart1('2','splyňovací kotoľ na tuhé palivo', 1)">
+                                                                        <label for="a2_1"><span></span>splyňovací kotoľ na tuhé palivo</label>
+                                                                    </div>
+                                                                    <div class="field-group">
+                                                                        <input name="a_1" type="radio" id="a3_1" ng-checked="calcVals[0].part1=='3'" ng-click="changePart1('3','tepelné čerpadlo', 1)">
+                                                                        <label for="a3_1"><span></span>tepelné čerpadlo</label>
+                                                                    </div>
+                                                                    <div class="field-group">
+                                                                        <input name="a_1" type="radio" id="a4_1" ng-checked="calcVals[0].part1=='4'" ng-click="changePart1('4','elektrické vykurovanie', 1)">
+                                                                        <label for="a4_1"><span></span>elektrické vykurovanie</label>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <!-- /CONTROL BLOCK -->
+
+                                                            <!-- CONTROL BLOCK -->
+                                                            <div class="control-block">
+                                                                <div class="title">Odovzdávací systém</div>
+                                                                <div class="field-group">
+                                                                    <input name="b_1" type="radio" id="b1_1" ng-checked="calcVals[0].part2=='1'" ng-click="changePart2('1','teplovodné vykurovacie telesá - radiátory', 1)" ng-disabled="calcVals[0].part1=='3' || calcVals[0].part1=='4'" checked="checked">
+                                                                    <label for="b1_1"><span></span>teplovodné vykurovacie telesá - radiátory</label>
+                                                                </div>
+                                                                <div class="show-more">
+                                                                    <img src="{{ settings.baseUrl }}assets/img/arrow-left.png" alt="Arrow left" />
+                                                                </div>
+                                                                <div class="hidden-fields">
+                                                                    <div class="field-group">
+                                                                        <input name="b_1" type="radio" id="b2_1" ng-checked="calcVals[0].part2=='2'" ng-click="changePart2('2','teplovodné podlahové kúrenie', 1)" ng-disabled="calcVals[0].part1=='4'">
+                                                                        <label for="b2_1"><span></span>teplovodné podlahové kúrenie</label>
+                                                                    </div>
+                                                                    <div class="field-group">
+                                                                        <input name="b_1" type="radio" id="b3_1" ng-checked="calcVals[0].part2=='3'" ng-click="changePart2('3','stropné kúrenie (s možnosťou chladenia)', 1)" ng-disabled="calcVals[0].part1=='1' || calcVals[0].part1=='2' || calcVals[0].part1=='4'" disabled="disabled">
+                                                                        <label for="b3_1"><span></span>stropné kúrenie (s možnosťou chladenia)</label>
+                                                                    </div>
+                                                                    <div class="field-group">
+                                                                        <input name="b_1" type="radio" id="b4_1" ng-checked="calcVals[0].part2=='4'" ng-click="changePart2('4','elektrické podlahové kúrenie s termokáblami', 1)" ng-disabled="calcVals[0].part1=='1' || calcVals[0].part1=='2' || calcVals[0].part1=='3'" disabled="disabled">
+                                                                        <label for="b4_1"><span></span>elektrické podlahové kúrenie s termokáblami</label>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <!-- /CONTROL BLOCK -->
+
+                                                            <!-- CONTROL BLOCK -->
+                                                            <div class="control-block">
+                                                                <div class="title">Rekuperácia</div>
+                                                                <div class="field-group">
+                                                                    <input name="c_1" type="checkbox" id="c1_1" ng-checked="calcVals[0].part3=='1'" ng-click="changePart3(1)">
+                                                                    <label for="c1_1"><span></span>rekuperácia - umelé vetranie bez tepelných strát (cez vzdušný výmenník tepla)</label>
+                                                                </div>
+                                                            </div>
+                                                            <!-- /CONTROL BLOCK -->
+
+                                                        </div>
+                                                        <!-- /CALCULATOR CONTROLS INSIDE -->
+
+                                                        <div class="result-visual">
+                                                            <img ng-src="{{ settings.baseUrl }}assets/img/calculator/class_{[{calcVals[1].eclass}]}.png" alt=""/>
+                                                        </div>
+
+                                                        <div class="results">
+                                                            <div class="results-row">
+                                                                <div>Primárna energia na m2:</div>
+                                                                <strong>{[{calcVals[1].primar | numberFilter }]} kWh/rok*m<sup>2</sup></strong>
+                                                            </div>
+                                                            <div class="results-row">
+                                                                <div>Energetická trieda:</div>
+                                                                <strong class="eclass eclass_{[{calcVals[1].eclass}]}">{[{calcVals[1].eclass}]}</strong>
+                                                            </div>
+                                                            <div class="results-row">
+                                                                <div>Celková ročná potreba energie:</div>
+                                                                <strong>{[{calcVals[1].total | numberFilter }]} kWh/rok</strong>
+                                                            </div>
+                                                            <div class="results-row">
+                                                                <div>Náklady na mesačnú réžiu:</div>
+                                                                <strong class="with-bg">{[{calcVals[1].costs | numberFilter }]} &euro;</strong>
+                                                            </div>
+
+                                                            <div class="price-row">
+                                                                <div>
+                                                                    <div>Holodom</div>
+                                                                    <strong>{[{calcVals[1].holodom | number: 2 }]} &euro;</strong>
+                                                                </div>
+                                                                <div>
+                                                                    <div>Komplet</div>
+                                                                    <strong>{[{calcVals[1].housekey | number: 2 }]} &euro;</strong>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <!-- SIDE SWITCHER -->
+                                                        <div class="side-switcher-container _hidden" ng-click="toggleSide()" ng-class="{'on': sideIsRight()}">
+                                                            <div>
+                                                                <input name="r" type="checkbox" id="r1"/>
+                                                            </div>
+                                                        </div>
+                                                        <!-- /SIDE SWITCHER -->
+
+                                                    </div>
+                                                    <div class="result-col col-second">
+                                                        <div class="title">Rodinný dom s vybeveným:</div>
+
+                                                        <!-- CALCULATOR CONTROLS INSIDE -->
+                                                        <div class="control-panel second">
+
+                                                            <!-- CONTROL BLOCK -->
+                                                            <div class="control-block">
+                                                                <div class="title">Zdroj tepla</div>
+                                                                <div class="field-group">
+                                                                    <input name="a_2" type="radio" id="a1_2" ng-checked="calcVals[3].part1=='1'" ng-click="changePart1('1','plynový kondenzačný kotoľ', 2)" checked="checked">
+                                                                    <label for="a1_2"><span></span>plynový kondenzačný kotoľ</label>
+                                                                </div>
+                                                                <div class="show-more">
+                                                                    <img src="{{ settings.baseUrl }}assets/img/arrow-left.png" alt="Arrow left" />
+                                                                </div>
+                                                                <div class="hidden-fields">
+                                                                    <div class="field-group">
+                                                                        <input name="a_2" type="radio" id="a2_2" ng-checked="calcVals[3].part1=='2'" ng-click="changePart1('2','splyňovací kotoľ na tuhé palivo', 2)">
+                                                                        <label for="a2_2"><span></span>splyňovací kotoľ na tuhé palivo</label>
+                                                                    </div>
+                                                                    <div class="field-group">
+                                                                        <input name="a_2" type="radio" id="a3_2" ng-checked="calcVals[3].part1=='3'" ng-click="changePart1('3','tepelné čerpadlo', 2)">
+                                                                        <label for="a3_2"><span></span>tepelné čerpadlo</label>
+                                                                    </div>
+                                                                    <div class="field-group">
+                                                                        <input name="a_2" type="radio" id="a4_2" ng-checked="calcVals[3].part1=='4'" ng-click="changePart1('4','elektrické vykurovanie', 2)">
+                                                                        <label for="a4_2"><span></span>elektrické vykurovanie</label>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <!-- /CONTROL BLOCK -->
+
+                                                            <!-- CONTROL BLOCK -->
+                                                            <div class="control-block">
+                                                                <div class="title">Odovzdávací systém</div>
+                                                                <div class="field-group">
+                                                                    <input name="b_2" type="radio" id="b1_2" ng-checked="calcVals[3].part2=='1'" ng-click="changePart2('1','teplovodné vykurovacie telesá - radiátory', 2)" ng-disabled="calcVals[3].part1=='3' || calcVals[3].part1=='4'" checked="checked">
+                                                                    <label for="b1_2"><span></span>teplovodné vykurovacie telesá - radiátory</label>
+                                                                </div>
+                                                                <div class="show-more">
+                                                                    <img src="{{ settings.baseUrl }}assets/img/arrow-left.png" alt="Arrow left" />
+                                                                </div>
+                                                                <div class="hidden-fields">
+                                                                    <div class="field-group">
+                                                                        <input name="b_2" type="radio" id="b2_2" ng-checked="calcVals[3].part2=='2'" ng-click="changePart2('2','teplovodné podlahové kúrenie', 2)" ng-disabled="calcVals[3].part1=='4'">
+                                                                        <label for="b2_2"><span></span>teplovodné podlahové kúrenie</label>
+                                                                    </div>
+                                                                    <div class="field-group">
+                                                                        <input name="b_2" type="radio" id="b3_2" ng-checked="calcVals[3].part2=='3'" ng-click="changePart2('3','stropné kúrenie (s možnosťou chladenia)', 2)" ng-disabled="calcVals[3].part1=='1' || calcVals[3].part1=='2' || calcVals[3].part1=='4'" disabled="disabled">
+                                                                        <label for="b3_2"><span></span>stropné kúrenie (s možnosťou chladenia)</label>
+                                                                    </div>
+                                                                    <div class="field-group">
+                                                                        <input name="b_2" type="radio" id="b4_2" ng-checked="calcVals[3].part2=='4'" ng-click="changePart2('4','elektrické podlahové kúrenie s termokáblami', 2)" ng-disabled="calcVals[3].part1=='1' || calcVals[3].part1=='2' || calcVals[3].part1=='3'" disabled="disabled">
+                                                                        <label for="b4_2"><span></span>elektrické podlahové kúrenie s termokáblami</label>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <!-- /CONTROL BLOCK -->
+
+                                                            <!-- CONTROL BLOCK -->
+                                                            <div class="control-block">
+                                                                <div class="title">Rekuperácia</div>
+                                                                <div class="field-group">
+                                                                    <input name="c_2" type="checkbox" id="c1_2" ng-checked="calcVals[3].part3=='1'" ng-click="changePart3(2)">
+                                                                    <label for="c1_2"><span></span>rekuperácia - umelé vetranie bez tepelných strát (cez vzdušný výmenník tepla)</label>
+                                                                </div>
+                                                            </div>
+                                                            <!-- /CONTROL BLOCK -->
+
+                                                        </div>
+                                                        <!-- /CALCULATOR CONTROLS INSIDE -->
+
+                                                        <div class="result-visual">
+                                                            <img ng-src="{{ settings.baseUrl }}assets/img/calculator/class_{[{calcVals[2].eclass}]}.png" alt=""/>
+                                                        </div>
+
+                                                        <div class="results">
+                                                            <div class="results-row">
+                                                                <div>Primárna energia na m2:</div>
+                                                                <strong>{[{calcVals[2].primar | numberFilter }]} kWh/rok*m<sup>2</sup></strong>
+                                                            </div>
+                                                            <div class="results-row">
+                                                                <div>Energetická trieda:</div>
+                                                                <strong class="eclass eclass_{[{calcVals[2].eclass}]}">{[{calcVals[2].eclass}]}</strong>
+                                                            </div>
+                                                            <div class="results-row">
+                                                                <div>Celková ročná potreba energie:</div>
+                                                                <strong>{[{calcVals[2].total | numberFilter }]} kWh/rok</strong>
+                                                            </div>
+                                                            <div class="results-row">
+                                                                <div>Náklady na mesačnú réžiu:</div>
+                                                                <strong class="with-bg">{[{calcVals[2].costs | numberFilter }]} &euro;</strong>
+                                                            </div>
+
+                                                            <div class="price-row">
+                                                                <div>
+                                                                    <div>Holodom</div>
+                                                                    <strong>{[{calcVals[2].holodom | number : 2}]} &euro;</strong>
+                                                                </div>
+                                                                <div>
+                                                                    <div>Komplet</div>
+                                                                    <strong>{[{calcVals[2].housekey | number : 2}]} &euro;</strong>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                    <!-- /RIGHT 2 COL -->
+                                                </div>
+                                            </div>
+                                            <!-- /MAIN CALCULATOR -->
+
+                                            <p>Uvedené ceny nezahŕňajú pripojenia na inžinierske siete.</p>
+                                            <p>V kalkulácii "Náklady na mesačnú réžiu" nie je zahrnutá pevná mesačná zložka podľa ampérickej hodnoty hlavného ističa a pevná mesačná platba za jedno odberné miesto. Uvedené režijné náklady sú vypočítané podľa výhrevnosti palív, účinnosti tepelného zdroja, aktuálnych cien palív a elektrickej energie.</p>
+                                            <p>Uvedené energetické hodnoty nie sú dokonalo presné, môžu sa líšiť pri inej orientácii domov k svetovým stranám. Primárnou nazývame energiu vo forme, v akej sa vyskytujev prírode (napr.: uhlie, ropa, zemný plyn, drevo, vietor, vodná energia, prírodný urán, slnečné žiarenie). Pri výpočte primárnej energie sa ročná potreba energie vynásobý s príslušným váhovým faktorom používanej primárnej energie a tiež sa určí množstvo emisií CO2. Preto primárna energia podľa čoho sa dom zaradí do energetickej triedy nie je priamo úmerná s mesačnými nákladmi.</p>
+
+                                        </div>
+                                        <!-- /TAB 3 -->
+
+                                    </div>
+                                    <div class="swiper-slide" data-hash="materialy-vasho-domu">
+
+                                        <!-- TAB 4 -->
+                                        <div class="tabbed-swiper-content">
+                                            {% if calculationFile is not null   %}
+                                                {% include 'preparator-module/reader/calculator' %}
+                                            {% else %}
+                                                <div class="notice">Neobsahuje kalkuláciu!</div>
+                                            {% endif %}
+                                        </div>
+                                        <!-- /TAB 4 -->
+
+                                    </div>
+                                    <div class="swiper-slide" data-hash="podorys-editor">
+
+                                        <!-- TAB 5 -->
+                                        <div class="tabbed-swiper-content">
+                                            {% embed '_components/editor' %}{% endembed %}
+                                            <div class="notice">
+                                                <p>Tento editor nefunguje na mobilných zariadeniach ani tabletoch!</p>
+                                            </div>
+                                        </div>
+                                        <!-- /TAB 5 -->
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /TABBED DETAILS -->
+
+                </div>
+                <!-- HOUSE DETAILS-->
+
+                {% if entry.podobneDomy is not empty %}
+
+                    <!-- RELATED HOUSES -->
+                    <div class="related-houses">
+                        <h2 class="plain">Podobné domy</h2>
+
+                        <div id="related-list-container">
+                            <div class="swiper-button-prev"></div>
+                            <div class="swiper-container">
+                                <div class="swiper-wrapper">
+                                    {% for house in entry.podobneDomy %}
+
+                                        <div class="swiper-slide">
+                                            <!-- HOUSE ELEM -->
+                                            <a href="{{ house.url }}" class="house-elem">
+                                                {% set houseCover = house.vizualy.one() %}
+                                                <img src="{{ houseCover.url('relatedHousesCover') }}" alt="{{ houseCover.title }} - {{ entry.nazov }} | Familyhouse" />
+                                                {{ imagesMacro.imageWebp(houseCover) }}
+                                                <div class="details">
+                                                    <div class="top">
+                                                        <div class="name">
+                                                            <div class="counter">#{{ house.id }}</div>
+                                                            <div>{{ house.nazov }}</div>
+                                                        </div>
+
+                                                        {% if house.stitok != '' %}
+                                                            <div class="label" style="background: {{ house.stitokFarba.value }} ">
+                                                                <div>{{ house.stitok }}</div>
+                                                            </div>
+                                                        {% endif %}
+
+                                                    </div>
+                                                    <div class="bottom">
+                                                        <div class="box"></div>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                            <!-- /HOUSE ELEM -->
+                                        </div>
+
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <div class="swiper-button-next"></div>
+                        </div>
+                    </div>
+                    <!-- /RELATED HOUSES -->
+
+                {% endif %}
+
+            </div>
+        </div>
+        <!-- /HOUSE LISTING -->
+    </div>
+    <!-- /FILTER + HOUSE LISTING -->
+
+</div>
+<!-- /CONTENT CONTAINER -->
+
+

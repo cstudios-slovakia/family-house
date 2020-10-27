@@ -1,0 +1,201 @@
+
+{% extends "_layout" %}
+{% set seo = entry.seoUpdated %}
+
+{% block bodyClass %}dom-list-view dom-view{% endblock bodyClass %}
+{% block footerScripts %}
+    <script src="{{ settings.baseUrl }}assets/js/vendor/angular.min.js"></script>
+    <script src="{{ settings.baseUrl }}assets/js/vendor/angular-file-upload.min.js"></script>
+    <script src="{{ settings.baseUrl }}assets/js/vendor/price-offer.js?v=1.0.11"></script>
+{% endblock footerScripts %}
+
+{% block content %}
+
+<h1 class="_hidden">{{ "Cenová ponuka"|t }}</h1>
+
+<!-- CONTENT CONTAINER -->
+    <div class="main grid-2-layout no-filter">
+
+        <!-- FILTER + HOUSE LISTING -->
+            <div class="filter-house-listing">
+                {% embed '_components/left' %}{% endembed %}
+
+                <!-- HOUSE LISTING -->
+                    <div class="house-listing">
+                        <div>
+
+                            <!-- CONTACT CONTENT -->
+                                <div class="house-details contact-container">
+
+                                    <div class="house-header">
+                                        <div>
+                                            <div class="name">
+                                                <div class="counter"></div>
+                                                <div class="no-padding">{{ "Cenová ponuka"|t }}</div>
+                                            </div>
+                                        </div>
+                                        <div class="beadcrumbs">
+                                            <a href="{{ siteUrl }}" class="elem">{{ "Hlavná stránka"|t }}</a>
+                                            <div>{{ "Cenová ponuka"|t }}</div>
+                                        </div>
+                                    </div>
+
+                                    <!-- PRICE OFFER -->
+                                        <div id="priceOfferController" class="price-offer" ng-app="priceOffer" ng-controller="priceOfferCtrl" ng-init="apiUrl='{{ siteUrl }}offer.php'">
+
+                                            <!-- SELECTION -->
+                                                <div class="selection">
+
+                                                    <!-- INDIVIDUAL -->
+                                                        <div class="individual block" ng-class="{'_is-selected': isActive(0), '_is-inactive': isInactive(0)}" ng-click="selectType(0)">
+                                                            <img src="{{ settings.baseUrl }}assets/img/backgrounds/price-offer/individual.jpg" alt="Individuálny projekt | {{ siteName }}">
+                                                            <div class="title">{{ "Individuálny projekt"|t }}</div>
+                                                        </div>
+                                                    <!-- /INDIVIDUAL -->
+
+                                                    <!-- FAMILY HOUSE -->
+                                                        <div class="family block" ng-class="{'_is-selected': isActive(1), '_is-inactive': isInactive(1)}" ng-click="selectType(1)">
+                                                            <img src="{{ settings.baseUrl }}assets/img/backgrounds/price-offer/family.jpg" alt="Stavba rodinného domu | {{ siteName }}">
+                                                            <div class="title">{{ "Stavba rodinného domu"|t }}</div>
+                                                        </div>
+                                                    <!-- /FAMILY HOUSE -->
+
+                                                    <!-- OTHER -->
+                                                        <div class="other block" ng-class="{'_is-selected': isActive(2), '_is-inactive': isInactive(2)}" ng-click="selectType(2)">
+                                                            <img src="{{ settings.baseUrl }}assets/img/backgrounds/price-offer/other.jpg" alt="Iné stavby | {{ siteName }}">
+                                                            <div class="title">{{ "Iné stavby"|t }}</div>
+                                                        </div>
+                                                    <!-- /OTHER -->
+
+                                                </div>
+                                            <!-- /SELECTION -->
+
+                                            <!-- OFFER FORM -->
+                                                <div class="offer-form" ng-class="{
+                                                    'default-message': isState(-1),
+                                                    '_show': !isState(-1)
+                                                    }">
+
+                                                    <!-- DEFAULT MESSAGE -->
+                                                        <div class="message">
+                                                            <div>
+                                                                <img src="{{ settings.baseUrl }}assets/img/svg/arrow-white--left.svg" alt="Arrow | {{ siteName }}">
+                                                            </div>
+                                                            <div>{{ "Vyberte si projekt, <br> na ktorý žiadate cenovú ponuku"|t|raw }}</div>
+                                                        </div>
+                                                    <!-- /DEFAULT MESSAGE -->
+
+                                                    <!-- SUCCESS MESSAGE -->
+                                                        <div class="success-message">
+                                                            <div>{{ "Ďakujeme, <br> budeme Vás kontaktovať!"|t|raw }}</div>
+                                                        </div>
+                                                    <!-- /SUCCESS MESSAGE -->
+
+                                                    <!-- FORM/s -->
+                                                        <div class="forms">
+                                                            <form id="price-offer-form-id" name="offer" novalidate method="post" action="" accept-charset="UTF-8" enctype="multipart/form-data">
+                                                                {{ getCsrfInput() }}
+                                                                <div class="controls">
+                                                                    <div class="form-row" ng-class="{'error': hasError('name')}">
+                                                                        <input type="text" placeholder="{{ "Meno:"|t }}" name="name" ng-model="name" required/>
+                                                                    </div>
+
+                                                                    <div class="form-row" ng-class="{'error': hasError('location')}">
+                                                                        <input type="text" placeholder="{{ "Lokalita:"|t }}" name="location" ng-model="location" required/>
+                                                                    </div>
+
+                                                                    <div class="form-row">
+                                                                        <input type="text" placeholder="{{ "Tel.č.:"|t }}" name="phone" ng-model="phone"/>
+                                                                    </div>
+
+                                                                    <div class="form-row" ng-class="{'error': hasError('email')}">
+                                                                        <input type="text" placeholder="{{ "Mailová adresa:"|t }}" name="email" ng-model="email" required/>
+                                                                    </div>
+
+                                                                    <div class="form-row" ng-class="{'error': hasError('size')}">
+                                                                        <input type="text" placeholder="{{ "Úžitková plocha domu v m2:"|t }}" name="size" ng-model="size"/>
+                                                                    </div>
+
+                                                                    <div class="form-row" ng-class="{'error': hasError('type')}">
+                                                                        <select name="type" ng-model="type" ng-init="type='0'">
+                                                                            <option selected disabled value="0">{{ "Bungalov alebo poschodový dom:"|t }}</option>
+                                                                            <option value="1">{{ "Bungalov"|t }}</option>
+                                                                            <option value="2">{{ "Poschodový dom"|t }}</option>
+                                                                        </select>
+                                                                    </div>
+
+                                                                    <div class="form-row" ng-class="{'error': hasError('garage')}">
+                                                                        <select name="garage" ng-model="garage" ng-init="garage='0'">
+                                                                            <option selected disabled value="0">{{ "Samostatný garaž alebo dvojgaraž:"|t }}</option>
+                                                                            <option value="3">{{ "Bez garáže"|t }}</option>
+                                                                            <option value="1">{{ "Samostatná garaž"|t }}</option>
+                                                                            <option value="2">{{ "Dvojgaraž"|t }}</option>
+                                                                        </select>
+                                                                    </div>
+
+                                                                    <div class="form-row" ng-show="isState(2)" ng-class="{'error': hasError('stavba')}">
+                                                                        <select name="stavba" ng-model="stavba" ng-init="stavba='0'">
+                                                                            <option selected disabled value="0">{{ "Typ stavby:"|t }}</option>
+                                                                            <option value="1">{{ "Bytový dom"|t }}</option>
+                                                                            <option value="2">{{ "Polyfunkčná budova"|t }}</option>
+                                                                            <option value="3">{{ "Administratívna budova"|t }}</option>
+                                                                            <option value="4">{{ "Priemyselná budova"|t }}</option>
+                                                                            <option value="5">{{ "Poľnohospodárska budova"|t }}</option>
+                                                                            <option value="6">{{ "Dopravné stavby"|t }}</option>
+                                                                            <option value="7">{{ "Inžinierske siete"|t }}</option>
+                                                                            <option value="8">{{ "Ostatné"|t }}</option>
+                                                                        </select>
+                                                                    </div>
+
+                                                                    <div class="form-row file" ng-class="{'progress': uploader.isUploading}">
+                                                                        <div class="progress" ng-style="{'width': uploader.progress + '%'}"></div>
+                                                                        <input type="file" name="file" accept="image/*, application/pdf" ng-model="file" nv-file-select uploader="uploader" options="{url: '{{ siteUrl }}upload.php'}"/>
+                                                                        <div>
+                                                                            <span>{{ "Načítať projekt alebo pôdorys"|t }}</span>
+                                                                            <svg viewBox="0 0 24 24">
+                                                                                <path fill="#fff" d="M20,6A2,2 0 0,1 22,8V18A2,2 0 0,1 20,20H4A2,2 0 0,1 2,18V6A2,2 0 0,1 4,4H10L12,6H20M10.75,13H14V17H16V13H19.25L15,8.75" />
+                                                                            </svg>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="form-row" ng-class="{'error': hasError('message')}">
+                                                                        <textarea placeholder="{{ "Poznámky"|t }}" name="message" ng-model="message"></textarea>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="form-footer">
+                                                                    <p>{{ "Po odoslaní Vás budeme kontaktovať!"|t }}</p>
+                                                                    <div>
+                                                                        <div>
+                                                                            <div style="visibility: hidden; opacity: 0; width: 1px;height:1px" ng-click="submitForm()" class="trigger"></div>
+<!--                                                                            <button type="button" class="submit-angular-form" disabled>-->
+                                                                            <button type="button" class="submit-angular-form" ng-click="submitForm()">
+                                                                                <span>{{ "Odoslať"|t }}</span>
+                                                                            </button>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+
+                                                            </form>
+                                                        </div>
+                                                    <!-- /FORM/s -->
+
+                                                </div>
+                                            <!-- /OFFER FORM -->
+
+                                        </div>
+                                    <!-- /PRICE OFFER -->
+
+                                </div>
+                            <!-- /CONTACT CONTENT-->
+
+                        </div>
+                    </div>
+                <!-- /HOUSE LISTING -->
+
+            </div>
+        <!-- /FILTER + HOUSE LISTING -->
+
+    </div>
+<!-- /CONTENT CONTAINER -->
+
+{% endblock %}

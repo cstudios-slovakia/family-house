@@ -1,0 +1,41 @@
+<!-- TOOLBAR -->
+    {% set _sortingSelected = 'id desc' %}
+    {% if craft.app.request.getParam('sort') is not empty %}
+        {% set _sortingSelected = craft.app.request.getParam('sort') %}
+    {% endif %}
+
+    <div class="toolbar">
+        <div class="search">
+            <form>
+                <input type="search" name="q" placeholder="Čo hľadáte? napr. Bungalov"/>
+            </form>
+        </div>
+
+        {% if filterResult is defined  %}
+        <div class="filter--result">
+            {% set resultPostFix = 'rodinných domov' %}
+
+            {% if filterResult < 5 %}
+                {% if filterResult < 2 %}
+                    {% set resultPostFix = 'rodinný dom' %}
+                {% else %}
+                    {% set resultPostFix = 'rodinné domy' %}
+                {% endif %}
+            {% endif %}
+
+            Našli sme {{ filterResult }} {{ resultPostFix }}
+        </div>
+        {% endif %}
+
+        <div class="sorting">
+            <select name="sorting">
+                <option value="id desc" {% if _sortingSelected == 'id desc' %}selected{% endif %}>{{"Zoradenie"|t}}</option>
+                <option value="nazov asc" {% if _sortingSelected == 'nazov asc' %}selected{% endif %}>{{"Meno"|t}}</option>
+                <option value="kompletSDph asc" {% if _sortingSelected == 'kompletSDph asc' %}selected{% endif %}>{{"Cena: Od najnižšej po najvyššiu"|t}}</option>
+                <option value="kompletSDph desc" {% if _sortingSelected == 'kompletSDph desc' %}selected{% endif %}>{{ "Cena: Od najvyššej po najnižšíu"|t}}</option>
+                <option value="uzhitkovaPlocha desc" {% if _sortingSelected == 'uzhitkovaPlocha desc' %}selected{% endif %}>{{ "Úžitková plocha: Od najvyššej po najnižšíu"|t}}</option>
+                <option value="uzhitkovaPlocha asc" {% if _sortingSelected == 'uzhitkovaPlocha asc' %}selected{% endif %}>{{ "Úžitková plocha: Od najnižšej po najvyššiu"|t}}</option>
+            </select>
+        </div>
+    </div>
+<!-- /TOOLBAR -->

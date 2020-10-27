@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+    {% set sitebase = 'https://familyhouse.sk/' %}
+
+    {% set dom = craft.entries().section('dom').type('Dom').first() %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projekty Domov - Family House 2020</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="{{ sitebase }}assets/css/vendor/swiper.min.css">
+
+    <link rel="stylesheet" href="{{ sitebase }}assets/new/css/simplebar.css">
+    <link rel="stylesheet" href="{{ sitebase }}assets/new/css/main.css?=ver{{ random(1, 100) }}">
+</head>
+<body>
+    <div class="page-container">
+        
+        {% embed "new/header/header.html" %}
+        {% endembed %}
+
+        <div class="page" id="multipage">
+            
+            {% embed "new/pages/page_sidebar.html" %}
+            {% endembed %}
+
+
+                <div class="multipage-container">
+                
+                    <div class="dopravne-stavby">
+                        {% set e = craft.entries().section('projektovanieKomercnychBudov').level('1').one() %}
+                        <div class="title-row">
+                            <h1>
+                                {{ e.title }}
+                            </h1>
+                        </div>
+
+                        <div class="grid">
+                            {% set i = e.universalEntry.all() %}
+                            {% set ii = e.universalEntry.one() %}
+
+                            <div class="left">
+                                {% set img = ii.obrazok.one() %}
+                                <img src="{{ img.getUrl('houseDetailGalleryThumbs480w') }}" width="{{ img.getWidth('houseDetailGalleryThumbs480w') }}" height="{{ img.getHeight('houseDetailGalleryThumbs480w') }}" alt="">
+                            </div>
+
+
+                            <div class="right">
+                                {% for q in i %}
+                                    <div class="item">
+                                        <div class="q">
+                                            {{ q.nadpis }}
+                                        </div>
+                                        <div class="a">
+                                            {{ q.popis }}
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        
+
+                    </div>    
+                
+                    {% embed "new/embed_interest.html" %}
+                    {% endembed %}
+    
+    
+    
+                </div>
+            
+            
+            </div>
+    
+    
+    
+    
+    
+    
+    
+            {% embed "new/footer.twig" %}
+            {% endembed %}
+        
+        </div>
+        
+        
+            <script src="{{ sitebase }}assets/js/vendor/jquery-3.2.1.min.js"></script>
+            <script src="{{ sitebase }}assets/js/vendor/jquery-waypoints-and-sticky.js"></script>
+            <script src="{{ sitebase }}assets/js/vendor/simplebar.min.js"></script>
+            <script src="{{ sitebase }}assets/js/vendor/vue.js"></script>
+            <script src="{{ sitebase }}assets/js/vendor/vue-router.js"></script>
+            <script src="{{ sitebase }}assets/js/vendor/swiper.min.js"></script>
+            <script src="{{ sitebase }}assets/new/js/main.js?=ver{{ random(1, 100) }}"></script>
+        
+            <script>
+                
+        
+            </script>
+</body>
+</html>

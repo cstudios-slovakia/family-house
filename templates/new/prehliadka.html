@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+    {% set sitebase = 'https://familyhouse.sk/' %}
+    {% set entry = craft.entries().section('dom').slug(craft.app.request.getSegment(2)).one() %}
+    
+    {% set dom = entry %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projekty Domov - Family House 2020</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="{{ sitebase }}assets/css/vendor/swiper.min.css">
+
+    <link rel="stylesheet" href="{{ sitebase }}assets/new/css/simplebar.css">
+    <link rel="stylesheet" href="{{ sitebase }}assets/new/css/main.css?=ver{{ random(1, 100) }}">
+</head>
+<body>
+    <div class="page-container">
+        
+        {% embed "new/header/header.html" %}
+        {% endembed %}
+
+
+        <div class="page" id="prehliadka">
+
+            {% embed "new/dom_sidebar.twig" %}
+            {% endembed %}
+
+
+            <div class="dom-container prehliadka-container">
+
+                <div class="dom-swiper-big-container">
+                    <div class="dom-swiper-big">
+                        <div class="swiper-wrapper">
+                            {% if entry.prehliadkaObrazok|length %}
+                                {% set imgs = entry.prehliadkaObrazok.all() %}
+                            {% endif %}
+                            {% if entry.prehliadkaVideo|length %}
+                                {% set vids = entry.prehliadkaVideo.all() %}
+                            {% endif %}
+                            {% if entry.prehliadka360Obrazky|length %}
+                                {% set o360 = entry.prehliadka360Obrazky %}
+                            {% endif %}
+                        {# {% set imgs = craft.entries().section('dom').type('dom_v2').slug(craft.app.request.getSegment(2)).one().prehliadkaObrazok.all() %}
+                        {% set vids = craft.entries().section('dom').type('dom_v2').slug(craft.app.request.getSegment(2)).one().prehliadkaVideo.all() %}
+                        {% set o360 = craft.entries().section('dom').type('dom_v2').slug(craft.app.request.getSegment(2)).one().prehliadka360Obrazky %} #}
+
+                            {% if entry.prehliadkaVideo|length %}
+                                {% for v in vids %}
+                                <div class="swiper-slide" id="v360">
+                                    <video width="100%" height="100%" controls autoplay>
+                                        <source src="{{ v.getUrl() }}" type="video/mp4">
+                                    </video>
+                                    
+                                    <a href="{{ entry.prehliadka360Obrazky }}" target="_blank" class="v360button video">
+                                        <div>360&deg;</div>
+                                        <div>vstúpiť</div>
+                                        <div>do domu</div>
+                                    </a>
+                                    
+                                </div>
+                                {% endfor %}
+                            {% endif %}
+
+
+
+                            {% for s in imgs %}
+                            <div class="swiper-slide">
+                                <img src="{{ s.getUrl('housedetailgallerythumbs1600w') }}" width="{{ s.getWidth('housedetailgallerythumbs1600w') }}" height="{{ s.getHeight('housedetailgallerythumbs1600w') }}" alt="{{ dom.nazov }}">
+                                <div class="heart-flip">
+                                    <div class="heart">
+                                        <img src="{{ sitebase }}assets/new/img/heart.svg" alt="">
+                                    </div>
+                                    <div class="flip">
+                                        <img src="{{ sitebase }}assets/new/img/flipicon.svg" alt="">
+                                    </div>
+                                </div>
+                                {% if entry.prehliadka360Obrazky|length > 0 %}
+                                <a href="{{ entry.prehliadka360Obrazky }}" target="_blank" class="v360button">
+                                    <div>360&deg;</div>
+                                    <div>vstúpiť</div>
+                                    <div>do domu</div>
+                                </a>
+                                {% endif %}
+                            </div>
+                            {% endfor %}
+                        </div>
+                        <div class="dom-swiper-big-nav">
+                            <div class="prev">
+                                <img src="{{ sitebase }}assets/new/img/dropdown-green.svg" alt="">
+                            </div>
+                            <div class="count"></div>
+                            <div class="next">
+                                <img src="{{ sitebase }}assets/new/img/dropdown-green.svg" alt="">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="dom-swiper-big-thumbs-container">
+                    <div class="right-fog">
+                    </div>
+                    <div class="dom-swiper-big-thumbs">
+                        <div class="swiper-wrapper">
+                            {% for ss in imgs  %}
+                            <div class="swiper-slide">
+                                <img src="{{ ss.getUrl('houseDetailGalleryThumbs320w') }}" width="{{ ss.getWidth('houseDetailGalleryThumbs320w') }}" height="{{ ss.getHeight('houseDetailGalleryThumbs320w') }}" alt="">
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="dom-thumbs-swiper-scroll">
+                        <div class="prev">
+                            <img src="{{ sitebase }}assets/new/img/dropdown-right.svg" alt="">
+                        </div>
+                        <div class="next">
+                            <img src="{{ sitebase }}assets/new/img/dropdown-right.svg" alt="">
+                        </div>
+                    </div>
+                </div>
+                <div class="dom-description">
+                    <div class="dom-description-text">
+                        
+                        {% set seopstr = craft.entries().section('dom').slug(craft.app.request.getSegment(2)).one() %}
+
+                        {# description content for entry #}
+                        {% set finalContent = [] %}
+                        {% if seopstr.seopKeys is not empty %}
+
+                            {% for elem in seopstr.seopKeys %}
+                                {% set currentLoopIndex = loop.index %}
+                                {% set contentIndex = elem.contentKey - 1 %}
+
+                                {% if seopstr.seo|length %}
+                                    {% for seoObject in seopstr.seo %}
+                                        {% if currentLoopIndex == loop.index %}
+                                            {# Entry content #}
+                                            {% if seoObject.contents|length and contentIndex >= 0 %}
+                                                {% if seoObject.contents[contentIndex] is defined %}
+                                                    {% set finalContent = finalContent|merge([seoObject.contents[contentIndex].content]) %}
+                                                {% endif %}
+                                            {% endif %}
+
+                                        {% endif %}
+                                    {% endfor %}
+                                {% endif %}
+
+                            {% endfor %}
+
+                        {% endif %}
+
+                        {% if finalContent|length %}
+                            {% set fullDescription = finalContent|join(' ')|length > 270 ? finalContent|join(' ') : finalContent|join(' ') %}
+                            {{ fullDescription }}
+                        {% endif %}
+                    </div>
+                    <div class="detail-grid">
+                        <div class="left">
+                            <div class="line">
+                                <img src="{{ sitebase }}assets/new/img/bed-blue.svg" alt="">
+                                <div class="label">
+                                    <div class="top">počet izieb</div>
+                                    <div class="bottom red">
+                                        {{ dom.izby.label }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="line">
+                                <img src="{{ sitebase }}assets/new/img/measure-blue.svg" alt="">
+                                <div class="label">
+                                    <div class="top">úžitkova plocha</div>
+                                    <div class="bottom red">{{ dom.uzhitkovaPlocha }}m&sup2;</div>
+                                </div>
+                            </div>
+                            <div class="line">
+                                <img src="{{ sitebase }}assets/new/img/bath-blue.svg" alt="">
+                                <div class="label">
+                                    <div class="top">počet kupeľní</div>
+                                    <div class="bottom red">
+                                        {% if dom.volitelne.contains('kupelna') %}
+                                            2x
+                                        {% else %}
+                                            1x
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="line">
+                                <img src="{{ sitebase }}assets/new/img/parking-blue.svg" alt="">
+                                <div class="label">
+                                    <div class="top">Garážove státie</div>
+                                    <div class="bottom red">
+                                        {% if dom.garaz == 'g0' %}
+                                            Bez garáže
+                                        {% elseif dom.garaz == 'g1' %}
+                                            1x
+                                        {% else %}
+                                            2x
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="line">
+                                <img src="{{ sitebase }}assets/new/img/wardrobe-blue.svg" alt="">
+                                <div class="label">
+                                    <div class="top">šatník</div>
+                                    <div class="bottom red">
+                                        {% if dom.volitelne.contains('satnik') %}
+                                            Ano
+                                        {% else %}
+                                            Nie
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mid">
+
+                            <div class="line">
+                                <img src="{{ sitebase }}assets/new/img/blueprint-blue.svg" alt="">
+                                <div class="label">
+                                    <div class="top">cena projektu</div>
+                                    <div class="bottom red">{{ dom.projekt|number_format(2, ',', '.') }}&euro;</div>
+                                </div>
+                            </div>
+                            <div class="line">
+                                <img src="{{ sitebase }}assets/new/img/brickicon-blue.svg" alt="">
+                                <div class="label">
+                                    <div class="top">hrubá stavba</div>
+                                    <div class="bottom red">{{ dom.holodomSDph|number_format(0, ',', '.') }}&euro;</div>
+                                </div>
+                            </div>
+                            <div class="line">
+                                <img src="{{ sitebase }}assets/new/img/holodomicon-blue.svg" alt="">
+                                <div class="label">
+                                    <div class="top">holodom</div>
+                                    <div class="bottom red">{{ dom.holodomSDph|number_format(0, ',', '.') }}&euro;</div>
+                                </div>
+                            </div>
+                            <div class="line">
+                                <img src="{{ sitebase }}assets/new/img/completicon-blue.svg" alt="">
+                                <div class="label">
+                                    <div class="top">komplet</div>
+                                    <div class="bottom red">{{ dom.kompletSDph|number_format(0, ',', '.') }}&euro;</div>
+                                </div>
+                            </div>
+                            <div class="line">
+                                <img src="{{ sitebase }}assets/new/img/housekey-blue.svg" alt="">
+                                <div class="label">
+                                    <div class="top">cena domu na kľúč</div>
+                                    <div class="bottom red">{{ dom.kompletSDph|number_format(0, ',', '.') }}&euro;</div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <!-- <div class="right">
+
+                            <div class="line">
+                                <img src="{{ sitebase }}assets/new/img/lowprice-blue.svg" alt="">
+                                <div class="label">
+                                    <div class="top">montovany dom</div>
+                                </div>
+                            </div>
+                            <div class="line">
+                                <img src="{{ sitebase }}assets/new/img/highquality-blue.svg" alt="">
+                                <div class="label">
+                                    <div class="top">klasicky murovany dom</div>
+                                </div>
+                            </div>
+
+
+                        </div> -->
+                    </div>
+                </div>
+                <!-- <div class="basic-info">
+                    <h2>Základné informácie</h2>
+                    <div class="info-grid">
+                        <div>
+                            <div class="title">
+                                <img src="{{ sitebase }}assets/new/img/houseicon.svg" class="ico" alt="">
+                                <h3>informácie / vizualizácia</h3>
+                                <img src="{{ sitebase }}assets/new/img/dropdown-right.svg" class="arrow" alt="">
+                            </div>
+                            <div class="text">
+                                <div class="spacer"></div>
+                                Dobre premyslená vizualizácia exteriéru Vás presvedčí o tom, že vybrať si tento rodinný dom je tým správnym krokom vopred. Dizajn zovňajšku domuzodpovedá najnovším trendom a očakávaniam nového majiteľa. Samozrejmosťou je aj prispôsobenie exteriéru domu Vašim požiadavkám, kontaktujte nás pre viac informácií!
+                            </div>
+                        </div>
+                        <div>
+                            <div class="title">
+                                <img src="{{ sitebase }}assets/new/img/360icon.svg" class="ico" alt="">
+                                <h3>virtuálna prehliadka</h3>
+                                <img src="{{ sitebase }}assets/new/img/dropdown-right.svg" class="arrow" alt="">
+                            </div>
+                            <div class="text">
+                                <div class="spacer"></div>
+                                Chcete mať funkčný a zároveň aj dizajnový interiér rodinného domu? Vy sa nemusíte o nič starať, nakoľko sme pre Vás pripravili Vás návrh interiéru tohtokrásneho domu. Vizualizácia interiérov priamo od nás, s možnosťou virtuálnej prehliadky v dome. Zariaďovanie interiérov nikdy nebolo jednoduchšie!Pozrite si možnosti zariadenia domu, aby sa Vám ľahšie rozhodovalo!
+                            </div>
+                        </div>
+                        <div>
+                            <div class="title">
+                                <img src="{{ sitebase }}assets/new/img/plan.svg" class="ico" alt="">
+                                <h3>pôdorys / legenda miestností</h3>
+                                <img src="{{ sitebase }}assets/new/img/dropdown-right.svg" class="arrow" alt="">
+                            </div>
+                            <div class="text">
+                                <div class="spacer"></div>
+                                Pri navrhovaní projektov domov vždy dbáme na to, aby pôdorys a celkové dispozičné riešenie domu bol premyslený do najmenších detailov, a tým sazíska plnohodnotný a funkčný domov. Vždy sa snažíme o to, aby dom bol plne funkčný nielen v interiéri ale mal zaujímavý aj exteriér. Vyberte si tento rodinný dom na základe jeho rozumného pôdorysu!
+                            </div>
+                        </div>
+                        <div>
+                            <div class="title">
+                                <img src="{{ sitebase }}assets/new/img/household.svg" class="ico" alt="">
+                                <h3>osadenie domu na pozemok</h3>
+                                <img src="{{ sitebase }}assets/new/img/dropdown-right.svg" class="arrow" alt="">
+                            </div>
+                            <div class="text">
+                                <div class="spacer"></div>
+                                Osadenie domu je veľmi dôležitý krok pri plánovaní stavby. Tento nástroj Vám pomôže umiestniťVás vysnívaný rodinný dom na pozemok danýchrozmerov.luxusných domoch, Je to veľmi nápomocné pri osadení domu netypických tvarov,ako sú: domy v tvare L, domy na úzky pozemok, alebo pri ktoré majúväčšie. rozmeryPodmienky umiestnenia rodinného domu na pozemok upravuje vyhláška č.532/2002, o presnýchpodmienkach nájdete viac aj v našom článku. Pozrite si, ako sa zmestí tento rodinný dom na Váš pozemok:
+                            </div>
+                        </div>
+                        <div>
+                            <div class="title">
+                                <img src="{{ sitebase }}assets/new/img/configurator.svg" class="ico" alt="">
+                                <h3>konfigurátor / energetika</h3>
+                                <img src="{{ sitebase }}assets/new/img/dropdown-right.svg" class="arrow" alt="">
+                            </div>
+                            <div class="text">
+                                <div class="spacer"></div>
+                                Vaše pohodlie je pre nás prvoradé: vytvorili sme pre Vás špeciálny konfigurátor, kde si môžete sami zvoliť,kde si sami môžete vyskladať, ako by malvyzerať Váš rodinný dom. Týmto spôsobom sa dá ovplyvniť aj energetická trieda domu,keďže Vy si určujete, aké materiály, aká forma zateplenia, kúreniaa pod. by mali byť vo Vašom dome.
+                            </div>
+                        </div>
+                        <div>
+                            <div class="title">
+                                <img src="{{ sitebase }}assets/new/img/calc.svg" class="ico" alt="">
+                                <h3>kalkulácia / financovanie</h3>
+                                <img src="{{ sitebase }}assets/new/img/dropdown-right.svg" class="arrow" alt="">
+                            </div>
+                            <div class="text">
+                                <div class="spacer"></div>
+                                V tejto časti si môžete vypočítať výšku Vašej mesačnej splátky v prípade tohto projektu domu. Vy si určíte výšku hypotéky, aj dobu splácania týmsi môžete získať prehľad o tom, aké vysoké by boli mesačné splátky v prípade vybavenia hypotéky na tento rodinný dom. Stavba domu nikdynebola jednoduchšia, u nás všetko vybavíte na jednom mieste! Ďalej na hypotekárnu kalkulačku:
+                            </div>
+                        </div>
+                    </div>
+                </div> -->
+
+
+
+                {% embed "new/embed_interest.html" %}
+                {% endembed %}
+
+
+
+            </div>
+
+
+        </div>
+
+
+
+
+
+
+
+        {% embed "new/footer.twig" %}
+        {% endembed %}
+
+    </div>
+
+
+        <script src="{{ sitebase }}assets/js/vendor/jquery-3.2.1.min.js"></script>
+        <script src="{{ sitebase }}assets/js/vendor/jquery-waypoints-and-sticky.js"></script>
+        <script src="{{ sitebase }}assets/js/vendor/simplebar.min.js"></script>
+        <script src="{{ sitebase }}assets/js/vendor/vue.js"></script>
+        <script src="{{ sitebase }}assets/js/vendor/vue-router.js"></script>
+        <script src="{{ sitebase }}assets/js/vendor/swiper.min.js"></script>
+
+        <script src="{{ sitebase }}assets/new/js/main.js?=ver{{ random(1, 100) }}"></script>
+        <script src="https://storage.googleapis.com/vrview/2.0/build/vrview.min.js"></script>
+
+
+        <script>
+
+            // dom swiper thumbs
+            var dom_swiper_big_thumbs = new Swiper('.dom-swiper-big-thumbs', {
+                spaceBetween: 20,
+                slidesPerView: 6,
+                // freeMode: true,
+                watchSlidesVisibility: true,
+                watchSlidesProgress: true,
+                scrollbar: {
+                    el: '.dom-thumbs-swiper-scroll',
+                    draggable: true,
+                },
+                navigation: {
+                    nextEl: '.dom-thumbs-swiper-scroll .next',
+                    prevEl: '.dom-thumbs-swiper-scroll .prev',
+                },
+            });
+
+            // dom swiper big
+            var dom_swiper_big = new Swiper('.dom-swiper-big', {
+                spaceBetween: 10,
+                navigation: {
+                    nextEl: '.dom-swiper-big-nav .next',
+                    prevEl: '.dom-swiper-big-nav .prev',
+                },
+                thumbs: {
+                    swiper: dom_swiper_big_thumbs,
+                },
+            });
+
+            // $('.v360button.video').click(function(){
+            //     dom_swiper_big.slideTo(1);
+            // });
+
+            var adjustedIndex = 0;
+
+            {% if entry.prehliadkaVideo|length %}
+                var adjustedIndex = ({{vids|length}});
+            {% endif %}
+
+            $('.dom-swiper-big-thumbs .swiper-slide').click(function(){
+                actSlide = $(this).index() + adjustedIndex;
+                dom_swiper_big.slideTo(actSlide);
+            });
+
+            
+            
+
+
+        </script>
+        {% embed 'new/cookies-embed.html'%}
+        {% endembed %}
+</body>
+</html>

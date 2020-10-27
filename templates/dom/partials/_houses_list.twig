@@ -1,0 +1,234 @@
+<div class="list {% if comingSoon %}coming-soon-list{% endif %}">
+
+    {% if comingSoon %}
+        <div class="comin-soon">{{ "Coming soon"|t }}</div>
+    {% else %}
+
+        {% if housesList|length == 0 %}
+            {% include 'dom/partials/_empty_houses_list' %}
+        {% endif %}
+
+        {% import "_components/macros/images_output.html" as imagesMacro %}
+
+        {% for entry in housesList %}
+
+            {% if entry.type.handle == 'dom' %}
+            <a href="{{ entry.url }}{{ enabledFilterQueryString }}"
+               class="house-elem">
+                {% set cover = entry.vizualy.first() %}
+
+
+                {{ imagesMacro.imageWebp(cover) }}
+                <div class="details">
+                    <div class="top">
+                        <div class="name">
+                            <div class="counter">
+                                #{% if entry.cisloDomu is not empty %}{{ entry.cisloDomu }}{% else %}{{ entry.id }}{% endif %}</div>
+                            <div>{{ entry.nazov }}</div>
+                        </div>
+                    </div>
+                    <div class="bottom">
+
+                        {% if entry.stitok != '' %}
+                            <div class="label" style="background: {{ entry.stitokFarba.value }} ">
+                                <div>{{ entry.stitok }}</div>
+                            </div>
+                        {% endif %}
+
+                        <div class="box"></div>
+                    </div>
+                </div>
+
+                {% set finalContent = [] %}
+                {% if entry.seopKeys is not empty %}
+
+                    {% for elem in entry.seopKeys %}
+                        {% set currentLoopIndex = loop.index %}
+                        {% set contentIndex = elem.contentKey - 1 %}
+
+                        {% if entry.seo|length %}
+                            {% for seoObject in entry.seo %}
+                                {% if currentLoopIndex == loop.index %}
+                                    {# Entry content #}
+                                    {% if seoObject.contents|length and contentIndex >= 0 %}
+                                        {% if seoObject.contents[contentIndex] is defined %}
+                                            {% set finalContent = finalContent|merge([seoObject.contents[contentIndex].content]) %}
+                                        {% endif %}
+                                    {% endif %}
+
+                                {% endif %}
+                            {% endfor %}
+                        {% endif %}
+
+                    {% endfor %}
+
+                {% endif %}
+
+                <!-- DETAILS BOTTOM -->
+                <div class="details-bottom">
+                    <div class="short-description">
+                        {% if finalContent|length %}
+                            <p>{{ finalContent|join(' ')|length > 270 ? finalContent|join(' ') : finalContent|join(' ') }}</p>
+                        {% endif %}
+                    </div>
+                    <div class="info-grid">
+                        <div>
+                            <div class="row">
+                                <div class="label">{{ 'Úžitková plocha'|t }}</div>
+                                <div>{{ entry.uzhitkovaPlocha }} m<sup>2</sup></div>
+                            </div>
+                            <div class="row">
+                                <div class="label">{{ 'Cena projektu'|t }}</div>
+                                <div>{{ entry.projekt }} &euro;</div>
+                            </div>
+                            <div class="row">
+                                <div class="label">{{ 'Cena holodomu'|t }}</div>
+                                <div>{{ entry.holodomSDph }} &euro;</div>
+                            </div>
+                            <div class="row">
+                                <div class="label">{{ 'Cena komplet'|t }}</div>
+                                <div>
+                                    <strong class="red">{{ entry.kompletSDph }} &euro;</strong>
+                                </div>
+                            </div>
+                            <div class="row cena-mesacna" data-redirect="https://familyhouse.sk/financovanie">
+                                <div class="label">{{ 'Cena mesačne'|t }}</div>
+                                <div>
+                                    {% if entry.mesacne is empty %}
+                                        <strong class="red">-</strong>
+                                    {% else %}
+                                        <strong class="red">{{ entry.mesacne }} &euro;</strong>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="interest">
+                            <div>{{ "Mám <br>záujem"|t|raw }}</div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /DETAILS BOTTOM -->
+            </a>
+            {% else  %}
+                {% if currentUser %}
+                    <a href="{{ entry.url }}{{ enabledFilterQueryString }}"
+                       class="house-elem">
+                        {% set cover = entry.vizualy.first() %}
+
+
+                        {{ imagesMacro.imageWebp(cover) }}
+                        <div class="details">
+                            <div class="top">
+                                <div class="name">
+                                    <div class="counter">
+                                        #{% if entry.cisloDomu is not empty %}{{ entry.cisloDomu }}{% else %}{{ entry.id }}{% endif %}</div>
+                                    <div>{{ entry.nazov }}</div>
+                                </div>
+                            </div>
+                            <div class="bottom">
+
+                                {% if entry.stitok != '' %}
+                                    <div class="label" style="background: {{ entry.stitokFarba.value }} ">
+                                        <div>{{ entry.stitok }}</div>
+                                    </div>
+                                {% endif %}
+
+                                <div class="box"></div>
+                            </div>
+                        </div>
+
+                        {% set finalContent = [] %}
+                        {% if entry.seopKeys is not empty %}
+
+                            {% for elem in entry.seopKeys %}
+                                {% set currentLoopIndex = loop.index %}
+                                {% set contentIndex = elem.contentKey - 1 %}
+
+                                {% if entry.seo|length %}
+                                    {% for seoObject in entry.seo %}
+                                        {% if currentLoopIndex == loop.index %}
+                                            {# Entry content #}
+                                            {% if seoObject.contents|length and contentIndex >= 0 %}
+                                                {% if seoObject.contents[contentIndex] is defined %}
+                                                    {% set finalContent = finalContent|merge([seoObject.contents[contentIndex].content]) %}
+                                                {% endif %}
+                                            {% endif %}
+
+                                        {% endif %}
+                                    {% endfor %}
+                                {% endif %}
+
+                            {% endfor %}
+
+                        {% endif %}
+
+                        <!-- DETAILS BOTTOM -->
+                        <div class="details-bottom">
+                            <div class="short-description">
+                                {% if finalContent|length %}
+                                    <p>{{ finalContent|join(' ')|length > 270 ? finalContent|join(' ') : finalContent|join(' ') }}</p>
+                                {% endif %}
+                            </div>
+                            <div class="info-grid">
+                                <div>
+                                    <div class="row">
+                                        <div class="label">{{ 'Úžitková plocha'|t }}</div>
+                                        <div>{{ entry.uzhitkovaPlocha }} m<sup>2</sup></div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="label">{{ 'Cena projektu'|t }}</div>
+                                        <div>{{ entry.projekt }} &euro;</div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="label">{{ 'Cena holodomu'|t }}</div>
+                                        <div>{{ entry.holodomSDph }} &euro;</div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="label">{{ 'Cena komplet'|t }}</div>
+                                        <div>
+                                            <strong class="red">{{ entry.kompletSDph }} &euro;</strong>
+                                        </div>
+                                    </div>
+                                    <div class="row cena-mesacna" data-redirect="https://familyhouse.sk/financovanie">
+                                        <div class="label">{{ 'Cena mesačne'|t }}</div>
+                                        <div>
+                                            {% if entry.mesacne is empty %}
+                                                <strong class="red">-</strong>
+                                            {% else %}
+                                                <strong class="red">{{ entry.mesacne }} &euro;</strong>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="interest">
+                                    <div>{{ "Mám <br>záujem"|t|raw }}</div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /DETAILS BOTTOM -->
+                    </a>
+                {% endif %}
+            {% endif %}
+
+        {% endfor %}
+    {% endif %}
+
+</div>
+
+
+
+{% if housesList|length > 0 %}
+
+    <div class="paginate-info">
+        {% for page, prevUrl in paginateInfo.getPrevUrls(5) %}
+            {% set prevUrl = prevUrl|replace({'filter/house-filter/index': 'projekty-domov' }) %}
+            <a href="{{ prevUrl ~ enabledFilterQueryString }}">{{ page }}</a>
+        {% endfor %}
+        <span class="current">{{ paginateInfo.currentPage }}</span>
+        {% for page, nextUrl in paginateInfo.getNextUrls(5) %}
+            {% set nextUrl = nextUrl|replace({'filter/house-filter/index': 'projekty-domov' }) %}
+            <a href="{{ nextUrl ~ enabledFilterQueryString }}">{{ page }}</a>
+        {% endfor %}
+    </div>
+
+{% endif %}

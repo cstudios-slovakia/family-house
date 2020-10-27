@@ -1,0 +1,24 @@
+{# predefined filter input data comes from admin#}
+{% set filterInputDatas = craft.housefilterModule.getFilterInputData %}
+
+<form name="filterForm" class="filter-content ajax-submit" action="{{ url('filter/house-filter/index') }}" method="get" data-url="{{ siteUrl }}projekty-domov" data-siteurl="{{ siteUrl }}">
+    {% set activeLabels = craft.housefilterModule.getActiveFilterLabelList %}
+    {% if activeLabels is defined and activeLabels is not empty %}
+            {% set filterIsActive = true %}
+        {% else %}
+            {% set filterIsActive = false %}
+    {% endif %}
+
+    <h3 class="updated-filter-title">{{ "Filtrovať projekty"|t }}</h3>
+
+    <div class="title">
+        <strong>{{  "Filtrovať projekty"|t }}</strong>
+    </div>
+
+    {% embed '_components/filter/_filter_inputs' %}{% endembed %}
+    <!-- FILTER BUTTON -->
+        <button type="button" class="reset-filter {% if filterIsActive == false %}_hidden{% endif %}">
+            <span>{{ "Zrušiť filter"|t }}</span>
+        </button>
+    <!-- /FILTER BUTTON -->
+</form>

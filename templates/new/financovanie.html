@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+    {% set sitebase = 'https://familyhouse.sk/' %}
+
+    {% set entry = craft.entries().section('dom').slug(craft.app.request.getSegment(2)).one() %}
+    {% set dom = entry %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>financovanie - Family House</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="{{ sitebase }}assets/css/vendor/swiper.min.css">
+
+    <link rel="stylesheet" href="{{ sitebase }}assets/new/css/simplebar.css">
+    <link rel="stylesheet" href="{{ sitebase }}assets/new/css/main.css?=ver{{ random(1, 100) }}">
+</head>
+<body>
+    <div class="page-container">
+        
+        {% embed "new/header/header.html" %}
+        {% endembed %}
+
+
+        <div class="page" id="financovanie">
+            
+            {% embed "new/pages/page_sidebar.html" %}
+            {% endembed %}
+
+            
+            <div class="financovanie-container">
+                <div class="wrapper">
+                    <iframe src="https://www.fincentrum.com/app/plugins/fctr-iframe/iframe/iframe.php?pId=JY3vyZrmJg&locale=3"
+                    style="width: 100%;height: 750px;border: none;background-color: transparent;"></iframe>
+                </div>
+
+                
+                <div class="financovanie-description">
+
+                </div>
+
+                {% embed "new/embed_interest.html" %}
+                {% endembed %}
+                
+            </div>
+
+
+
+            
+
+        </div>
+
+
+
+
+        {% embed "new/footer.twig" %}
+        {% endembed %}
+
+    </div>
+
+
+    <script src="{{ sitebase }}assets/js/vendor/jquery-3.2.1.min.js"></script>
+    <script src="{{ sitebase }}assets/js/vendor/jquery-waypoints-and-sticky.js"></script>
+    <script src="{{ sitebase }}assets/js/vendor/simplebar.min.js"></script>
+    <script src="{{ sitebase }}assets/js/vendor/vue.js"></script>
+    <script src="{{ sitebase }}assets/js/vendor/vue-router.js"></script>
+    <script src="{{ sitebase }}assets/js/vendor/swiper.min.js"></script>
+    <script src="{{ sitebase }}assets/new/js/main.js?=ver{{ random(1, 100) }}"></script>
+
+    <script>
+        // ref swiper
+        var ref_swiper = new Swiper('.ref-swiper', {
+            spaceBetween: 20,
+            slidesPerView: 6,
+            scrollbar: {
+                el: '.ref-swiper-scroll'
+            },
+            navigation: {
+                nextEl: '.ref-swiper-scroll .next',
+                prevEl: '.ref-swiper-scroll .prev',
+            }
+        });
+
+        // dom swiper thumbs
+        var dom_swiper_big_thumbs = new Swiper('.dom-swiper-big-thumbs', {
+            spaceBetween: 20,
+            slidesPerView: 6,
+            // freeMode: true,
+            watchSlidesVisibility: true,
+            watchSlidesProgress: true,
+            scrollbar: {
+                el: '.dom-thumbs-swiper-scroll'
+            },
+            navigation: {
+                nextEl: '.dom-thumbs-swiper-scroll .next',
+                prevEl: '.dom-thumbs-swiper-scroll .prev',
+            },
+        });
+
+        // dom swiper big
+        var dom_swiper_big = new Swiper('.dom-swiper-big', {
+            spaceBetween: 10,
+            pagination: {
+                el: '.dom-swiper-big-nav .count',
+                type: 'fraction',
+            },
+            navigation: {
+                nextEl: '.dom-swiper-big-nav .next',
+                prevEl: '.dom-swiper-big-nav .prev',
+            },
+            thumbs: {
+                swiper: dom_swiper_big_thumbs,
+            },
+        }); 
+
+        $('.heart-flip > .flip').click(function(){
+            $('.dom-swiper-big swiper-slide img').toggleClass('flipped')
+        });
+
+
+    </script>
+    {% embed 'new/cookies-embed.html'%}
+    {% endembed %}
+</body>
+</html>

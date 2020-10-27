@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+    {% set sitebase = 'https://familyhouse.sk/' %}
+
+    
+    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projekty Domov - Family House 2020</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="{{ sitebase }}assets/css/vendor/swiper.min.css">
+
+    <link rel="stylesheet" href="{{ sitebase }}assets/new/css/simplebar.css">
+    <link rel="stylesheet" href="{{ sitebase }}assets/new/css/main.css?=ver{{ random(1, 100) }}">
+</head>
+<body>
+    <div class="page-container">
+
+        
+
+        {% embed "new/header/header.html" %}
+        {% endembed %}
+        
+        <div class="page" id="poradenstvo">
+            
+            {% embed "new/pages/page_sidebar.html" %}
+            {% endembed %}
+
+            <div class="poradenstvo-container">
+
+                
+
+                <form class="poradenstvo-form" style="margin-bottom: 120px;" method="post" action="{{sitebase}}services/spytajte.php" accept-charset="UTF-8">
+                    
+                    {{ getCsrfInput() }}
+                    <h2>
+                        kontaktný <br> formulár
+                    </h2>
+                    <div action="" class="poradenstvo">
+                        <input type="hidden" name="action" value="contactForm/message/add">
+                        <input type="hidden" name="formId" value="1">
+                        <input type="hidden" name="redirect" value="dakujeme">
+                        <input type="hidden" class="captcha-input" name="g-recaptcha-response" value="0">
+                        <div class="row">
+                            <input type="text" name="name" id="name" placeholder="Vaše meno a priezvisko*" value="{% if message is defined %}{{ message.name }}{% endif %}" required>
+                        </div>
+                        <!-- <div class="row">
+                            <input type="text" name="City" id="City" placeholder="Mesto*">
+                        </div> -->
+                        <div class="row">
+                            <input type="text" name="telephone" id="telephone" placeholder="Telefónne číslo" required>
+                        </div>
+                        <div class="row">
+                            <input type="text" name="email" id="email" placeholder="E-mailová adresa*" value="{% if message is defined %}{{ message.email }}{% endif %}" required>
+                        </div>
+                        <textarea name="message" id="message" cols="30" rows="10" placeholder="Poznámky; napr. kedy Vám môžeme zavolať">{% if message is defined %}{{ message.message }}{% endif %}</textarea>
+                        <!-- <div class="row">
+                            <h3>S čím potrebujete poradiť?</h3>
+                        </div> -->
+                        
+                        <!-- <div class="img-row">
+                            <div class="img-item">
+                                <label class="chb" for="projekt">
+                                    <input type="checkbox" name="projekt" id="projekt">
+                                    <div class="label">Projekt</div>
+                                </label>
+                                
+                            </div>
+                            <div class="img-item">
+                                <label class="chb" for="stavba">
+                                    <input type="checkbox" name="stavba" id="stavba">
+                                    <div class="label">Stavba domu</div>
+                                </label>
+                                
+                            </div>
+                            <div class="img-item">
+                                <label class="chb" for="vizualizacia">
+                                    <input type="checkbox" name="vizualizacia" id="vizualizacia">
+                                    <div class="label">Vizualizácia</div>
+                                </label>
+                            </div>
+                        </div> -->
+                        
+                        <!-- <div class="row">
+                            <div class="agree">
+                                <input type="checkbox" name="sales" id="sales">
+                                <label for="sales">Súhlasím s <a href="">obchodnými podmienkami</a></label>
+                            </div>
+                        </div> -->
+                        <button type="submit" value="odoslať" class="send-btn" disabled>odoslať</button>
+                    </div>
+                </form>
+
+
+            </div>
+
+            <div class="step-sidebar">
+                <div class="inner-wrapper">
+                    <!-- <div class="steps">
+                        <div class="label">
+                            len
+                        </div>
+                        <div class="nums">
+                            <div class="num active">
+                                1
+                            </div>
+                        </div>
+                        <div class="label">
+                            krok
+                        </div>
+                    </div> -->
+                    {% set mem = craft.entries().section('member').slug('zuzana-kohutova').one() %}
+                    {% set ss = mem.personalPhoto.first() %}
+                    <div class="member">
+                        <div class="img-wrap">
+                            <img src="{{ ss.getUrl('houseDetailGalleryThumbs320w') }}" width="{{ ss.getWidth('houseDetailGalleryThumbs320w') }}" height="{{ ss.getHeight('houseDetailGalleryThumbs320w') }}" alt="">
+                        </div>
+                        <div class="position">
+                            <div class="bold uppercase row">
+                                {{ mem.function }}
+                            </div>
+                            <div class="bold row">
+                                {{ mem.memberName }}
+                            </div>
+                            <div class="row">
+                                {{ mem.memberPhone }}
+                            </div>
+                            <div class="row">
+                                {{ mem.memberEmail }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        
+        
+        </div>
+
+
+
+
+
+
+
+        {% embed "new/footer-checkout.html" %}
+        {% endembed %}
+    
+    </div>
+    
+    
+        <script src="{{ sitebase }}assets/js/vendor/jquery-3.2.1.min.js"></script>
+        <script src="{{ sitebase }}assets/js/vendor/jquery-waypoints-and-sticky.js"></script>
+        <script src="{{ sitebase }}assets/js/vendor/simplebar.min.js"></script>
+        <script src="{{ sitebase }}assets/js/vendor/vue.js"></script>
+        <script src="{{ sitebase }}assets/js/vendor/vue-router.js"></script>
+        <script src="{{ sitebase }}assets/js/vendor/swiper.min.js"></script>
+        <script src="{{ sitebase }}assets/js/vendor/three.js"></script>
+        <script src="{{ sitebase }}assets/js/vendor/panolens.js"></script>
+        <script src="{{ sitebase }}assets/new/js/main.js?=ver{{ random(1, 100) }}"></script>
+    
+        <script>
+    
+    
+        </script>
+
+{% embed '_components/security/reCaptcha' %}{% endembed %}
+{% embed 'new/cookies-embed.html'%}
+    {% endembed %}
+</body>
+</html>
